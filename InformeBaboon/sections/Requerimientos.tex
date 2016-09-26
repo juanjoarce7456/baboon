@@ -1,0 +1,88 @@
+\section{Requerimientos}
+
+\begin{enumerate}
+	\item El sistema debe delegar flujo de ejecución a un motor de
+	petri.
+	\begin{itemize}
+		\item El sistema debe mapear transiciones de una red de petri a eventos
+		especificados por los usuarios. Un evento puede ser equivalente a un conjunto de transiciones.
+		\item Cuando un evento es desencadenado por el disparo de un conjunto de
+		transiciones el sistema debe ejecutar todas las tareas que se encuentran registradas al evento.
+		\item Cuando un suceso definido por el usuario ocurre, el sistema debe
+		notificar todos los eventos asociados a este suceso al motor de petri.
+		\item El sistema debe proveer una interface para que el usuario pueda
+		suscribir sucesos, tareas y fines de tareas a eventos especificados por el usuario.
+		\item El sistema debe proveer una interface para que el usuario pueda definir
+		eventos.
+		\item Cuando una tarea termina el sistema debe notificar al motor de petri
+		acerca de todos los eventos asociados a la finalización de la tarea.
+	\end{itemize}
+	\item Para un usuario con conocimiento intermedio en Java y Redes de Petri, el
+	framework puede aprender a usarse en una semana o menos.
+	\begin{itemize}
+	    \item La utilización del sistema puede incorporar como máximo diez
+	    conceptos nuevos a aprender por un usuario con un nivel intermedio en Java
+	    y redes de Petri.
+	    \item El sistema debe ser acompañado con al menos dos ejemplos de uso en
+	    los cuales se muestre al menos un 80\% de las funciones del mismo.
+	\end{itemize}
+	\item El sistema debe ser compatible con las versiones actuales de motores de
+	Petri desarrollados en el Laboratorio de Arquitectura de Computadoras de la
+	Facultad de Ciencias Exactas y Naturales de la Universidad Nacional de Córdoba.
+	\begin{itemize}
+	    \item El sistema debe proveer una interfaz para que el usuario ingrese un
+	    archivo PNML con la descripción de una red de Petri.
+	    \item El sistema puede instanciar un entorno de ejecución de redes de
+	    Petri dado que el usuario ha ingresado un archivo PNML conteniendo la
+	    descripción de la red y ha elegido el motor de Petri que desea usar.
+	    \item El sistema debe utilizar la interface expuesta por el motor de
+	    petri.
+	\end{itemize}
+	\item El sistema quiere tener una interfaz gráfica de usuario para inicializar
+	un nuevo proyecto.
+	\begin{itemize}
+	    \item La interfaz de usuario quiere contener una pantalla 'PNML Loader'
+	    	\begin{itemize}
+	    	    \item La pantalla debe dejar al usuario buscar en su disco local y
+	    	    elegir un archivo.
+	    	    \item La pantalla debe dejar al usuario ingresar la dirección a un
+	    	    archivo manualmente mediante la escritura con el teclado.
+	    	    \item La pantalla debe permitir confirmar la elección de un archivo.
+	    	    \item Si el usuario confirma un archivo y el archivo es un PNML válido
+	    	    entonces puede usarse para configurar el entorno de ejecución de
+	    	    Petri.
+	    	    \item Si el usuario confirma un archivo y el archivo no es un PNML
+	    	    válido entonces debe mostrarse un error en pantalla y el usuario debe
+	    	    ser capaz de elegir otro archivo.
+	    	\end{itemize}
+	    \item La interfaz de usuario quiere contener una pantalla de creación de
+	    eventos
+	    \begin{itemize}
+	    	    \item La pantalla debe dejar al usuario definir un evento y asociarlo
+	    	    con una o más transiciones definidas en un archivo PNML cargado
+	    	    previamente por el usuario.
+	    	    \item La pantalla de creación de eventos quiere permitir guardar las
+	    	    decisiones del usuario en un archivo.
+	    	    \item La pantalla de creación de eventos quiere permitir al usuario
+	    	    cargar configuraciones a partir de un archivo.
+	    	    \item Si un archivo guardado previamente se selecciona para ser
+	    	    cargado y su contenido tiene un formato inválido, la pantalla
+	    	    quiere mostrar un texto de error especificando el problema y el
+	    	    archivo no debe ser cargado.
+	    	    \item Si un archivo guardado previamente se selecciona para ser
+	    	    cargado y el contenido del archivo contiene uno omás eventos que
+	    	    mapean a transiciones inexistentes, la pantalla quiere mostrar un
+	    	    texto de error especificando el problema y sólo debe cargarse la
+	    	    configuración de los eventos fuera de conflicto.
+	    \end{itemize}
+	     \item La interfaz de usuario quiere contener una pantalla de selección de
+	     el motor de Petri.
+	     \begin{itemize}
+	         \item La pantalla debe permitir elegir entre un motor de Petri Java,
+	         un motor de Petri en hardware o un motor de Petri en driver.
+	         \item La pantalla debe comunicar la decisión del usuario para preparar
+	         el entorno de ejecución de Petri de acuerdo al motor elegido.
+	     \end{itemize}
+	         
+	\end{itemize}
+\end{enumerate}

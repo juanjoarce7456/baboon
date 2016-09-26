@@ -1,0 +1,36 @@
+\section{Programación Orientada a Aspectos}
+
+
+\subsection{Concepto}
+
+La programación orientada a aspectos es un paradigma de programación que tiene
+como objetivo incrementar la modularidad mediante la separación de intereses
+transversales (cross-cutting concerns). 
+Los intereses transversales son aspectos de un programa que afectan a otros
+intereses, son partes de un programa que dependen de, o afectan, muchas
+otras partes del sistema.
+Estos intereses usualmente no pueden separarse claramente del resto del
+sistema, y pueden resultar en duplicación de código o un alto grado de
+dependencia entre partes del sistema.
+
+
+Los intereses transversales son la base para el desarrollo de aspectos. Estos no
+pueden ser representados claramente en los paradigmas de programación orientado
+a objetos o programación procedural.
+La separación de intereses transversales se realiza añadiendo comportamientos
+adicionales al codigo existente (llamados advices) sin cambiar el
+código existente. En cambio especifica separadamente que codigo debe modificarse
+mediante la definición de pointcuts. 
+ 
+\subsection{Ejecución}
+
+
+Un pointcut es un conjunto de joinpoints, que permiten
+determinar donde aplicar exactamente un advice de un aspecto. Generalmente
+se especifican utilizando nombres de clases o de métodos, en algunos casos
+utilizando expresiones regulares que hacen juego con estos nombres. Cuando la
+ejecución del programa alcanza uno de los joinpoints descriptos en el pointcut,
+una porción de código asociada al pointcut (llamada advice) es ejecutada. Esto
+permite al programador describir dónde y cuándo el codigo adicional debe
+ejecutarse. Esto proporciona la posibilidad de añadir aspectos a un código
+existente, o al diseño de un software con una clara separación de intereses.

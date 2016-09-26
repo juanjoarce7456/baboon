@@ -1,0 +1,26 @@
+# eclipse project files
+.project
+.metadata
+.texlipse
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# latex output
+*.dvi
+*.pdf
+
+# do not exclude libs
+!lib/*
+!resources/*
