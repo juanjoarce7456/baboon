@@ -24,3 +24,4 @@ local.properties
 # do not exclude libs
 !lib/*
 !resources/*
+/document.synctex.gz

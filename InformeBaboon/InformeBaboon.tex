@@ -3,8 +3,14 @@
 \documentclass{report}
 \usepackage[utf8]{inputenc}
 \usepackage{tabularx}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{color}
 \begin{document}
+	\graphicspath{ {resources/images/} }
     \include{./sections/Requerimientos}
     \include{./sections/Frameworks}
     \include{./sections/AspectOrientedProgramming}
+    \bibliography{./bibliografia}
+	\bibliographystyle{plain}
 \end{document}
