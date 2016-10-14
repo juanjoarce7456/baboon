@@ -75,7 +75,8 @@ DEL DISEÑO DE LA PRIMER POC, LO DE LAS PLAZAS DE RECURSOS Y COMO SE REEMPLAZARO
 	petri.
 	\begin{itemize}
 		\item El sistema debe mapear transiciones de una red de petri a eventos
-		especificados por los usuarios. Un evento puede ser equivalente a un conjunto de transiciones.
+		especificados por los usuarios. Un evento equivale a una
+		conjunción de transiciones y guardas.
 		\item Cuando un evento es desencadenado por el disparo de un conjunto de
 		transiciones el sistema debe ejecutar todas las tareas que se encuentran registradas al evento.
 		\item Cuando un suceso definido por el usuario ocurre, el sistema debe
@@ -86,9 +87,14 @@ DEL DISEÑO DE LA PRIMER POC, LO DE LAS PLAZAS DE RECURSOS Y COMO SE REEMPLAZARO
 		eventos.
 		\item Cuando una tarea termina el sistema debe notificar al motor de petri
 		acerca de todos los eventos asociados a la finalización de la tarea.
+		%DEFINIMOS LA DIFERENCIA ENTRE SUCESO Y FIN DE TAREA CON LOS CASOS. DESDE EL
+		%PUNTO DE VISTA DEL USUARIO ES DISTINTO, DESDE EL PUNTO DE VISTA DEL FRAMEWORK
+		%EL FUNCIONAMIENTO ES IGUAL.
 	\end{itemize}
 	\item Para un usuario con conocimiento intermedio en Java y Redes de Petri, el
 	framework puede aprender a usarse en una semana o menos.
+	%VAMOS A MEDIR ESTE REQUERIMIENTO CON ALUMNOS DE LA CATEDRA PROGRAMACIÓN
+	% CONCURRENTE DEL AÑO 2017
 	\begin{itemize}
 	    \item La utilización del sistema puede incorporar como máximo diez
 	    conceptos nuevos a aprender por un usuario con un nivel intermedio en Java
@@ -104,7 +110,9 @@ DEL DISEÑO DE LA PRIMER POC, LO DE LAS PLAZAS DE RECURSOS Y COMO SE REEMPLAZARO
 	    archivo PNML con la descripción de una red de Petri.
 	    \item El sistema puede instanciar un entorno de ejecución de redes de
 	    Petri dado que el usuario ha ingresado un archivo PNML conteniendo la
-	    descripción de la red y ha elegido el motor de Petri que desea usar.
+	    descripción de la red y ha elegido el motor de Petri que desea usar. 
+	    %LOS MOTORES SON: JAVA, IPCORE Y DRIVER. EN ESTE TRABAJO VAMOS A ASEGURAR Y
+	    % TESTEAR LA FUNCIONALIDAD CON EL MOTOR DE JAVA.
 	    \item El sistema debe utilizar la interface expuesta por el motor de
 	    petri.
 	\end{itemize}
