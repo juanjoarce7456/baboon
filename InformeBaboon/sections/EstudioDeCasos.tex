@@ -40,18 +40,32 @@ framework da aviso de eventos al monitor, desencadenando la ejecución de las ta
 		cinta Transportadora para procesar otra pieza.
 \end{enumerate}
 
-Esta forma de ejecución limita la funcionalidad de sincronización de la red de
-Petri, acotando su funcionamiento únicamente a tareas sincrónicas. El
-framework Chimp no contempla el caso de eventos externos asincrónicos que
-desencadenen disparos en la red. Además, el framework está asumiendo una parte
-del rol de control de flujo de ejecución, lo cual debería delegarse por completo
-al monitor de redes de Petri.
+El concepto de Dummy introducido en Chimp ~\cite{chimp} contempla únicamente
+casos de tareas sincrónicas. Esta forma de ejecución limita la funcionalidad de
+sincronización de la red de Petri, acotando su funcionamiento. Si bien es
+tentador suscribir las tareas a una transición informada, que avisa al framework
+cuando estan dadas las condiciones de ejecución, existe una gran desventaja al
+utilizar la ejecución dirigida por informes. Al utilizar la suscripción a
+transiciones informadas el framework está asumiendo una parte del rol de control
+de flujo de ejecución, lo cual debería delegarse por completo al monitor de
+redes de Petri. El framework debe decidir qué hacer con el informe que recibe
+desde la red (debe decidir si debe despertar un hilo o crear un hilo nuevo,
+decidir qué hilo despertar). En el caso particular de Chimp ~\cite{chimp} no
+existen hilos durmiendo en el monitor, desaprovechando una de las principales
+ventajas de la arquitectura del sistema.
+\\
+Este problema se soluciona mediante el concepto de petición de ejecución, donde
+los hilos realizan disparos asincrónicos al monitor y son bloqueados si no
+pueden ejecutarse. Una vez que se cumplen las condiciones de ejecución de un
+hilo dormido el monitor es el encargado de despertarlo. De esta forma el control
+de flujo de ejecución se encuentra completamente integrado en el monitor de
+petri.
 
 \subsubsection{Análisis de ejecución del caso de estudio por
 petición de ejecución al motor de petri} 
-Una alternativa al método de ejecución de Chimp consiste en que los hilos
-encargados de realizar las tareas realicen una petición de ejecución al monitor
-sin tener en cuenta el estado actual de la red de Petri.
+Como se expuso anteriormente, una alternativa al método de ejecución de Chimp
+consiste una petición de ejecución al monitor por parte de los hilos que
+realizan tareas, sin tener en cuenta el estado actual de la red de Petri.
  El monitor es el encargado de dormir aquellas tareas que no pueden ser
  ejecutadas. Una vez que las condiciones son las adecuadas para realizar la
  tarea, el monitor se encarga de despertar al hilo encargado de ejecutarla.
@@ -69,16 +83,23 @@ sin tener en cuenta el estado actual de la red de Petri.
 \end{enumerate}
 Tras el análisis  del ejemplo anterior se llega a una serie de
 conclusiones. En primer lugar, es necesario que el framework de aviso al monitor
-cuando una tarea debe ser realizada de forma atómica. Además, el
-sistema de peticiones es más adecuado para una arquitectura manejada por un
-monitor, sin embargo, dada la red de petri
-Figura~\ref{fig:petri_cinta_transportadora_1} surgen problemas de
-sincronización. Un ejemplo de estos problemas se origina al realizar una
-petición de ejecución de la tarea “moverEst2”, el monitor permite ejecutar esta
+de un evento de finalización de tarea, cuando existen otras partes de la red que
+dependen de este evento.
+Por otro lado, se puede asegurar que el sistema de ejecución basado en
+peticiones es más adecuado para una arquitectura manejada por un monitor. La
+petición de ejecución permite concentrar el control del flujo de ejecución en
+el monitor.
+Sin embargo, dada la red de petri
+Figura~\ref{fig:petri_cinta_transportadora_1} se puede notar que surgen
+problemas de sincronización. Un ejemplo de estos problemas se origina al realizar una petición de ejecución de la tarea “moverEst2”, el monitor permite ejecutar esta
 tarea de forma inmediata, sin tener en cuenta si la tarea ``moverEst1'' ha
-finalizado.
+finalizado. En consecuencia, utilizar un sistema de ejecución basado en
+peticiones requiere un nuevo modelo en red de Petri del problema que sea capaz
+de sincronizar los eventos de finalización de tarea.
+A continuación se analizan algunas alternativas de modelado orientadas a
+resolver este problema.
 
-\subsubsection{Sincronización por Plaza-Transición}
+\subsubsection{Sincronización por Transición-Plaza}
 Una posible solución a los problemas planteados en la sección anterior es
 modelar la red de la siguiente forma:\\
 
@@ -123,9 +144,9 @@ Donde:\\
 \end{enumerate}
 La principal ventaja de este método es que no modifica la semántica de la red y
 no añade nuevos conceptos ni cambios en su forma de ejecución.
-La desventaja consiste en que realizar este tipo de sincronización puede
-conllevar un incremento considerable de la cantidad de plazas y transiciones de
-la red, lo que conlleva el procesamiento de matrices de mayor tamaño.
+La desventaja más importante es que puede provocar un incremento considerable de
+la cantidad de plazas y transiciones de la red, lo que conlleva el
+procesamiento de matrices de mayor tamaño.
 
 \subsubsection{Sincronización por Guardas}
 Este método consiste en la utilización de una guarda como forma de
@@ -169,12 +190,12 @@ sincronización entre tareas consecutivas. Ver Figura ~\ref{fig:petri_cinta_tran
 
 La ventaja de este método es que permite resolver el problema de sincronización
 sin aumentar la cantidad de componentes de la red de Petri.
-Como desventaja se puede mencionar que modifica la semántica de la
-red, complicando su demostración matemática. Además, el diseño del monitor de
+Como desventaja se puede mencionar que la utilización de guardas modifica la
+semántica de la red, complicando su demostración matemática. Además, el diseño del monitor de
 petri soporta una única guarda por transición, por lo tanto esta solución impide
 la utilización de la guarda para otros propósitos en una situación de tareas
-consecutivas. Por último, una desventaja importante de la utilización de guardas
-es que al ser un valor binario no se puede saber cuantas veces ha sido seteada
+consecutivas. Por último, otra desventaja importante de la utilización de
+guardas es que al ser un valor binario no se puede saber cuantas veces ha sido seteada
 la guarda.
 Se supone un caso donde una ``tarea A'' es realizada por multiples hilos de manera
 independiente, y cada hilo realiza la ``tarea A'' en su totalidad. A su
@@ -244,18 +265,46 @@ externo realiza un disparo perenne sobre la transición.
 
 Esta solución tiene como principal ventaja mantener la cantidad de componentes
 de la red de Petri.
-Su principal desventaja consiste en que añade un nuevo componente a la
+Su principal desventaja consiste en que añade una nueva etiqueta a la
 petri, dificultando su demostración matemática. Esta solución supone añadir una
 interfaz al monitor de petri para dormir hilos en una cola de condición de una
 transición tipo P y que los hilos bloqueados en esta cola de condición sólo
 puedan liberarse por medio de un disparo perenne ocasionado por un hilo externo.
-\emph{\color{red} Los hilos peticionarios (que solicitan permiso de ejecución)
-a una transición tipo P no debieran utilizar la interfaz fire. En cambio, deben
-utilizar una interfaz sleep, que haga una operacion acquire sobre el semáforo
-de la cola de condición.
-Los hilos que dan aviso de una finalización de tarea deben utilizar la interfaz
-fire de modo perenne para realizar una operación release sobre el semáforo de
-la cola de condición. Esta operación release debe darse por más que no existan
-hilos esperando en la cola de condición de la transición tipo P, porque sino se
-tendría una pérdida de eventos de finalización de tarea.}
+El hilo que realiza el disparo sobre la transición debe realizar una operación
+release sobre la cola de condición de disparos perennes (sin importar si existen
+o no hilos bloqueados en la cola) para evitar la pérdida de eventos de
+finalización de tarea.
 
+\subsubsection{Resumen}
+Existen dos maneras de coordinar la ejecución de las tareas a partir de una red
+de Petri.\\ 
+La primera consiste en suscribir una tarea a una transición y que se
+informe a la tarea cuando la transición es disparada. En caso de ser
+una tarea sincrónica, se dispara otra transición al finalizar la misma. Esta
+transición disparada tendrá suscripta la siguiente tarea a ejecutar e informará
+su disparo a dicha tarea. Este modo de ejecución tiene una desventaja
+importante que consiste en la descentralización del manejo de los hilos por
+parte del monitor, atribuyendole al framework parte de la responsabilidad de
+esta tarea. Al delegar en el framework el manejo del informe de una transición
+informada, es el mismo quien debe encargarse de despertar o crear el hilo que
+ejecute la tarea suscripta a dicha transición. De esta forma se desaprovecha
+una de las principales ventajas de la arquitectura de un sistema con monitor.\\
+El segundo modo consiste en hilos pidiendo permiso de ejecución al monitor
+mediante el disparo de las transiciones correspondientes a las tareas que deben
+realizar. De esta forma el monitor duerme los hilos que no pueden ejecutarse y
+despierta aquel hilo que duerma en la cola de condicion de la
+transición que se dispara. De esta forma el manejo de la concurrencia y de los
+hilos es llevado a cabo íntegramente por el monitor. Sin embargo, para
+sincronizar tareas dependientes entre sí (una debe comenzar luego de la
+finalización de la otra) debe existir una forma de dar aviso al framework de la
+finalización de una tarea.\\
+En esta sección se analizaron tres formas de realizar este aviso de finalización
+de tareas en un modo de ejecución por petición, Por transición-plaza, por
+guardas y por transiciones tipo ``P''.\\
+ Tras analizar estos tres modelos de redes de Petri se decidió optar por añadir
+ un conjunto transición-plaza como forma de sincronización. Si bien presenta la
+ desventaja de incrementar el número de plazas y transiciones de la red, con su
+ inherente incremento de tamaño de matrices a procesar, permite utilizar una
+ ejecución guiada por permiso de ejecución (centralizando el control de flujo
+ de ejecución en el monitor) y además no añade conceptos nuevos a la red,
+ facilitando el entendimiento de la misma y su ejecución.
