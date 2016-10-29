@@ -6,11 +6,15 @@ import java.util.logging.Logger;
 import org.unc.lac.baboon.main.BaboonApplication;
 
 /**
- * <b>AppSetup1</b>
+ * AppSetup1 is used by {@link BaboonMainApplicationSetupTest} for testing
+ * purposes. It logs information to a {@link Logger} when its
+ * {@link AppSetup1#declare()} and {@link AppSetup1#subscribe()} methods are
+ * run.
  * 
- * @author Ariel Ivan Rabinovich & Juan Jose Arce Giacobbe
- *         <p>
- *         Class used by {@link BaboonMainApplicationSetupTest}
+ * @author Ariel Ivan Rabinovich
+ * @author Juan Jose Arce Giacobbe
+ * @see {@link BaboonApplication}
+ * @see {@link BaboonFramework}
  */
 public class AppSetup1 implements BaboonApplication {
     private final static Logger LOGGER = Logger.getLogger(AppSetup1.class.getName());

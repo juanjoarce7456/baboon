@@ -6,11 +6,17 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 /**
- * BaboonFramework.
+ * BaboonFramework is the main class of the framework. This class should be
+ * selected as Main class on Run Configurations in order to use Baboon.
+ * <p>
+ * At least one class implementing {@link BaboonApplication} must be written for
+ * BaboonFramework to initialize the system.
  * 
- * @author Ariel Ivan Rabinovich & Juan Jose Arce Giacobbe This class contains
- *         the main method of the framework. See
- *         {@link BaboonFramework#main(String[])}
+ * @author Ariel Ivan Rabinovich
+ * @author Juan Jose Arce Giacobbe
+ * @version 1.0
+ * @see {@link BaboonApplication}
+ * @see {@link BaboonFramework#main(String[])}
  */
 
 public class BaboonFramework {
@@ -22,11 +28,15 @@ public class BaboonFramework {
     static private ArrayList<BaboonApplication> appSetupObjects = new ArrayList<BaboonApplication>();
 
     /**
-     * Main method. Creates an instance for every class implementing
-     * {@link BaboonApplication} interface. Calls
-     * {@link BaboonApplication#declare()} for every BaboonApplication instance.
-     * After, calls {@link BaboonApplication#subscribe()} for every
-     * BaboonApplication instance.
+     * Main method.
+     * <p>
+     * Creates an instance for every class implementing
+     * {@link BaboonApplication} interface.
+     * <p>
+     * Calls {@link BaboonApplication#declare()} for every
+     * {@link BaboonApplication} instance. After, calls
+     * {@link BaboonApplication#subscribe()} for every {@link BaboonApplication}
+     * instance.
      */
     public static void main(String[] args) {
         Reflections reflections = new Reflections("");

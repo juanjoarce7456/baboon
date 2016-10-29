@@ -7,13 +7,15 @@ import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
 
 /**
- * <b>LogCatcher</b>
+ * LogCatcher is a test utility.
+ * <p>
+ * A LogCatcher object uses a handler to obtain logs from a {@link Logger}
+ * object.
  * 
- * @author Ariel Ivan Rabinovich & Juan Jose Arce Giacobbe
- *         <p>
- *         Test utility. This class uses a handler to obtain logs from a
- *         {@link java.util.logging.Logger} object
- *         </p>
+ * @author Ariel Ivan Rabinovich
+ * @author Juan Jose Arce Giacobbe
+ * @version 1.0
+ * @see {@link java.util.logging.Logger}
  */
 public class LogCatcher {
     private OutputStream logCapturingStream;
@@ -33,8 +35,7 @@ public class LogCatcher {
      * starts to capture its logs.
      * 
      * @param logger
-     *            A {@link java.util.logging.Logger} object from where the logs
-     *            will be captured.
+     *            A {@link Logger} object from where the logs will be captured.
      */
     public void attachLogCapturer(Logger logger) {
         logCapturingStream = new ByteArrayOutputStream();

@@ -4,6 +4,10 @@ package org.unc.lac.baboon.main;
  * Setup Interface. The classes implementing this interface will be instantiated
  * automatically. The declare and subscribe method will be called automatically
  * by the framework in that order.
+ * 
+ * @author Ariel Ivan Rabinovich
+ * @author Juan Jose Arce Giacobbe
+ * @version 1.0
  */
 public interface BaboonApplication {
     /**
