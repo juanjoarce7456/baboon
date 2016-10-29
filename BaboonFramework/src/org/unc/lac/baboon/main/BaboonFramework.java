@@ -11,12 +11,13 @@ import org.reflections.Reflections;
  * <p>
  * At least one class implementing {@link BaboonApplication} must be written for
  * BaboonFramework to initialize the system.
+ * </p>
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
- * @see {@link BaboonApplication}
- * @see {@link BaboonFramework#main(String[])}
+ * @see BaboonApplication
+ * @see BaboonFramework#main(String[])
  */
 
 public class BaboonFramework {

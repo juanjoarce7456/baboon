@@ -178,12 +178,12 @@ public class BaboonMainApplicationSetupTest {
         String capturedLog2 = logCatcher4.getTestCapturedLog();
         Assert.assertTrue(capturedLog.contains(expectedLogForDeclareMethod + " Concrete"));
         Assert.assertTrue(capturedLog.contains(expectedLogForSubscribeMethod + " Concrete"));
-        Assert.assertTrue(
-                !capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: ConcreteAppSetupOverrides"));
-        Assert.assertTrue(
-                !capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: ConcreteAppSetupOverrides"));
-        Assert.assertTrue(!capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: AbstractAppSetup"));
-        Assert.assertTrue(!capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: AbstractAppSetup"));
+        Assert.assertFalse(
+                capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: ConcreteAppSetupOverrides"));
+        Assert.assertFalse(
+                capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: ConcreteAppSetupOverrides"));
+        Assert.assertFalse(capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: AbstractAppSetup"));
+        Assert.assertFalse(capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: AbstractAppSetup"));
     }
 
     /**
@@ -225,7 +225,7 @@ public class BaboonMainApplicationSetupTest {
                 capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: ConcreteAppSetupNotOverrides"));
         Assert.assertTrue(
                 capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: ConcreteAppSetupNotOverrides"));
-        Assert.assertTrue(!capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: AbstractAppSetup"));
-        Assert.assertTrue(!capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: AbstractAppSetup"));
+        Assert.assertFalse(capturedLog2.contains(expectedLogForDeclareMethod + " Abstract from: AbstractAppSetup"));
+        Assert.assertFalse(capturedLog2.contains(expectedLogForSubscribeMethod + " Abstract from: AbstractAppSetup"));
     }
 }

@@ -14,8 +14,8 @@ import org.unc.lac.baboon.main.BaboonApplication;
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
- * @see {@link BaboonApplication}
- * @see {@link BaboonFramework}
+ * @see BaboonApplication
+ * @see BaboonFramework
  */
 public class ConcreteAppSetupNotOverrides extends AbstractAppSetup {
     private final static Logger LOGGER = Logger.getLogger(ConcreteAppSetupNotOverrides.class.getName());

@@ -11,11 +11,12 @@ import java.util.logging.StreamHandler;
  * <p>
  * A LogCatcher object uses a handler to obtain logs from a {@link Logger}
  * object.
+ * </p>
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
- * @see {@link java.util.logging.Logger}
+ * @see Logger
  */
 public class LogCatcher {
     private OutputStream logCapturingStream;
