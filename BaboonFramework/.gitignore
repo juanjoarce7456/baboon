@@ -2,6 +2,7 @@
 .metadata
 bin/
 tmp/
+build/
 *.tmp
 *.bak
 *.swp
@@ -34,3 +35,4 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+/target/
