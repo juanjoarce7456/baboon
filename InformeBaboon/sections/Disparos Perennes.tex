@@ -1,0 +1,19 @@
+\section{Disparos perennes}
+Un disparo de transición perenne se define como un disparo que no ocasiona el
+bloqueo del hilo que lo realiza. Es decir que por más que las condiciones no
+estén dadas para disparar una transición, si se la dispara de forma perenne el
+hilo no será dormido en la cola de condición de la transición (ni en ninguna
+otra cola).
+De la definición de disparo perenne se llega a la conclusión de que este
+tipo de disparo no es útil a la hora de realizar petición de ejecución al
+monitor. En cambio, es una herramienta que permite realizar avisos asincrónicos
+o realizar cambios en el flujo de ejecución desde fuera del monitor. A su vez,
+al realizar un disparo perenne se puede despertar a otros hilos durmiendo en una
+transición para que realicen una tarea si es que están disponibles para
+hacerlo. A la tarea o hilo que realiza el disparo perenne no le interesa el
+resultado del mismo, y este resultado no modifica su propia ejecución debido a
+que el disparo siempre arrojará un resultado exitoso a quien lo realice y no
+bloqueará dicho hilo.
+
+Dentro del contexto de Baboon, un evento interno puede definirse como el
+disparo de una transición 

@@ -25,3 +25,6 @@ local.properties
 !lib/*
 !resources/*
 /document.synctex.gz
+/InformeBaboon.aux
+/InformeBaboon.log
+/documen.synctex.gz
