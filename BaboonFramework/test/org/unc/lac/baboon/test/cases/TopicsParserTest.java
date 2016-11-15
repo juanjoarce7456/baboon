@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import org.junit.Test;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
-import org.unc.lac.baboon.test.utils.appsetup.AppSetup1;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
 
 public class TopicsParserTest {
+    
+    private final String topicsPath01 = "test/org/unc/lac/baboon/test/resources/topics01.json";
 
     /**
      * <li>Given I have a topics json file containing three topics
@@ -17,10 +18,10 @@ public class TopicsParserTest {
      * <li>And I use {@link TopicsJsonParser#getTopicsFromJson(String)} to obtain a java object representation of topics json</li>
      * <li>When I compare the size of the expected values and the java 
      * object representation obtained from {@link TopicsJsonParser#getTopicsFromJson(String)} (actual values)</li>
-     * <li>And I compare the names of the expected values and the actual values }</li>
-     * <li>And I compare the permissions of the expected values and the actual values }</li>
-     * <li>And I compare the fire callbacks of the expected values and the actual values }</li>
-     * <li>And I compare the set guard callbacks of the expected values and the actual values }</li>
+     * <li>And I compare the names of the expected values and the actual values</li>
+     * <li>And I compare the permissions of the expected values and the actual values</li>
+     * <li>And I compare the fire callbacks of the expected values and the actual values</li>
+     * <li>And I compare the set guard callbacks of the expected values and the actual values</li>
      * <li>Then the sizes are equal</li>
      * <li>And the names are equal></li>
      * <li>And the permissions are equal></li>
@@ -35,20 +36,20 @@ public class TopicsParserTest {
         final String[][] expectedCallbacks = {{"t1","t2","tx"},{},{"pepe","pedro","juan"}};
         final String[][] expectedSetGuardCallbacks= {{},{},{"g1","g2","g3"}};
         try {
-            ArrayList<Topic> topics = parser.getTopicsFromJson("test/org/unc/lac/baboon/test/resources/topics.json");
-            assertEquals(topics.size(),expectedNames.length);
+            ArrayList<Topic> topics = parser.getTopicsFromJson(topicsPath01);
+            assertEquals(expectedNames.length,topics.size());
             String[] names = new String[topics.size()]; 
             String[] permissions = new String[topics.size()]; 
             for (int i=0; i<topics.size(); i++){
-                names[i] = topics.get(i).name;
-                permissions[i] = topics.get(i).permission;
+                names[i] = topics.get(i).getName();
+                permissions[i] = topics.get(i).getPermission();
                 for(int j=0; j<expectedNames.length; j++){
-                    if(expectedNames[j].equals(topics.get(i).name)){   
+                    if(expectedNames[j].equals(topics.get(i).getName())){   
                         String[] actualCallbacks = new String[expectedCallbacks[i].length];
                         String[] actualSetGuardCallbacks = new String[expectedSetGuardCallbacks[i].length];
-                        actualCallbacks = topics.get(i).fireCallback.toArray(actualCallbacks);
+                        actualCallbacks = topics.get(i).getFireCallback().toArray(actualCallbacks);
                         assertArrayEquals(expectedCallbacks[i], actualCallbacks);
-                        actualSetGuardCallbacks = topics.get(i).setGuardCallback.toArray(actualSetGuardCallbacks);
+                        actualSetGuardCallbacks = topics.get(i).getSetGuardCallback().toArray(actualSetGuardCallbacks);
                         assertArrayEquals(expectedSetGuardCallbacks[i], actualSetGuardCallbacks);
                     }
                 }

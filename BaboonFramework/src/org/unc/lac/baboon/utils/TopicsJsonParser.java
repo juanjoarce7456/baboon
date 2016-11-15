@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @see Topic
  */
 public class TopicsJsonParser {
-    static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     
     /**
