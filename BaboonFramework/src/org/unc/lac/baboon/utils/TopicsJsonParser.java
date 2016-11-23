@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
@@ -15,7 +16,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Converts a json file containing an array of topics to Java objects representation
+ * Converts a json file containing an array of topics to Java objects
+ * representation
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -25,30 +27,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TopicsJsonParser {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    
     /**
-     * Reads a json file containing an array of topics and returns 
-     * an ArrayList of {@link Topic} objects
+     * Reads a json file containing an array of topics and returns a HashMap of
+     * {@link Topic} objects indexed by topic name
      * 
-     * @param jsonPath the path of the json file to parse.
-     * @return an ArrayList of {@link Topic} objects described by the json file.
+     * @param jsonPath
+     *            the path of the json file to parse.
+     * @return a HashMap of the {@link Topic} objects described by the json file
+     *         indexed by topic name.
      */
-    public ArrayList<Topic> getTopicsFromJson(String jsonPath) throws BadTopicsJsonFormat, NoTopicsJsonFileException{
-        try{
+    public HashMap<String, Topic> getTopicsFromJson(String jsonPath)
+            throws BadTopicsJsonFormat, NoTopicsJsonFileException {
+        try {
             File file = new File(jsonPath);
-            ArrayList<Topic> topics= objectMapper.readValue(file, new TypeReference<ArrayList<Topic>>(){});
-            return topics;
-        }
-        catch (JsonParseException | JsonMappingException e){
+            ArrayList<Topic> topics = objectMapper.readValue(file, new TypeReference<ArrayList<Topic>>() {
+            });
+            HashMap<String, Topic> topicsIndexedByName = new HashMap<String, Topic>();
+            for (Topic topic : topics) {
+                topicsIndexedByName.put(topic.getName(), topic);
+            }
+            return topicsIndexedByName;
+        } catch (JsonParseException | JsonMappingException e) {
             throw new BadTopicsJsonFormat(e.getMessage());
-        }
-        catch (FileNotFoundException | NullPointerException e){
+        } catch (FileNotFoundException | NullPointerException e) {
             throw new NoTopicsJsonFileException("The path provided does not correspond to a file. " + e.getMessage());
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new NoTopicsJsonFileException(e.getMessage());
         }
     }
-    
-}
 
+}

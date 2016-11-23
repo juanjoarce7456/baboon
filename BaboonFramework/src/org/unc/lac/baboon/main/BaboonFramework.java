@@ -21,12 +21,11 @@ import org.reflections.Reflections;
  */
 
 public class BaboonFramework {
-
     /**
      * List of BaboonApplication objects automatically instantiated by the
      * framework
      */
-    static private ArrayList<BaboonApplication> appSetupObjects = new ArrayList<BaboonApplication>();
+    private static ArrayList<BaboonApplication> appSetupObjects = new ArrayList<BaboonApplication>();
 
     /**
      * Main method.

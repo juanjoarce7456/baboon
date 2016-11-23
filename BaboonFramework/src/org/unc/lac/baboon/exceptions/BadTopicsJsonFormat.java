@@ -22,6 +22,7 @@ public class BadTopicsJsonFormat extends Exception {
     public BadTopicsJsonFormat(String message) {
         super(message);
     }
+
     public BadTopicsJsonFormat(Throwable cause) {
         super(cause);
     }
@@ -29,9 +30,8 @@ public class BadTopicsJsonFormat extends Exception {
     public BadTopicsJsonFormat(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    public BadTopicsJsonFormat(String message, Throwable cause, boolean enableSuppression,
-            boolean writableStackTrace) {
+
+    public BadTopicsJsonFormat(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
