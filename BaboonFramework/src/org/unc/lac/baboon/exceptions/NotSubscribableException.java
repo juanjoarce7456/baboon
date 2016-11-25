@@ -4,8 +4,9 @@ package org.unc.lac.baboon.exceptions;
  * This exception is thrown when the system can not subscribe an object and
  * method to a topic. The causes can be: the method name provided is null, the
  * object provided is null, the topic name provided is null, the topic or method
- * does not exists on the system or there was a security exception while trying
- * to resolve the method from its name.
+ * does not exists on the system, there was a security exception while trying to
+ * resolve the method from its name or the object and method to subscribe are
+ * already subscribed to another topic.
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -17,7 +18,7 @@ public class NotSubscribableException extends Exception {
     private static final long serialVersionUID = -6680335799064723743L;
 
     public NotSubscribableException() {
-        super("The object instance and method provided is not a Task or HappeningHandler");
+        super("The object instance and method provided is not subscribable");
     }
 
     public NotSubscribableException(String message) {
