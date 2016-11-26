@@ -46,6 +46,7 @@ public class BaboonConfig {
      *         "read-only" access.
      * @see Collections#unmodifiableMap(Map)
      */
+
     public Map<AbstractTask, Topic> getSubscriptionsUnmodifiableMap() {
         return Collections.unmodifiableMap(subscriptionsMap);
     }
