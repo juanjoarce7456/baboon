@@ -136,7 +136,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, method);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
@@ -165,7 +165,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, null);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
@@ -194,7 +194,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, "methodNotExistingOnClass");
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
@@ -224,13 +224,13 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             baboonConfig.subscribeToTopic("notExistingTopicName", mockController, method);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
         try {
             baboonConfig.subscribeToTopic(null, mockController, method);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
@@ -257,7 +257,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[0], null, method);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
@@ -386,7 +386,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             assertEquals(1, baboonConfig.getSubscriptionsUnmodifiableMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, taskMethod);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
         try {
@@ -394,7 +394,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             assertEquals(2, baboonConfig.getSubscriptionsUnmodifiableMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod);
             fail("Exception should have been thrown before this point");
-        } catch (NotSubscribableException e) {
+        } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
