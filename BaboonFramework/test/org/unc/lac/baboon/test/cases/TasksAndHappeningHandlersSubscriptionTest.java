@@ -1,11 +1,7 @@
 package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
-
-import java.lang.reflect.Method;
 import java.util.Map;
-
-import org.javatuples.Pair;
 import org.junit.Test;
 import org.unc.lac.baboon.annotations.HappeningHandler;
 import org.unc.lac.baboon.annotations.Task;
@@ -13,6 +9,9 @@ import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.main.BaboonConfig;
+import org.unc.lac.baboon.task.AbstractTask;
+import org.unc.lac.baboon.task.HappeningHandlerObject;
+import org.unc.lac.baboon.task.TaskObject;
 import org.unc.lac.baboon.test.utils.tasks.MockController;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
@@ -48,14 +47,11 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, happeningHandlerMethod);
-            Map<Pair<Object, Method>, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            Pair<Object, Method> testHHO = new Pair<Object, Method>(mockController,
+            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
+            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
                     MethodDictionary.getMethod(mockController, happeningHandlerMethod));
             assertEquals(1, subscriptionsMap.size());
             assertTrue(subscriptionsMap.keySet().contains(testHHO));
-            for (Pair<Object, Method> happeningHandler : subscriptionsMap.keySet()) {
-                assertTrue(happeningHandler.getValue1().isAnnotationPresent(HappeningHandler.class));
-            }
             assertEquals(topicNamesDefined[0], subscriptionsMap.get(testHHO).getName());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
@@ -92,14 +88,10 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, taskMethod);
-            Map<Pair<Object, Method>, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            Pair<Object, Method> testTO = new Pair<Object, Method>(mockController,
-                    MethodDictionary.getMethod(mockController, taskMethod));
+            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
+            TaskObject testTO = new TaskObject(mockController, MethodDictionary.getMethod(mockController, taskMethod));
             assertEquals(1, subscriptionsMap.size());
             assertTrue(subscriptionsMap.keySet().contains(testTO));
-            for (Pair<Object, Method> happeningHandler : subscriptionsMap.keySet()) {
-                assertTrue(happeningHandler.getValue1().isAnnotationPresent(Task.class));
-            }
             assertEquals(topicNamesDefined[0], subscriptionsMap.get(testTO).getName());
 
         } catch (NotSubscribableException e) {

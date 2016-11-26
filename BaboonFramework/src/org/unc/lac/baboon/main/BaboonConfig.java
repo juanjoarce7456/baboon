@@ -4,13 +4,14 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.javatuples.Pair;
 import org.unc.lac.baboon.annotations.HappeningHandler;
 import org.unc.lac.baboon.annotations.Task;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
+import org.unc.lac.baboon.task.AbstractTask;
+import org.unc.lac.baboon.task.HappeningHandlerObject;
+import org.unc.lac.baboon.task.TaskObject;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
@@ -32,7 +33,7 @@ public class BaboonConfig {
     /**
      * Map of HappeningHandlers and Tasks subscribed to topics
      */
-    private HashMap<Pair<Object, Method>, Topic> subscriptionsMap = new HashMap<Pair<Object, Method>, Topic>();
+    private HashMap<AbstractTask, Topic> subscriptionsMap = new HashMap<AbstractTask, Topic>();
     /**
      * Map of Topics registered on the system indexed by name
      */
@@ -45,7 +46,7 @@ public class BaboonConfig {
      *         "read-only" access.
      * @see Collections#unmodifiableMap(Map)
      */
-    public Map<Pair<Object, Method>, Topic> getSubscriptionsUnmodifiableMap() {
+    public Map<AbstractTask, Topic> getSubscriptionsUnmodifiableMap() {
         return Collections.unmodifiableMap(subscriptionsMap);
     }
 
@@ -90,10 +91,14 @@ public class BaboonConfig {
         Method method;
         try {
             method = MethodDictionary.getMethod(object, methodName);
-            if (method.isAnnotationPresent(HappeningHandler.class) || method.isAnnotationPresent(Task.class)) {
-                if (subscriptionsMap.putIfAbsent(new Pair<Object, Method>(object, method), topic) != null) {
+            boolean isHappeningHandler = false;
+            if ((isHappeningHandler = method.isAnnotationPresent(HappeningHandler.class))
+                    || method.isAnnotationPresent(Task.class)) {
+                AbstractTask task = (isHappeningHandler) ? new HappeningHandlerObject(object, method)
+                        : new TaskObject(object, method);
+                if (subscriptionsMap.putIfAbsent(task, topic) != null) {
                     throw new NotSubscribableException(
-                            "A HappeningHandler or Task is already subscribed to the topic.");
+                            "This HappeningHandler or Task is already subscribed to a topic.");
                 }
             } else {
                 throw new NotSubscribableException();
