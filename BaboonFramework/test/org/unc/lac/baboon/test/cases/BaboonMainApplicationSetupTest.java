@@ -54,7 +54,6 @@ public class BaboonMainApplicationSetupTest {
     @Test
     public void testMainCallsDeclareMethod() {
         String capturedLog = logCatcher1.getTestCapturedLog();
-        System.out.println("capturedLog: \n" + capturedLog);
         Assert.assertTrue(capturedLog.contains(expectedLogForDeclareMethod));
     }
 
@@ -70,7 +69,6 @@ public class BaboonMainApplicationSetupTest {
     @Test
     public void testMainCallsSubscribeMethod() {
         String capturedLog = logCatcher1.getTestCapturedLog();
-        System.out.println("capturedLog: \n" + capturedLog);
         Assert.assertTrue(capturedLog.contains(expectedLogForSubscribeMethod));
     }
 

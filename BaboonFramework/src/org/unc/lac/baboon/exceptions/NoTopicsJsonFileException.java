@@ -3,7 +3,8 @@ package org.unc.lac.baboon.exceptions;
 import org.unc.lac.baboon.topic.Topic;
 
 /**
- * This exception is thrown when the given topics json file can not be found on the filesystem.
+ * This exception is thrown when the given topics json file can not be found on
+ * the filesystem.
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -12,7 +13,7 @@ import org.unc.lac.baboon.topic.Topic;
  * @see Topic
  */
 public class NoTopicsJsonFileException extends Exception {
-    
+
     private static final long serialVersionUID = -8169836890348633262L;
 
     public NoTopicsJsonFileException() {
@@ -22,7 +23,7 @@ public class NoTopicsJsonFileException extends Exception {
     public NoTopicsJsonFileException(String message) {
         super(message);
     }
-    
+
     public NoTopicsJsonFileException(Throwable cause) {
         super(cause);
     }
@@ -30,7 +31,7 @@ public class NoTopicsJsonFileException extends Exception {
     public NoTopicsJsonFileException(String message, Throwable cause) {
         super(message, cause);
     }
-    
+
     public NoTopicsJsonFileException(String message, Throwable cause, boolean enableSuppression,
             boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
