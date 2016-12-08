@@ -21,7 +21,7 @@ import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory
  */
 
 public class BaboonPetriCore {
-    private static PetriNetFactory factory;
+    private PetriNetFactory factory;
     private PetriMonitor monitor;
     private PetriNet petri;
 
