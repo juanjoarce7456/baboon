@@ -34,6 +34,15 @@ public class DummyThread implements Callable<Void> {
     BaboonPetriCore petriCore;
 
     public DummyThread(TaskObject task, Topic topic, BaboonPetriCore petriCore) {
+        if(task==null){
+            throw new IllegalArgumentException("Task can not be null");
+        }
+        if(topic==null){
+            throw new IllegalArgumentException("Topic can not be null");
+        }
+        if(petriCore==null){
+            throw new IllegalArgumentException("Petri Core can not be null");
+        }
         this.topic = topic;
         this.task = task;
         this.petriCore = petriCore;
