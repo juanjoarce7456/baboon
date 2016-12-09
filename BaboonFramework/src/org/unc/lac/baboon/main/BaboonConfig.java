@@ -92,16 +92,17 @@ public class BaboonConfig {
         Method method;
         try {
             method = MethodDictionary.getMethod(object, methodName);
-            if (method.isAnnotationPresent(HappeningHandler.class)){
+            if (method.isAnnotationPresent(HappeningHandler.class)) {
                 if (subscriptionsMap.putIfAbsent(new HappeningHandlerObject(object, method), topic) != null) {
-                    throw new NotSubscribableException(
-                            "The happening handler is already subscribed to a topic.");
+                    throw new NotSubscribableException("The happening handler is already subscribed to a topic.");
                 }
-            }
-            else if(method.isAnnotationPresent(Task.class)) {
-                if (subscriptionsMap.putIfAbsent(new TaskObject(object, method), topic) != null) {
-                    throw new NotSubscribableException(
-                            "The task is already subscribed to a topic.");
+            } else if (method.isAnnotationPresent(Task.class)) {
+                if (topic.getPermission() == null) {
+                    throw new NotSubscribableException("The topic's permission could not be empty.");
+                } else if (topic.getPermission().isEmpty()) {
+                    throw new NotSubscribableException("The topic's permission could not be null.");
+                } else if (subscriptionsMap.putIfAbsent(new TaskObject(object, method), topic) != null) {
+                    throw new NotSubscribableException("The task is already subscribed to a topic.");
                 }
             } else {
                 throw new NotSubscribableException();
