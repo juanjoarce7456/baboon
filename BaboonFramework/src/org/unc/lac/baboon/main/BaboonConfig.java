@@ -81,27 +81,28 @@ public class BaboonConfig {
     public void subscribeToTopic(String topicName, Object object, String methodName) throws NotSubscribableException {
         Topic topic = getTopicByName(topicName);
         if (topicName == null || topic == null) {
-            throw new NotSubscribableException("Can Not subscribe to a null topic");
+            throw new NotSubscribableException("Cannot subscribe to a null topic");
         }
         if (object == null) {
-            throw new NotSubscribableException("Can Not subscribe a null object");
+            throw new NotSubscribableException("Cannot subscribe a null object");
         }
         if (methodName == null) {
-            throw new NotSubscribableException("Can Not subscribe a null method name");
+            throw new NotSubscribableException("Cannot subscribe a null method name");
         }
         Method method;
         try {
             method = MethodDictionary.getMethod(object, methodName);
-            if (method.isAnnotationPresent(HappeningHandler.class)){
+            if (method.isAnnotationPresent(HappeningHandler.class)) {
                 if (subscriptionsMap.putIfAbsent(new HappeningHandlerObject(object, method), topic) != null) {
-                    throw new NotSubscribableException(
-                            "The happening handler is already subscribed to a topic.");
+                    throw new NotSubscribableException("The happening handler is already subscribed to a topic.");
                 }
-            }
-            else if(method.isAnnotationPresent(Task.class)) {
-                if (subscriptionsMap.putIfAbsent(new TaskObject(object, method), topic) != null) {
-                    throw new NotSubscribableException(
-                            "The task is already subscribed to a topic.");
+            } else if (method.isAnnotationPresent(Task.class)) {
+                if (topic.getPermission() == null) {
+                    throw new NotSubscribableException("The topic's permission cannot be empty.");
+                } else if (topic.getPermission().isEmpty()) {
+                    throw new NotSubscribableException("The topic's permission cannot be null.");
+                } else if (subscriptionsMap.putIfAbsent(new TaskObject(object, method), topic) != null) {
+                    throw new NotSubscribableException("The task is already subscribed to a topic.");
                 }
             } else {
                 throw new NotSubscribableException();

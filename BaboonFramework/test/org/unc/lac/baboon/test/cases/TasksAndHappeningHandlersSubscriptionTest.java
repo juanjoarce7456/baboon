@@ -18,6 +18,7 @@ import org.unc.lac.baboon.utils.MethodDictionary;
 
 public class TasksAndHappeningHandlersSubscriptionTest {
     private final String topicsPath02 = "test/org/unc/lac/baboon/test/resources/topics02.json";
+    private final String topicsPath03 = "test/org/unc/lac/baboon/test/resources/topics03.json";
     private final String[] topicNamesDefined = { "topic1", "topic2", "topic3" };
 
     /**
@@ -29,9 +30,9 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * {@link HappeningHandler} annotated method to a {@link Topic}</li>
      * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
      * contain a {@link HappeningHandlerObject} with the object instance and the
-     * method subscribed as a map's key</li> And the
-     * {@link HappeningHandlerObject} subscriptions Map should contain the
-     * {@link Topic} as value for the key</li>
+     * method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * contain the {@link Topic} as value for the key</li>
      */
     @Test
     public void subscribingAnExistingHappeningHandlerToAnExistingTopicShouldGetRegisteredInConfigTest() {
@@ -71,8 +72,9 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * annotated method to a {@link Topic}</li>
      * <li>Then the {@link TaskObject} subscriptions Map should contain a
      * {@link TaskObject} with the object instance and the method subscribed as
-     * a map's key</li> And the {@link TaskObject} subscriptions Map should
-     * contain the {@link Topic} as value for the key</li>
+     * a map's key</li>
+     * <li>And the {@link TaskObject} subscriptions Map should contain the
+     * {@link Topic} as value for the key</li>
      */
     @Test
     public void subscribingAnExistingTaskToAnExistingTopicShouldShouldGetRegisteredInConfigTest() {
@@ -388,6 +390,150 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
+        }
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And topic1 has an empty permission string</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe a {@link TaskObject} to topic1</li>
+     * <li>Then a {@link NotSubscribableException} exception should be
+     * thrown</li>
+     */
+    @Test
+    public void subscribingTaskToTopicWithEmptyPermissionShouldNotBePossibleTest() {
+        final MockController mockController = new MockController();
+        final String taskMethod = "mockTask";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        try {
+            baboonConfig.addTopics(topicsPath03);
+        } catch (BadTopicsJsonFormat e) {
+            fail(e.getMessage());
+        } catch (NoTopicsJsonFileException e) {
+            fail(e.getMessage());
+        }
+        try {
+            assertEquals("", baboonConfig.getTopicByName(topicNamesDefined[0]).getPermission());
+            baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, taskMethod);
+            fail("Exception should have been thrown before this point");
+        } catch (Exception e) {
+            assertEquals(NotSubscribableException.class, e.getClass());
+        }
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic2"</li>
+     * <li>And topic2 has not the permission field</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe a {@link TaskObject} to topic2</li>
+     * <li>Then a {@link NotSubscribableException} exception should be
+     * thrown</li>
+     */
+    @Test
+    public void subscribingTaskToTopicWithNullPermissionShouldNotBePossibleTest() {
+        final MockController mockController = new MockController();
+        final String taskMethod = "mockTask";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        try {
+            baboonConfig.addTopics(topicsPath03);
+        } catch (BadTopicsJsonFormat e) {
+            fail(e.getMessage());
+        } catch (NoTopicsJsonFileException e) {
+            fail(e.getMessage());
+        }
+        try {
+            assertEquals(null, baboonConfig.getTopicByName(topicNamesDefined[1]).getPermission());
+            baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, taskMethod);
+            fail("Exception should have been thrown before this point");
+        } catch (Exception e) {
+            assertEquals(NotSubscribableException.class, e.getClass());
+        }
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And topic1 has an empty permission string</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe a {@link HappeningHandlerObject} to topic1</li>
+     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
+     * contain a {@link HappeningHandlerObject} with the object instance and the
+     * method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * contain the {@link Topic} as value for the key</li>
+     */
+    @Test
+    public void subscribingHappeningHandlerToTopicWithEmptyPermissionShouldGetRegisteredInConfigTest() {
+        final MockController mockController = new MockController();
+        final String happeningHandlerMethod = "mockHappeningHandler";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        try {
+            baboonConfig.addTopics(topicsPath03);
+        } catch (BadTopicsJsonFormat e) {
+            fail(e.getMessage());
+        } catch (NoTopicsJsonFileException e) {
+            fail(e.getMessage());
+        }
+        try {
+            assertEquals("", baboonConfig.getTopicByName(topicNamesDefined[0]).getPermission());
+            baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, happeningHandlerMethod);
+            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
+            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+                    MethodDictionary.getMethod(mockController, happeningHandlerMethod));
+            assertEquals(1, subscriptionsMap.size());
+            assertTrue(subscriptionsMap.keySet().contains(testHHO));
+            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testHHO).getName());
+        } catch (NotSubscribableException e) {
+            fail(e.getMessage());
+        } catch (NoSuchMethodException e) {
+            fail(e.getMessage());
+        } catch (SecurityException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic2"</li>
+     * <li>And topic2 has not the permission field</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe a {@link HappeningHandlerObject} to topic2</li>
+     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
+     * contain a {@link HappeningHandlerObject} with the object instance and the
+     * method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * contain the {@link Topic} as value for the key</li>
+     */
+    @Test
+    public void subscribingHappeningHandlerToTopicWithNullPermissionShouldGetRegisteredInConfigTest() {
+        final MockController mockController = new MockController();
+        final String happeningHandlerMethod = "mockHappeningHandler";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        try {
+            baboonConfig.addTopics(topicsPath03);
+        } catch (BadTopicsJsonFormat e) {
+            fail(e.getMessage());
+        } catch (NoTopicsJsonFileException e) {
+            fail(e.getMessage());
+        }
+        try {
+            assertEquals(null, baboonConfig.getTopicByName(topicNamesDefined[1]).getPermission());
+            baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, happeningHandlerMethod);
+            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
+            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+                    MethodDictionary.getMethod(mockController, happeningHandlerMethod));
+            assertEquals(1, subscriptionsMap.size());
+            assertTrue(subscriptionsMap.keySet().contains(testHHO));
+            assertEquals(topicNamesDefined[1], subscriptionsMap.get(testHHO).getName());
+        } catch (NotSubscribableException e) {
+            fail(e.getMessage());
+        } catch (NoSuchMethodException e) {
+            fail(e.getMessage());
+        } catch (SecurityException e) {
+            fail(e.getMessage());
         }
     }
 
