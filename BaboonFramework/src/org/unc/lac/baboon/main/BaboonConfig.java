@@ -81,13 +81,13 @@ public class BaboonConfig {
     public void subscribeToTopic(String topicName, Object object, String methodName) throws NotSubscribableException {
         Topic topic = getTopicByName(topicName);
         if (topicName == null || topic == null) {
-            throw new NotSubscribableException("Can Not subscribe to a null topic");
+            throw new NotSubscribableException("Cannot subscribe to a null topic");
         }
         if (object == null) {
-            throw new NotSubscribableException("Can Not subscribe a null object");
+            throw new NotSubscribableException("Cannot subscribe a null object");
         }
         if (methodName == null) {
-            throw new NotSubscribableException("Can Not subscribe a null method name");
+            throw new NotSubscribableException("Cannot subscribe a null method name");
         }
         Method method;
         try {
@@ -98,9 +98,9 @@ public class BaboonConfig {
                 }
             } else if (method.isAnnotationPresent(Task.class)) {
                 if (topic.getPermission() == null) {
-                    throw new NotSubscribableException("The topic's permission could not be empty.");
+                    throw new NotSubscribableException("The topic's permission cannot be empty.");
                 } else if (topic.getPermission().isEmpty()) {
-                    throw new NotSubscribableException("The topic's permission could not be null.");
+                    throw new NotSubscribableException("The topic's permission cannot be null.");
                 } else if (subscriptionsMap.putIfAbsent(new TaskObject(object, method), topic) != null) {
                     throw new NotSubscribableException("The task is already subscribed to a topic.");
                 }
