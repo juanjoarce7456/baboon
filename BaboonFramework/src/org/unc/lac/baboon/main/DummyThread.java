@@ -67,6 +67,10 @@ public class DummyThread implements Callable<Void> {
                 for (String transitionCallback : topic.getFireCallback()) {
                     petriCore.fireTransition(transitionCallback, true);
                 }
+                for (String guardCallback : topic.getSetGuardCallback()) {
+                    Boolean result = (Boolean) task.getGuardCallback(guardCallback).invoke(task.getObject());
+                    petriCore.setGuard(guardCallback,result.booleanValue());
+                }
             } catch (IllegalArgumentException | IllegalTransitionFiringError | NotInitializedPetriNetException
                     | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);

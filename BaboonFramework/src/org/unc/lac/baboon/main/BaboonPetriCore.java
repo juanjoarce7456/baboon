@@ -65,8 +65,8 @@ public class BaboonPetriCore {
     }
 
     /**
-     * Initializes the petri net. This method is called by Baboon framework on its
-     * setup.
+     * Initializes the petri net. This method is called by Baboon framework on
+     * its setup.
      */
     public void initializePetriNet() {
         petri.initializePetriNet();
@@ -101,6 +101,23 @@ public class BaboonPetriCore {
     public void fireTransition(String transitionName, boolean perennialFiring)
             throws IllegalArgumentException, IllegalTransitionFiringError, NotInitializedPetriNetException {
         monitor.fireTransition(transitionName, perennialFiring);
+    }
+
+    /**
+     * Sets a guard by using petri monitor. This method is called automatically
+     * by Baboon framework and is not intended to be used by user,
+     * 
+     * @param guardName
+     *            The name of the guard to be modified.
+     * @param newValue
+     *            the new boolean value to be set on the guard.
+     * 
+     * @see PetriMonitor
+     * @see PetriMonitor#setGuard(String, boolean)
+     */
+    public void setGuard(String guardName, boolean newValue)
+            throws IndexOutOfBoundsException, NullPointerException, NotInitializedPetriNetException {
+        monitor.setGuard(guardName, newValue);
     }
 
 }

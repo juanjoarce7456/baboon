@@ -2,7 +2,7 @@ package org.unc.lac.baboon.utils;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-
+import org.unc.lac.baboon.annotations.GuardProvider;
 import org.javatuples.Pair;
 
 /**
@@ -29,7 +29,8 @@ public class MethodDictionary {
      *            an object of the class declaring the method to resolve.
      * @param methodName
      *            the name of the method to resolve.
-     * @return a {@link Method} object resolved using object's class and methodName.
+     * @return a {@link Method} object resolved using object's class and
+     *         methodName.
      */
     public static Method getMethod(Object object, String methodName) throws NoSuchMethodException, SecurityException {
         Class<?> c = object.getClass();
@@ -41,5 +42,32 @@ public class MethodDictionary {
             methodDict.put(key, m);
             return m;
         }
+    }
+
+    /**
+     * Given an object instance and a guard's name returns the
+     * {@link GuardProvider} annotated Method object corresponding to the guard
+     * name given. The method name provided should be of a method that does not
+     * take parameters in its signature.
+     * 
+     * @param object
+     *            an object of the class declaring the method to resolve.
+     * @param guardName
+     *            the name of the guard used as value on the
+     *            {@link GuardProvider} annotation of the method to resolve.
+     * @return a {@link Method} object resolved using object's class and
+     *         methodName.
+     */
+    public static Method getGuardProviderMethod(Object object, String guardName) throws NoSuchMethodException {
+        Class<?> c = object.getClass();
+        for(Method m : c.getMethods()){
+            if(m.isAnnotationPresent(GuardProvider.class)){
+                if(m.getAnnotation(GuardProvider.class).value().equals(guardName)){
+                    return m;
+                }
+            }
+        }
+        
+        throw new NoSuchMethodException("There is not a GuardProvider annotated method with value " + guardName);
     }
 }
