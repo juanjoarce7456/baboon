@@ -77,7 +77,7 @@ public class DummyThread implements Callable<Void> {
                         petriCore.setGuard(guardCallback,result.booleanValue());
                     }
                     catch(NullPointerException e){
-                        LOGGER.log(Level.WARNING, "Cannot set a guard on callback", e);
+                        LOGGER.log(Level.SEVERE, "Cannot set a guard on callback", e);
                     }
                 }
             } catch (IllegalArgumentException | IllegalTransitionFiringError | NotInitializedPetriNetException
