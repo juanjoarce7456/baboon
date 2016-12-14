@@ -133,7 +133,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("The method should be annotated with HappeningHandler or Task annotations"));
         }
     }
 
@@ -163,7 +162,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("Cannot subscribe a null method name"));
         }
     }
 
@@ -193,7 +191,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("This method does not exist on object provided"));
         }
     }
 
@@ -230,7 +227,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("Cannot subscribe to a null topic"));
         }
     }
 
@@ -258,7 +254,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("Cannot subscribe a null object"));
         }
     }
 
@@ -388,7 +383,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("The task is already subscribed to a topic"));
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, happeningHandlerMethod);
@@ -397,7 +391,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("The happening handler is already subscribed to a topic"));
         }
     }
 
@@ -428,7 +421,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("The topic's permission cannot be empty"));
         }
     }
 
@@ -459,7 +451,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("The topic's permission cannot be null"));
         }
     }
 
@@ -596,6 +587,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
                 if (key.equals(testHHO)) {
                     assertEquals(providerMethod1, key.getGuardCallback("g1").getName());
                     assertEquals(providerMethod2, key.getGuardCallback("g2").getName());
+                    break;
                 }
             }
             assertEquals(topicNamesDefined[2], subscriptionsMap.get(testHHO).getName());
@@ -641,7 +633,6 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
             assertEquals(NotSubscribableException.class, e.getClass());
-            assertTrue(e.getMessage().contains("There is not a GuardProvider annotated method with value"));
         }
     }
 

@@ -22,8 +22,8 @@ public class MethodDictionary {
 
     /**
      * Given an object instance and a method's name returns the Method object
-     * corresponding to the method name given. The method name provided should
-     * be of a method that does not take parameters in its signature.
+     * corresponding to the method name given. The given method must not take
+     * any arguments.
      * 
      * @param object
      *            an object of the class declaring the method to resolve.
@@ -47,8 +47,7 @@ public class MethodDictionary {
     /**
      * Given an object instance and a guard's name returns the
      * {@link GuardProvider} annotated Method object corresponding to the guard
-     * name given. The method name provided should be of a method that does not
-     * take parameters in its signature.
+     * name given. The given method must not take any arguments.
      * 
      * @param object
      *            an object of the class declaring the method to resolve.
@@ -60,14 +59,14 @@ public class MethodDictionary {
      */
     public static Method getGuardProviderMethod(Object object, String guardName) throws NoSuchMethodException {
         Class<?> c = object.getClass();
-        for(Method m : c.getMethods()){
-            if(m.isAnnotationPresent(GuardProvider.class)){
-                if(m.getAnnotation(GuardProvider.class).value().equals(guardName)){
+        for (Method m : c.getMethods()) {
+            if (m.isAnnotationPresent(GuardProvider.class)) {
+                if (m.getAnnotation(GuardProvider.class).value().equals(guardName)) {
                     return m;
                 }
             }
         }
-        
+
         throw new NoSuchMethodException("There is not a GuardProvider annotated method with value " + guardName);
     }
 }

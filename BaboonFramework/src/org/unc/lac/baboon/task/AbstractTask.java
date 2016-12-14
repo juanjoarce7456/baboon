@@ -40,7 +40,7 @@ public abstract class AbstractTask {
      *             method present in the object instance of this task.
      */
     public void addGuardCallback(String guardName, Method callback) {
-        if (guardName == null || guardName == "") {
+        if (guardName == null || guardName.isEmpty()) {
             throw new IllegalArgumentException("guardName cannot be empty");
         }
         if (!callback.isAnnotationPresent(GuardProvider.class)) {
@@ -66,14 +66,13 @@ public abstract class AbstractTask {
         return guardCallback.get(guardName);
     }
 
-    public boolean isMethodPresent(Method method) {
-        boolean result = true;
+    private boolean isMethodPresent(Method method) {
         for (Method m : getObject().getClass().getMethods()) {
-            if (result = method.equals(m)) {
-                return result;
+            if (method.equals(m)) {
+                return true;
             }
         }
-        return result;
+        return false;
     }
 
     /**
