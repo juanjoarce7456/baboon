@@ -7,5 +7,17 @@
     {
     "name":"topic2",
     "fireCallback":["t1"]
+    },
+    {
+    "name":"topic3",
+    "permission":"t0",
+    "fireCallback":["t1"],
+    "setGuardCallback":["g1","g2"]
+    },
+    {
+    "name":"topic4",
+    "permission":"t0",
+    "fireCallback":["t1"],
+    "setGuardCallback":["g1","g3"]
     }
 ]

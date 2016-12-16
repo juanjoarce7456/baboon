@@ -3,6 +3,7 @@ package org.unc.lac.baboon.test.cases;
 import static org.junit.Assert.*;
 import java.util.Map;
 import org.junit.Test;
+import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningHandler;
 import org.unc.lac.baboon.annotations.Task;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
@@ -19,7 +20,7 @@ import org.unc.lac.baboon.utils.MethodDictionary;
 public class TasksAndHappeningHandlersSubscriptionTest {
     private final String topicsPath02 = "test/org/unc/lac/baboon/test/resources/topics02.json";
     private final String topicsPath03 = "test/org/unc/lac/baboon/test/resources/topics03.json";
-    private final String[] topicNamesDefined = { "topic1", "topic2", "topic3" };
+    private final String[] topicNamesDefined = { "topic1", "topic2", "topic3", "topic4" };
 
     /**
      * <li>Given I have a topics json file containing three topics</li>
@@ -534,6 +535,104 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             fail(e.getMessage());
         } catch (SecurityException e) {
             fail(e.getMessage());
+        }
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic3"</li>
+     * <li>And topic3 has a set_guard_callback {{["g1","g2"]}}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>And I have a controller with a method that returns a boolean and
+     * requires no parameters annotated with {@link GuardProvider#value()}
+     * "g1"</li>
+     * <li>And the same controller has a method that returns a boolean and
+     * requires no parameters annotated with {@link GuardProvider#value()}
+     * "g2"</li>
+     * <li>When I subscribe a {@link HappeningHandlerObject} to topic3</li>
+     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
+     * contain a {@link HappeningHandlerObject} with the object instance and the
+     * method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * contain the {@link Topic} as value for the key</li>
+     * <li>And {@link HappeningHandlerObject#getGuardCallback(String)} should
+     * return a guard callback method with for "g1"</li> *
+     * <li>And {@link HappeningHandlerObject#getGuardCallback(String)} should
+     * return a guard callback method with for "g2"</li>
+     */
+    @Test
+    public void subscribingAbstractTaskWithGuardProvidersToTopicWithGuardCallbackShouldGetRegisteredInConfigTest() {
+        final MockController mockController = new MockController();
+        final String happeningHandlerMethod = "mockHappeningHandler";
+        final String providerMethod1 = "mockGuard1Provider";
+        final String providerMethod2 = "mockGuard2Provider";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        try {
+            baboonConfig.addTopics(topicsPath03);
+        } catch (BadTopicsJsonFormat e) {
+            fail(e.getMessage());
+        } catch (NoTopicsJsonFileException e) {
+            fail(e.getMessage());
+        }
+        try {
+            assertTrue(baboonConfig.getTopicByName(topicNamesDefined[2]).getSetGuardCallback().contains("g1"));
+            assertTrue(baboonConfig.getTopicByName(topicNamesDefined[2]).getSetGuardCallback().contains("g2"));
+            baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod);
+            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
+            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+                    MethodDictionary.getMethod(mockController, happeningHandlerMethod));
+            assertEquals(1, subscriptionsMap.size());
+            assertTrue(subscriptionsMap.keySet().contains(testHHO));
+            for (AbstractTask key : subscriptionsMap.keySet()) {
+                if (key.equals(testHHO)) {
+                    assertEquals(providerMethod1, key.getGuardCallback("g1").getName());
+                    assertEquals(providerMethod2, key.getGuardCallback("g2").getName());
+                    break;
+                }
+            }
+            assertEquals(topicNamesDefined[2], subscriptionsMap.get(testHHO).getName());
+        } catch (NotSubscribableException e) {
+            fail(e.getMessage());
+        } catch (NoSuchMethodException e) {
+            fail(e.getMessage());
+        } catch (SecurityException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic4"</li>
+     * <li>And topic4 has a set_guard_callback {{["g1","g3"]}}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>And I have a controller with a method that returns a boolean and
+     * requires no parameters annotated with {@link GuardProvider#value()}
+     * "g1"</li>
+     * <li>And the controller has not a method annotated with
+     * {@link GuardProvider#value()} "g3"</li>
+     * <li>When I subscribe a {@link HappeningHandlerObject} to topic4</li>
+     * <li>Then a {@link NotSubscribableException} exception should be
+     * thrown</li>
+     */
+    @Test
+    public void subscribingAnAbstractTaskWithMissingGuardProviderToTopicWithGuardCallbackShouldNotBePossibleTest() {
+        final MockController mockController = new MockController();
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final String taskMethod = "mockTask";
+        try {
+            baboonConfig.addTopics(topicsPath03);
+        } catch (BadTopicsJsonFormat e) {
+            fail(e.getMessage());
+        } catch (NoTopicsJsonFileException e) {
+            fail(e.getMessage());
+        }
+        try {
+            assertTrue(baboonConfig.getTopicByName(topicNamesDefined[3]).getSetGuardCallback().contains("g1"));
+            assertTrue(baboonConfig.getTopicByName(topicNamesDefined[3]).getSetGuardCallback().contains("g3"));
+            baboonConfig.subscribeToTopic(topicNamesDefined[3], mockController, taskMethod);
+            fail("Exception should have been thrown before this point");
+        } catch (Exception e) {
+            assertEquals(NotSubscribableException.class, e.getClass());
         }
     }
 

@@ -2,6 +2,9 @@ package org.unc.lac.baboon.main;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.unc.lac.baboon.task.TaskObject;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
@@ -20,6 +23,7 @@ import org.unc.lac.javapetriconcurrencymonitor.exceptions.NotInitializedPetriNet
  * 
  */
 public class DummyThread implements Callable<Void> {
+    private final static Logger LOGGER = Logger.getLogger(DummyThread.class.getName());
     /**
      * The task to be executed.
      */
@@ -66,6 +70,15 @@ public class DummyThread implements Callable<Void> {
                 task.executeMethod();
                 for (String transitionCallback : topic.getFireCallback()) {
                     petriCore.fireTransition(transitionCallback, true);
+                }
+                for (String guardCallback : topic.getSetGuardCallback()) {
+                    try{
+                        Boolean result = (Boolean) task.getGuardCallback(guardCallback).invoke(task.getObject());
+                        petriCore.setGuard(guardCallback,result.booleanValue());
+                    }
+                    catch(NullPointerException e){
+                        LOGGER.log(Level.SEVERE, "Cannot set a guard on callback", e);
+                    }
                 }
             } catch (IllegalArgumentException | IllegalTransitionFiringError | NotInitializedPetriNetException
                     | IllegalAccessException | InvocationTargetException e) {

@@ -15,6 +15,7 @@ import org.unc.lac.baboon.task.TaskObject;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Configuration Class. This class allows to import a json file containing the
@@ -48,7 +49,7 @@ public class BaboonConfig {
      */
 
     public Map<AbstractTask, Topic> getSubscriptionsUnmodifiableMap() {
-        return Collections.unmodifiableMap(subscriptionsMap);
+        return ImmutableMap.copyOf(subscriptionsMap);
     }
 
     /**
@@ -93,24 +94,53 @@ public class BaboonConfig {
         try {
             method = MethodDictionary.getMethod(object, methodName);
             if (method.isAnnotationPresent(HappeningHandler.class)) {
-                if (subscriptionsMap.putIfAbsent(new HappeningHandlerObject(object, method), topic) != null) {
+                AbstractTask happeningHandler = new HappeningHandlerObject(object, method);
+                subscribeGuardCallbacks(topic, happeningHandler);
+                if (subscriptionsMap.putIfAbsent(happeningHandler, topic) != null) {
                     throw new NotSubscribableException("The happening handler is already subscribed to a topic.");
                 }
             } else if (method.isAnnotationPresent(Task.class)) {
+                AbstractTask task = new TaskObject(object, method);
+                subscribeGuardCallbacks(topic, task);
                 if (topic.getPermission() == null) {
-                    throw new NotSubscribableException("The topic's permission cannot be empty.");
-                } else if (topic.getPermission().isEmpty()) {
                     throw new NotSubscribableException("The topic's permission cannot be null.");
-                } else if (subscriptionsMap.putIfAbsent(new TaskObject(object, method), topic) != null) {
+                } else if (topic.getPermission().isEmpty()) {
+                    throw new NotSubscribableException("The topic's permission cannot be empty.");
+                } else if (subscriptionsMap.putIfAbsent(task, topic) != null) {
                     throw new NotSubscribableException("The task is already subscribed to a topic.");
                 }
             } else {
-                throw new NotSubscribableException();
+                throw new NotSubscribableException("The method should be annotated with HappeningHandler or Task annotations");
             }
         } catch (NoSuchMethodException e) {
             throw new NotSubscribableException("This method does not exist on object provided", e);
         } catch (SecurityException e) {
             throw new NotSubscribableException("Security violation while trying to get method provided", e);
+        }
+    }
+
+    /**
+     * Determine the {@link Method} objects that will be invoked to resolve the
+     * guard values after the execution of the task (this methods should be
+     * annotated with {@link GuardProvider}). Also saves this Method objects on
+     * the task using {@link AbstractTask#addGuardCallback(String, Method)}
+     * 
+     * @param topic
+     *            The topic containing the names of the guards.
+     * @param task
+     *            The task subscribing to the topic, on which the callback
+     *            methods will be saved for future invocation.
+     * 
+     * @see Topic
+     * @see AbstractTask
+     */
+    private void subscribeGuardCallbacks(Topic topic, AbstractTask task) throws NotSubscribableException {
+        for (String guard : topic.getSetGuardCallback()) {
+            try {
+                task.addGuardCallback(guard, MethodDictionary.getGuardProviderMethod(task.getObject(), guard));
+            } catch (NoSuchMethodException | IllegalArgumentException e) {
+                throw new NotSubscribableException(e);
+            }
         }
     }
 

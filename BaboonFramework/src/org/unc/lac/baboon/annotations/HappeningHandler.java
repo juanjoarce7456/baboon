@@ -1,7 +1,9 @@
 package org.unc.lac.baboon.annotations;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation should be used on methods.
@@ -19,5 +21,6 @@ import java.lang.annotation.RetentionPolicy;
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
 public @interface HappeningHandler {
 }
