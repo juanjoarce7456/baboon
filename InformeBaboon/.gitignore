@@ -25,3 +25,4 @@ local.properties
 !lib/*
 !resources/*
 /document.synctex.gz
+/output/
