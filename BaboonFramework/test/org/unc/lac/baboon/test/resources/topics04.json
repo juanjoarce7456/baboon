@@ -1,0 +1,7 @@
+[
+    {
+    "name":"topic1",
+    "permission":"t0",
+    "fireCallback":["t1"]
+    }
+]

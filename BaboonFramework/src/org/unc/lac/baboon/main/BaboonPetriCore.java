@@ -1,13 +1,16 @@
 package org.unc.lac.baboon.main;
 
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
-import org.unc.lac.javapetriconcurrencymonitor.exceptions.NotInitializedPetriNetException;
+import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.PetriMonitor;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.policies.FirstInLinePolicy;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.policies.TransitionsPolicy;
 import org.unc.lac.javapetriconcurrencymonitor.petrinets.PetriNet;
 import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory;
 import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory.petriNetType;
+
+import rx.Observer;
+import rx.Subscription;
 
 /**
  * BaboonPetriCore is a wrapper containing the objects that are necessary for
@@ -94,12 +97,13 @@ public class BaboonPetriCore {
      *            The name of the transition to be fired.
      * @param perennialFiring
      *            Indicates if the firing is perennial or not.
+     * @throws PetriNetException 
      * 
      * @see PetriMonitor
      * @see PetriMonitor#fireTransition(String, boolean)
      */
     public void fireTransition(String transitionName, boolean perennialFiring)
-            throws IllegalArgumentException, IllegalTransitionFiringError, NotInitializedPetriNetException {
+            throws IllegalArgumentException, IllegalTransitionFiringError, PetriNetException {
         monitor.fireTransition(transitionName, perennialFiring);
     }
 
@@ -111,13 +115,34 @@ public class BaboonPetriCore {
      *            The name of the guard to be modified.
      * @param newValue
      *            the new boolean value to be set on the guard.
+     * @throws PetriNetException 
      * 
      * @see PetriMonitor
      * @see PetriMonitor#setGuard(String, boolean)
      */
     public void setGuard(String guardName, boolean newValue)
-            throws IndexOutOfBoundsException, NullPointerException, NotInitializedPetriNetException {
+            throws IndexOutOfBoundsException, NullPointerException, PetriNetException {
         monitor.setGuard(guardName, newValue);
+    }
+    
+    /**
+     * Subscribe the given observer to the given transition events if it's informed
+     * @param _transitionName the name of the transition to subscribe to
+     * @param _observer the observer to subscribe
+     * @throws IllegalArgumentException if the given transition is not informed
+     * @return a Subscription object used to unsubscribe
+     * @see PetriMonitor#subscribeToTransition(Transition, Observer)
+     */
+    public Subscription listenToTransitionInforms (final String _transitionName, final Observer<String> _observer){
+        return monitor.subscribeToTransition(_transitionName, _observer);
+    }
+    
+    /**
+     * This method returns the current marking on the Petri Net core of the application
+     * @return the tokens in each place of the Petri Net
+     */
+    public Integer[] getMarking(){
+        return petri.getCurrentMarking();
     }
 
 }

@@ -8,8 +8,7 @@ import java.util.logging.Logger;
 import org.unc.lac.baboon.task.TaskObject;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
-import org.unc.lac.javapetriconcurrencymonitor.exceptions.NotInitializedPetriNetException;
-
+import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 /**
  * A {@link Callable} object that executes a {@link TaskObject}. This is the
  * wrapper of a thread that asks the Petri monitor for permission to execute a
@@ -68,9 +67,6 @@ public class DummyThread implements Callable<Void> {
             try {
                 petriCore.fireTransition(topic.getPermission(), false);
                 task.executeMethod();
-                for (String transitionCallback : topic.getFireCallback()) {
-                    petriCore.fireTransition(transitionCallback, true);
-                }
                 for (String guardCallback : topic.getSetGuardCallback()) {
                     try{
                         Boolean result = (Boolean) task.getGuardCallback(guardCallback).invoke(task.getObject());
@@ -80,8 +76,12 @@ public class DummyThread implements Callable<Void> {
                         LOGGER.log(Level.SEVERE, "Cannot set a guard on callback", e);
                     }
                 }
-            } catch (IllegalArgumentException | IllegalTransitionFiringError | NotInitializedPetriNetException
+                for (String transitionCallback : topic.getFireCallback()) {
+                    petriCore.fireTransition(transitionCallback, true);
+                }
+            } catch (IllegalArgumentException | IllegalTransitionFiringError | PetriNetException
                     | IllegalAccessException | InvocationTargetException e) {
+                System.out.println("No pude disparar la transicion " + e.getMessage());
                 throw new RuntimeException(e);
             }
         }

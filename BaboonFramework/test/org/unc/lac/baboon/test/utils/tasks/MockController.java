@@ -22,7 +22,7 @@ public class MockController {
 
     @HappeningHandler
     public void mockHappeningHandler() {
-
+        
     }
 
     @Task

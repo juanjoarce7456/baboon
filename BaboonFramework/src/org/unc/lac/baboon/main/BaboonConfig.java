@@ -47,7 +47,6 @@ public class BaboonConfig {
      *         "read-only" access.
      * @see Collections#unmodifiableMap(Map)
      */
-
     public Map<AbstractTask, Topic> getSubscriptionsUnmodifiableMap() {
         return ImmutableMap.copyOf(subscriptionsMap);
     }
@@ -65,6 +64,14 @@ public class BaboonConfig {
         topicsList.putAll((new TopicsJsonParser()).getTopicsFromJson(topicsJsonFilePath));
     }
 
+    /**
+     * Returns the {@link Topic} with the name provided or null if there's no
+     * topic with such name.
+     * 
+     * @param The
+     *            name of the topic to be returned
+     * @return The {@link Topic} with the name provided as parameter
+     */
     public Topic getTopicByName(String topicName) {
         return Collections.unmodifiableMap(topicsList).get(topicName);
     }
@@ -110,7 +117,8 @@ public class BaboonConfig {
                     throw new NotSubscribableException("The task is already subscribed to a topic.");
                 }
             } else {
-                throw new NotSubscribableException("The method should be annotated with HappeningHandler or Task annotations");
+                throw new NotSubscribableException(
+                        "The method should be annotated with HappeningHandler or Task annotations");
             }
         } catch (NoSuchMethodException e) {
             throw new NotSubscribableException("This method does not exist on object provided", e);
