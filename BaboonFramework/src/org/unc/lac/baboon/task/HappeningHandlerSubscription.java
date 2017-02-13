@@ -2,6 +2,8 @@ package org.unc.lac.baboon.task;
 
 import java.lang.reflect.Method;
 
+import org.unc.lac.baboon.topic.Topic;
+
 /**
  * This class is as a wrapper that defines a HappeningHandlerObject as a pair of an object instance
  * and a method. It is used internally by framework and should not be known
@@ -11,10 +13,10 @@ import java.lang.reflect.Method;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  */
-public class HappeningHandlerObject extends AbstractTask {
+public class HappeningHandlerSubscription extends AbstractTaskSubscription {
 
-    public HappeningHandlerObject(Object objInstance, Method objMethod) {
-        super(objInstance, objMethod);
+    public HappeningHandlerSubscription(Object objInstance, Method objMethod, Topic topic) {
+        super(objInstance, objMethod, topic);
     }
 
 }

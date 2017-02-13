@@ -1,5 +1,6 @@
 package org.unc.lac.baboon.main;
 
+
 import java.util.ArrayList;
 import java.util.Set;
 import org.reflections.Reflections;
@@ -8,13 +9,11 @@ import org.unc.lac.baboon.annotations.Task;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
-import org.unc.lac.baboon.task.AbstractTask;
-import org.unc.lac.baboon.task.HappeningHandlerObject;
-import org.unc.lac.baboon.task.TaskObject;
+import org.unc.lac.baboon.happeninghandleraspect.HappeningHandlerJoinPoint;
+import org.unc.lac.baboon.task.AbstractTaskSubscription;
+import org.unc.lac.baboon.task.TaskSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
-import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
-import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.PetriMonitor;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.policies.FirstInLinePolicy;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.policies.TransitionsPolicy;
@@ -69,6 +68,7 @@ public class BaboonFramework {
             try {
                 appSetupObjects.add(app.newInstance());
             } catch (IllegalAccessException | InstantiationException e) {
+                
             }
         }
         for (BaboonApplication appSetup : appSetupObjects) {
@@ -82,10 +82,9 @@ public class BaboonFramework {
         } else {
             petriCore.initializePetriNet();
         }
-        for (AbstractTask task : baboonConfig.getSubscriptionsUnmodifiableMap().keySet()) {
-            if (task.getClass().equals(TaskObject.class)) {
-                Topic topic = baboonConfig.getSubscriptionsUnmodifiableMap().get(task);
-                dummiesExecutor.executeDummy(new DummyThread((TaskObject) task, topic, petriCore));
+        for (AbstractTaskSubscription task : baboonConfig.getSubscriptionsMap().values()) {
+            if (task.getClass().equals(TaskSubscription.class)) {
+                dummiesExecutor.executeDummy(new DummyThread((TaskSubscription) task, petriCore));
             }
         }
     }
@@ -121,6 +120,7 @@ public class BaboonFramework {
      */
     public static void createPetriCore(String pnmlFilePath, petriNetType type, TransitionsPolicy firingPolicy) {
         petriCore = new BaboonPetriCore(pnmlFilePath, type, firingPolicy);
+        HappeningHandlerJoinPoint.setObserver(new HappeningSynchronizer(baboonConfig,petriCore));
     }
 
     /**
@@ -152,73 +152,6 @@ public class BaboonFramework {
     }
 
     /**
-     * Returns the {@link Topic} object to which the task provided as a
-     * parameter is subscribed or null if there's no topic subscribed to the
-     * task.
-     * 
-     * @param task
-     *            The task subscribed to the topic to be returned
-     * 
-     * @return The {@link Topic} to which the task is subscribed or null if
-     *         there's no topic subscribed to the task provided
-     */
-    public static Topic getTopic(AbstractTask task) {
-        return baboonConfig.getSubscriptionsUnmodifiableMap().get(task);
-    }
-
-    /**
-     * Fires a transition by using petri core. This method is called
-     * automatically by Baboon framework and is not intended to be used by user,
-     * 
-     * @param transitionName
-     *            The name of the transition to be fired.
-     * @param perennialFiring
-     *            Indicates if the firing is perennial or not.
-     * @throws PetriNetException
-     * 
-     * @see PetriMonitor
-     * @see PetriMonitor#fireTransition(String, boolean)
-     */
-    public static void fireTransition(String transitionName, boolean perennialFiring)
-            throws IllegalArgumentException, IllegalTransitionFiringError, PetriNetException {
-        petriCore.fireTransition(transitionName, perennialFiring);
-    }
-
-    /**
-     * Sets a guard by using petri core. This method is called automatically by
-     * Baboon framework and is not intended to be used by user,
-     * 
-     * @param guardName
-     *            The name of the guard to be modified.
-     * @param newValue
-     *            the new boolean value to be set on the guard.
-     * @throws PetriNetException
-     * 
-     * @see PetriMonitor
-     * @see PetriMonitor#setGuard(String, boolean)
-     */
-    public static void setGuard(String guardName, boolean newValue)
-            throws IndexOutOfBoundsException, NullPointerException, PetriNetException {
-        petriCore.setGuard(guardName, newValue);
-    }
-
-    /**
-     * @deprecated
-     * Returns the a copy of the {@link HappeningHandlerObject} originally
-     * subscribed in the framework starting from a happening handler with the
-     * same method and object. This method is not intended to be used by
-     * user. (This is a provisory method and will be deleted in the future).
-     */
-    public static HappeningHandlerObject getSubscribedHappeningHandler(HappeningHandlerObject happeningHandler) {
-        for (AbstractTask task : baboonConfig.getSubscriptionsUnmodifiableMap().keySet()) {
-            if (task.equals(happeningHandler)) {
-                return (HappeningHandlerObject) task;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Subscribe the given observer to the given transition events if it's
      * informed
      * 
@@ -245,4 +178,7 @@ public class BaboonFramework {
     public static Integer[] getMarking() {
         return petriCore.getMarking();
     }
+
+
+
 }

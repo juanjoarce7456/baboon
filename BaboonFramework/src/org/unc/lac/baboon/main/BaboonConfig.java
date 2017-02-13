@@ -4,18 +4,19 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.javatuples.Pair;
 import org.unc.lac.baboon.annotations.HappeningHandler;
 import org.unc.lac.baboon.annotations.Task;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
-import org.unc.lac.baboon.task.AbstractTask;
-import org.unc.lac.baboon.task.HappeningHandlerObject;
-import org.unc.lac.baboon.task.TaskObject;
+import org.unc.lac.baboon.task.AbstractTaskSubscription;
+import org.unc.lac.baboon.task.HappeningHandlerSubscription;
+import org.unc.lac.baboon.task.TaskSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Configuration Class. This class allows to import a json file containing the
@@ -34,7 +35,7 @@ public class BaboonConfig {
     /**
      * Map of HappeningHandlers and Tasks subscribed to topics
      */
-    private HashMap<AbstractTask, Topic> subscriptionsMap = new HashMap<AbstractTask, Topic>();
+    private HashMap<Pair<Object,Method>, AbstractTaskSubscription> subscriptionsMap = new HashMap<Pair<Object,Method>, AbstractTaskSubscription>();
     /**
      * Map of Topics registered on the system indexed by name
      */
@@ -47,8 +48,8 @@ public class BaboonConfig {
      *         "read-only" access.
      * @see Collections#unmodifiableMap(Map)
      */
-    public Map<AbstractTask, Topic> getSubscriptionsUnmodifiableMap() {
-        return ImmutableMap.copyOf(subscriptionsMap);
+    public Map<Pair<Object,Method>, AbstractTaskSubscription> getSubscriptionsMap() {
+        return subscriptionsMap;
     }
 
     /**
@@ -100,20 +101,21 @@ public class BaboonConfig {
         Method method;
         try {
             method = MethodDictionary.getMethod(object, methodName);
+            Pair<Object,Method> key = new Pair<Object,Method>(object,method);
             if (method.isAnnotationPresent(HappeningHandler.class)) {
-                AbstractTask happeningHandler = new HappeningHandlerObject(object, method);
+                AbstractTaskSubscription happeningHandler = new HappeningHandlerSubscription(object, method,topic);
                 subscribeGuardCallbacks(topic, happeningHandler);
-                if (subscriptionsMap.putIfAbsent(happeningHandler, topic) != null) {
+                if (subscriptionsMap.putIfAbsent(key, happeningHandler) != null) {
                     throw new NotSubscribableException("The happening handler is already subscribed to a topic.");
                 }
             } else if (method.isAnnotationPresent(Task.class)) {
-                AbstractTask task = new TaskObject(object, method);
+                AbstractTaskSubscription task = new TaskSubscription(object, method,topic);
                 subscribeGuardCallbacks(topic, task);
                 if (topic.getPermission() == null) {
                     throw new NotSubscribableException("The topic's permission cannot be null.");
                 } else if (topic.getPermission().isEmpty()) {
                     throw new NotSubscribableException("The topic's permission cannot be empty.");
-                } else if (subscriptionsMap.putIfAbsent(task, topic) != null) {
+                } else if (subscriptionsMap.putIfAbsent(key,task) != null) {
                     throw new NotSubscribableException("The task is already subscribed to a topic.");
                 }
             } else {
@@ -131,7 +133,7 @@ public class BaboonConfig {
      * Determine the {@link Method} objects that will be invoked to resolve the
      * guard values after the execution of the task (this methods should be
      * annotated with {@link GuardProvider}). Also saves this Method objects on
-     * the task using {@link AbstractTask#addGuardCallback(String, Method)}
+     * the task using {@link AbstractTaskSubscription#addGuardCallback(String, Method)}
      * 
      * @param topic
      *            The topic containing the names of the guards.
@@ -140,9 +142,9 @@ public class BaboonConfig {
      *            methods will be saved for future invocation.
      * 
      * @see Topic
-     * @see AbstractTask
+     * @see AbstractTaskSubscription
      */
-    private void subscribeGuardCallbacks(Topic topic, AbstractTask task) throws NotSubscribableException {
+    private void subscribeGuardCallbacks(Topic topic, AbstractTaskSubscription task) throws NotSubscribableException {
         for (String guard : topic.getSetGuardCallback()) {
             try {
                 task.addGuardCallback(guard, MethodDictionary.getGuardProviderMethod(task.getObject(), guard));

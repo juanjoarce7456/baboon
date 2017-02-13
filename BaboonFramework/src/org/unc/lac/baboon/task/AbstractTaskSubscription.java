@@ -2,9 +2,8 @@ package org.unc.lac.baboon.task;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-
-import org.javatuples.Pair;
 import org.unc.lac.baboon.annotations.GuardProvider;
+import org.unc.lac.baboon.topic.Topic;
 
 /**
  * This class is as a wrapper that defines an AbstractTask as a pair of an
@@ -15,12 +14,16 @@ import org.unc.lac.baboon.annotations.GuardProvider;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  */
-public abstract class AbstractTask {
-    Pair<Object, Method> task;
+public abstract class AbstractTaskSubscription {
+    Object object;
+    Method method;
+    Topic topic;
     private HashMap<String, Method> guardCallback = new HashMap<String, Method>();
 
-    public AbstractTask(Object objInstance, Method objMethod) {
-        task = new Pair<Object, Method>(objInstance, objMethod);
+    public AbstractTaskSubscription(Object objInstance, Method objMethod, Topic topic) {
+        this.object = objInstance;
+        this.method = objMethod;
+        this.topic = topic;
     }
 
     /**
@@ -74,6 +77,16 @@ public abstract class AbstractTask {
         }
         return false;
     }
+    
+    /**
+     * This method returns the topic to which the abstract
+     * task is subscribed.
+     * 
+     * @return the topic to which the abstract task is subscribed
+     */
+    public Topic getTopic(){
+        return this.topic;
+    }
 
     /**
      * This method returns the instance of the object that defines the abstract
@@ -82,7 +95,7 @@ public abstract class AbstractTask {
      * @return the instance of the object of this abstract task
      */
     public Object getObject() {
-        return task.getValue0();
+        return this.object;
     }
 
     /**
@@ -91,31 +104,6 @@ public abstract class AbstractTask {
      * @return the method of this abstract task
      */
     public Method getMethod() {
-        return task.getValue1();
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((task == null) ? 0 : task.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AbstractTask other = (AbstractTask) obj;
-        if (task == null) {
-            if (other.task != null)
-                return false;
-        } else if (!task.equals(other.task))
-            return false;
-        return true;
+        return this.method;
     }
 }
