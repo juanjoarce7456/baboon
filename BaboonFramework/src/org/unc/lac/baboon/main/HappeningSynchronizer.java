@@ -18,9 +18,9 @@ import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
  * {@link HappeningHandlerSubscription} objects from {@BaboonConfig} to
  * Synchronize the execution of {@link HappeningHandler} annotated methods.
  * Also, to achieve the synchronization, this class implements
- * {@HappeningObserver} to observe the {@link HappeningHandlerJoinPoint} aspect
- * advice.
- * 
+ * {@HappeningObserver} to observe the aspect
+ * advices in {@link HappeningHandlerJoinPoint}.
+ *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
@@ -86,10 +86,8 @@ public class HappeningSynchronizer implements HappeningObserver {
     private void after(HappeningHandlerSubscription happeningHandlerSub) {
         for (String guardCallback : happeningHandlerSub.getTopic().getSetGuardCallback()) {
             try {
-                Boolean result;
-                result = (Boolean) happeningHandlerSub.getGuardCallback(guardCallback)
-                        .invoke(happeningHandlerSub.getObject());
-                petriCore.setGuard(guardCallback, result.booleanValue());
+                boolean result = happeningHandlerSub.getGuardValue(guardCallback);
+                petriCore.setGuard(guardCallback, result);
             } catch (NullPointerException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException | IndexOutOfBoundsException | PetriNetException e) {
                 throw new RuntimeException("Error while setting the callback guards", e);

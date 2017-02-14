@@ -1,5 +1,6 @@
 package org.unc.lac.baboon.task;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import org.unc.lac.baboon.annotations.GuardProvider;
@@ -9,7 +10,7 @@ import org.unc.lac.baboon.topic.Topic;
  * This class is as a wrapper that defines an AbstractTaskSubscription as a pair
  * of an object instance and a method, which are subscribed to a topic. It is
  * used internally by framework and should not be known by user.
- * 
+ *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
@@ -29,7 +30,7 @@ public abstract class AbstractTaskSubscription {
     /**
      * This method adds a new guard callback to the task. It is intended to be
      * used by the framework only, the user should not call this method.
-     * 
+     *
      * @param guardName
      *            The name of the guard to be set by the callback
      * @param callback
@@ -64,9 +65,16 @@ public abstract class AbstractTaskSubscription {
      * This method returns a {@link Method} object to be called for obtaining
      * the value of the guard. It is intended to be used by the framework only,
      * the user should not call this method.
+     *
+     * @throws InvocationTargetException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
      */
-    public Method getGuardCallback(String guardName) {
-        return guardCallback.get(guardName);
+    public boolean getGuardValue(String guardName)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Boolean result = (Boolean) guardCallback.get(guardName).invoke(getObject());
+
+        return result.booleanValue();
     }
 
     private boolean isMethodPresent(Method method) {
@@ -80,7 +88,7 @@ public abstract class AbstractTaskSubscription {
 
     /**
      * This method returns the topic to which the abstract task is subscribed.
-     * 
+     *
      * @return the topic to which the abstract task is subscribed
      */
     public Topic getTopic() {
@@ -90,7 +98,7 @@ public abstract class AbstractTaskSubscription {
     /**
      * This method returns the instance of the object that defines the abstract
      * task.
-     * 
+     *
      * @return the instance of the object of this abstract task
      */
     public Object getObject() {
@@ -99,7 +107,7 @@ public abstract class AbstractTaskSubscription {
 
     /**
      * This returns the method that defines the abstract task.
-     * 
+     *
      * @return the method of this abstract task
      */
     public Method getMethod() {

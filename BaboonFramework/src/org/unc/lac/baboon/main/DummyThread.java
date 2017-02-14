@@ -61,8 +61,8 @@ public class DummyThread implements Callable<Void> {
                 task.executeMethod();
                 for (String guardCallback : task.getTopic().getSetGuardCallback()) {
                     try{
-                        Boolean result = (Boolean) task.getGuardCallback(guardCallback).invoke(task.getObject());
-                        petriCore.setGuard(guardCallback,result.booleanValue());
+                        boolean result =  task.getGuardValue(guardCallback);
+                        petriCore.setGuard(guardCallback,result);
                     }
                     catch(NullPointerException e){
                         LOGGER.log(Level.SEVERE, "Cannot set a guard on callback", e);
