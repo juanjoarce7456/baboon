@@ -1,6 +1,7 @@
 package org.unc.lac.baboon.happeninghandleraspect;
 
 import org.unc.lac.baboon.annotations.HappeningHandler;
+import org.unc.lac.baboon.happeninghandleraspect.HappeningObserver.State;
 import org.unc.lac.baboon.topic.Topic;
 
 /**
@@ -33,17 +34,17 @@ public aspect HappeningHandlerJoinPoint {
      * HappeningHandler was subscribed.
      */
     before(): happening(){
-        observer.updateBefore(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName());
+        observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.BEFORE_EXECUTION);
     }
 
     /**
      * After the execution of the {@link HappeningHandler} annotated method,
      * this advice fires the transition callback and sets the guard callback.
-     * This callback are obtained from the {@link Topic} to which the
+     * These callbacks are obtained from the {@link Topic} to which the
      * HappeningHandler was subscribed.
      */
     after() : happening(){
-        observer.updateAfter(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName());
+        observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.AFTER_EXECUTION);
 
     }
 }

@@ -22,26 +22,21 @@ public class MockController {
 
     @HappeningHandler
     public void mockHappeningHandler() {
-        
     }
 
     @Task
     public void mockTask() {
-
     }
 
     public void mockNotSubscribableMethod() {
-
     }
 
     @HappeningHandler
     public void mockHappeningHandler2() {
-
     }
 
     @Task
     public void mockTask2() {
-
     }
 
     public void setGuard1Value(boolean newValue) {
@@ -61,5 +56,5 @@ public class MockController {
     public boolean mockGuard2Provider() {
         return guard2Value;
     }
-    
+
 }

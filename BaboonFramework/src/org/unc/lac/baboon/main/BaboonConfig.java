@@ -33,7 +33,7 @@ import org.unc.lac.baboon.utils.TopicsJsonParser;
  */
 public class BaboonConfig {
     /**
-     * Map of HappeningHandlers and Tasks subscribed to topics
+     * Map of HappeningHandlerSubscriptions and TaskSubscriptions
      */
     private HashMap<Pair<Object,Method>, AbstractTaskSubscription> subscriptionsMap = new HashMap<Pair<Object,Method>, AbstractTaskSubscription>();
     /**
@@ -42,11 +42,9 @@ public class BaboonConfig {
     private HashMap<String, Topic> topicsList = new HashMap<String, Topic>();
 
     /**
-     * Provides an Unmodifiable instance of {@link #subscriptionsMap}
+     * Provides the {@link #subscriptionsMap}.
      * 
-     * @return a Map of HappeningHandlers and Tasks subscribed to topics with
-     *         "read-only" access.
-     * @see Collections#unmodifiableMap(Map)
+     * @return a Map of HappeningHandlers and Tasks subscribed to topics
      */
     public Map<Pair<Object,Method>, AbstractTaskSubscription> getSubscriptionsMap() {
         return subscriptionsMap;

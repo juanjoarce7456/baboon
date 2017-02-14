@@ -6,9 +6,9 @@ import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.topic.Topic;
 
 /**
- * This class is as a wrapper that defines an AbstractTask as a pair of an
- * object instance and a method. It is used internally by framework and should
- * not be known by user.
+ * This class is as a wrapper that defines an AbstractTaskSubscription as a pair
+ * of an object instance and a method, which are subscribed to a topic. It is
+ * used internally by framework and should not be known by user.
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -77,14 +77,13 @@ public abstract class AbstractTaskSubscription {
         }
         return false;
     }
-    
+
     /**
-     * This method returns the topic to which the abstract
-     * task is subscribed.
+     * This method returns the topic to which the abstract task is subscribed.
      * 
      * @return the topic to which the abstract task is subscribed
      */
-    public Topic getTopic(){
+    public Topic getTopic() {
         return this.topic;
     }
 
