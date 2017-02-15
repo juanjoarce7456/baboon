@@ -61,10 +61,15 @@ public class HappeningSynchronizer implements HappeningObserver {
             if (happeningHandler == null) {
                 throw new RuntimeException("This Happening Handler is not subscribed");
             } else {
-                if (state == State.BEFORE_EXECUTION) {
-                    before(happeningHandler);
-                } else if (state == State.AFTER_EXECUTION) {
-                    after(happeningHandler);
+                switch(state){
+                    case BEFORE_EXECUTION:
+                        before(happeningHandler);
+                        break;               
+                    case AFTER_EXECUTION:
+                        after(happeningHandler);
+                        break;
+                    default:
+                        break;
                 }
             }
         } catch (NoSuchMethodException | SecurityException e) {

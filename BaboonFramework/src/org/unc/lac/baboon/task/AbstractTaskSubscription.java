@@ -62,9 +62,14 @@ public abstract class AbstractTaskSubscription {
     }
 
     /**
-     * This method returns a {@link Method} object to be called for obtaining
-     * the value of the guard. It is intended to be used by the framework only,
-     * the user should not call this method.
+     * This method returns the value of the guard by executing the
+     * {@link GuardProvider} annotated method associated with the guard. It is
+     * intended to be used by the framework only, the user should not call this
+     * method.
+     * 
+     * @param guardName
+     *            The name of the guard whose value is to be known
+     * @return The value of the guard
      *
      * @throws InvocationTargetException
      * @throws IllegalArgumentException
