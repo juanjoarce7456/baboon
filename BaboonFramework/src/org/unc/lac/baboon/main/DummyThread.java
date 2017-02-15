@@ -5,13 +5,12 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.unc.lac.baboon.task.TaskObject;
+import org.unc.lac.baboon.task.TaskSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
-import org.unc.lac.javapetriconcurrencymonitor.exceptions.NotInitializedPetriNetException;
-
+import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 /**
- * A {@link Callable} object that executes a {@link TaskObject}. This is the
+ * A {@link Callable} object that executes a {@link TaskSubscription}. This is the
  * wrapper of a thread that asks the Petri monitor for permission to execute a
  * task, executes the task and finally fires the transition callback and set
  * the guard callback. After setting the callback, the thread starts the task
@@ -27,60 +26,52 @@ public class DummyThread implements Callable<Void> {
     /**
      * The task to be executed.
      */
-    TaskObject task;
-    /**
-     * The topic defining the permission and the callback.
-     */
-    Topic topic;
+    TaskSubscription task;
     /**
      * The Petri core used to synchronize the execution of the task.
      */
     BaboonPetriCore petriCore;
 
-    public DummyThread(TaskObject task, Topic topic, BaboonPetriCore petriCore) {
+    public DummyThread(TaskSubscription task, BaboonPetriCore petriCore) {
         if(task==null){
             throw new IllegalArgumentException("Task can not be null");
-        }
-        if(topic==null){
-            throw new IllegalArgumentException("Topic can not be null");
         }
         if(petriCore==null){
             throw new IllegalArgumentException("Petri Core can not be null");
         }
-        this.topic = topic;
         this.task = task;
         this.petriCore = petriCore;
     }
 
     /**
-     * Executes a {@link TaskObject}. Asks the Petri monitor for permission to
+     * Executes a {@link TaskSubscription}. Asks the Petri monitor for permission to
      * execute a task, executes the task and finally fires the transition
      * callback and set the guard callback. After setting the callback,
      * starts the task execution process over again.
      * 
      * @see Topic
-     * @see TaskObject
+     * @see TaskSubscription
      * 
      */
     @Override
     public Void call() {
         while (true) {
             try {
-                petriCore.fireTransition(topic.getPermission(), false);
+                petriCore.fireTransition(task.getTopic().getPermission(), false);
                 task.executeMethod();
-                for (String transitionCallback : topic.getFireCallback()) {
-                    petriCore.fireTransition(transitionCallback, true);
-                }
-                for (String guardCallback : topic.getSetGuardCallback()) {
+                for (String guardCallback : task.getTopic().getSetGuardCallback()) {
                     try{
-                        Boolean result = (Boolean) task.getGuardCallback(guardCallback).invoke(task.getObject());
-                        petriCore.setGuard(guardCallback,result.booleanValue());
+                        boolean result =  task.getGuardValue(guardCallback);
+                        petriCore.setGuard(guardCallback,result);
                     }
                     catch(NullPointerException e){
                         LOGGER.log(Level.SEVERE, "Cannot set a guard on callback", e);
                     }
                 }
-            } catch (IllegalArgumentException | IllegalTransitionFiringError | NotInitializedPetriNetException
+                for (String transitionCallback : task.getTopic().getFireCallback()) {
+                    petriCore.fireTransition(transitionCallback, true);
+                }
+            } catch (IllegalArgumentException | IllegalTransitionFiringError | PetriNetException
                     | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }

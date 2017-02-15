@@ -1,7 +1,12 @@
 package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
+
+import org.javatuples.Pair;
 import org.junit.Test;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningHandler;
@@ -10,9 +15,9 @@ import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.main.BaboonConfig;
-import org.unc.lac.baboon.task.AbstractTask;
-import org.unc.lac.baboon.task.HappeningHandlerObject;
-import org.unc.lac.baboon.task.TaskObject;
+import org.unc.lac.baboon.task.AbstractTaskSubscription;
+import org.unc.lac.baboon.task.HappeningHandlerSubscription;
+import org.unc.lac.baboon.task.TaskSubscription;
 import org.unc.lac.baboon.test.utils.tasks.MockController;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
@@ -29,10 +34,10 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * <li>And I add the topics configuration to the Framework</li>
      * <li>When I subscribe the instance of the object and the
      * {@link HappeningHandler} annotated method to a {@link Topic}</li>
-     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
-     * contain a {@link HappeningHandlerObject} with the object instance and the
-     * method subscribed as a map's key</li>
-     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * <li>Then the {@link HappeningHandlerSubscription} subscriptions Map
+     * should contain a {@link HappeningHandlerSubscription} with the object
+     * instance and the method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerSubscription} subscriptions Map should
      * contain the {@link Topic} as value for the key</li>
      */
     @Test
@@ -49,12 +54,12 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, happeningHandlerMethod);
-            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+            Map<Pair<Object, Method>, AbstractTaskSubscription> subscriptionsMap = baboonConfig.getSubscriptionsMap();
+            Pair<Object, Method> testKey = new Pair<Object, Method>(mockController,
                     MethodDictionary.getMethod(mockController, happeningHandlerMethod));
             assertEquals(1, subscriptionsMap.size());
-            assertTrue(subscriptionsMap.keySet().contains(testHHO));
-            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testHHO).getName());
+            assertTrue(subscriptionsMap.keySet().contains(testKey));
+            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testKey).getTopic().getName());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         } catch (NoSuchMethodException e) {
@@ -71,10 +76,10 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * <li>And I add the topics configuration to the Framework</li>
      * <li>When I subscribe the instance of the object and the {@link Task}
      * annotated method to a {@link Topic}</li>
-     * <li>Then the {@link TaskObject} subscriptions Map should contain a
-     * {@link TaskObject} with the object instance and the method subscribed as
-     * a map's key</li>
-     * <li>And the {@link TaskObject} subscriptions Map should contain the
+     * <li>Then the {@link TaskSubscription} subscriptions Map should contain a
+     * {@link TaskSubscription} with the object instance and the method
+     * subscribed as a map's key</li>
+     * <li>And the {@link TaskSubscription} subscriptions Map should contain the
      * {@link Topic} as value for the key</li>
      */
     @Test
@@ -91,11 +96,12 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, taskMethod);
-            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            TaskObject testTO = new TaskObject(mockController, MethodDictionary.getMethod(mockController, taskMethod));
+            Map<Pair<Object, Method>, AbstractTaskSubscription> subscriptionsMap = baboonConfig.getSubscriptionsMap();
+            Pair<Object, Method> testTOKey = new Pair<Object, Method>(mockController,
+                    MethodDictionary.getMethod(mockController, taskMethod));
             assertEquals(1, subscriptionsMap.size());
-            assertTrue(subscriptionsMap.keySet().contains(testTO));
-            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testTO).getName());
+            assertTrue(subscriptionsMap.keySet().contains(testTOKey));
+            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testTOKey).getTopic().getName());
 
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
@@ -264,11 +270,11 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * <li>And the instance of controller object also has a method annotated
      * with {@link Task}</li>
      * <li>And I add the topics configuration to the Framework</li>
-     * <li>When I subscribe more than one {@link TaskObject} or
-     * {@link HappeningHandlerObject} to the same {@link Topic} in any
+     * <li>When I subscribe more than one {@link TaskSubscription} or
+     * {@link HappeningHandlerSubscription} to the same {@link Topic} in any
      * combinations</li>
-     * <li>Then all the {@link HappeningHandlerObject} and {@link TaskObject}
-     * objects should be subscribed
+     * <li>Then all the {@link HappeningHandlerSubscription} and
+     * {@link TaskSubscription} objects should be subscribed
      */
     @Test
     public void subscribingMoreThanOneHappeningHandlerOrTaskToTheSameTopicShouldBePossibleTest() {
@@ -289,9 +295,9 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod);
-            assertEquals(1, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(1, baboonConfig.getSubscriptionsMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, taskMethod);
-            assertEquals(2, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(2, baboonConfig.getSubscriptionsMap().size());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         }
@@ -308,9 +314,9 @@ public class TasksAndHappeningHandlersSubscriptionTest {
 
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, taskMethod2);
-            assertEquals(1, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(1, baboonConfig.getSubscriptionsMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod2);
-            assertEquals(2, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(2, baboonConfig.getSubscriptionsMap().size());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         }
@@ -327,9 +333,9 @@ public class TasksAndHappeningHandlersSubscriptionTest {
 
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, taskMethod);
-            assertEquals(1, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(1, baboonConfig.getSubscriptionsMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, taskMethod2);
-            assertEquals(2, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(2, baboonConfig.getSubscriptionsMap().size());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         }
@@ -347,9 +353,9 @@ public class TasksAndHappeningHandlersSubscriptionTest {
 
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod2);
-            assertEquals(1, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(1, baboonConfig.getSubscriptionsMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod);
-            assertEquals(2, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(2, baboonConfig.getSubscriptionsMap().size());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         }
@@ -358,8 +364,8 @@ public class TasksAndHappeningHandlersSubscriptionTest {
     /**
      * <li>Given I have a topics json file containing three topics</li>
      * <li>And I add the topics configuration to the Framework</li>
-     * <li>When I subscribe a {@link TaskObject} or
-     * {@link HappeningHandlerObject} to more than one topic</li>
+     * <li>When I subscribe a {@link TaskSubscription} or
+     * {@link HappeningHandlerSubscription} to more than one topic</li>
      * <li>Then a {@link NotSubscribableException} exception should be
      * thrown</li>
      */
@@ -378,7 +384,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, taskMethod);
-            assertEquals(1, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(1, baboonConfig.getSubscriptionsMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, taskMethod);
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
@@ -386,7 +392,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         }
         try {
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, happeningHandlerMethod);
-            assertEquals(2, baboonConfig.getSubscriptionsUnmodifiableMap().size());
+            assertEquals(2, baboonConfig.getSubscriptionsMap().size());
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod);
             fail("Exception should have been thrown before this point");
         } catch (Exception e) {
@@ -399,7 +405,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * "topic1"</li>
      * <li>And topic1 has an empty permission string</li>
      * <li>And I add the topics configuration to the Framework</li>
-     * <li>When I subscribe a {@link TaskObject} to topic1</li>
+     * <li>When I subscribe a {@link TaskSubscription} to topic1</li>
      * <li>Then a {@link NotSubscribableException} exception should be
      * thrown</li>
      */
@@ -429,7 +435,7 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * "topic2"</li>
      * <li>And topic2 has not the permission field</li>
      * <li>And I add the topics configuration to the Framework</li>
-     * <li>When I subscribe a {@link TaskObject} to topic2</li>
+     * <li>When I subscribe a {@link TaskSubscription} to topic2</li>
      * <li>Then a {@link NotSubscribableException} exception should be
      * thrown</li>
      */
@@ -459,11 +465,12 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * "topic1"</li>
      * <li>And topic1 has an empty permission string</li>
      * <li>And I add the topics configuration to the Framework</li>
-     * <li>When I subscribe a {@link HappeningHandlerObject} to topic1</li>
-     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
-     * contain a {@link HappeningHandlerObject} with the object instance and the
-     * method subscribed as a map's key</li>
-     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * <li>When I subscribe a {@link HappeningHandlerSubscription} to
+     * topic1</li>
+     * <li>Then the {@link HappeningHandlerSubscription} subscriptions Map
+     * should contain a {@link HappeningHandlerSubscription} with the object
+     * instance and the method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerSubscription} subscriptions Map should
      * contain the {@link Topic} as value for the key</li>
      */
     @Test
@@ -481,12 +488,12 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             assertEquals("", baboonConfig.getTopicByName(topicNamesDefined[0]).getPermission());
             baboonConfig.subscribeToTopic(topicNamesDefined[0], mockController, happeningHandlerMethod);
-            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+            Map<Pair<Object, Method>, AbstractTaskSubscription> subscriptionsMap = baboonConfig.getSubscriptionsMap();
+            Pair<Object, Method> testHHOKey = new Pair<Object, Method>(mockController,
                     MethodDictionary.getMethod(mockController, happeningHandlerMethod));
             assertEquals(1, subscriptionsMap.size());
-            assertTrue(subscriptionsMap.keySet().contains(testHHO));
-            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testHHO).getName());
+            assertTrue(subscriptionsMap.keySet().contains(testHHOKey));
+            assertEquals(topicNamesDefined[0], subscriptionsMap.get(testHHOKey).getTopic().getName());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         } catch (NoSuchMethodException e) {
@@ -501,11 +508,12 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * "topic2"</li>
      * <li>And topic2 has not the permission field</li>
      * <li>And I add the topics configuration to the Framework</li>
-     * <li>When I subscribe a {@link HappeningHandlerObject} to topic2</li>
-     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
-     * contain a {@link HappeningHandlerObject} with the object instance and the
-     * method subscribed as a map's key</li>
-     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * <li>When I subscribe a {@link HappeningHandlerSubscription} to
+     * topic2</li>
+     * <li>Then the {@link HappeningHandlerSubscription} subscriptions Map
+     * should contain a {@link HappeningHandlerSubscription} with the object
+     * instance and the method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerSubscription} subscriptions Map should
      * contain the {@link Topic} as value for the key</li>
      */
     @Test
@@ -523,12 +531,12 @@ public class TasksAndHappeningHandlersSubscriptionTest {
         try {
             assertEquals(null, baboonConfig.getTopicByName(topicNamesDefined[1]).getPermission());
             baboonConfig.subscribeToTopic(topicNamesDefined[1], mockController, happeningHandlerMethod);
-            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+            Map<Pair<Object, Method>, AbstractTaskSubscription> subscriptionsMap = baboonConfig.getSubscriptionsMap();
+            Pair<Object, Method> testHHO = new Pair<Object, Method>(mockController,
                     MethodDictionary.getMethod(mockController, happeningHandlerMethod));
             assertEquals(1, subscriptionsMap.size());
             assertTrue(subscriptionsMap.keySet().contains(testHHO));
-            assertEquals(topicNamesDefined[1], subscriptionsMap.get(testHHO).getName());
+            assertEquals(topicNamesDefined[1], subscriptionsMap.get(testHHO).getTopic().getName());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         } catch (NoSuchMethodException e) {
@@ -549,23 +557,22 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * <li>And the same controller has a method that returns a boolean and
      * requires no parameters annotated with {@link GuardProvider#value()}
      * "g2"</li>
-     * <li>When I subscribe a {@link HappeningHandlerObject} to topic3</li>
-     * <li>Then the {@link HappeningHandlerObject} subscriptions Map should
-     * contain a {@link HappeningHandlerObject} with the object instance and the
-     * method subscribed as a map's key</li>
-     * <li>And the {@link HappeningHandlerObject} subscriptions Map should
+     * <li>When I subscribe a {@link HappeningHandlerSubscription} to
+     * topic3</li>
+     * <li>Then the {@link HappeningHandlerSubscription} subscriptions Map
+     * should contain a {@link HappeningHandlerSubscription} with the object
+     * instance and the method subscribed as a map's key</li>
+     * <li>And the {@link HappeningHandlerSubscription} subscriptions Map should
      * contain the {@link Topic} as value for the key</li>
-     * <li>And {@link HappeningHandlerObject#getGuardCallback(String)} should
-     * return a guard callback method with for "g1"</li> *
-     * <li>And {@link HappeningHandlerObject#getGuardCallback(String)} should
-     * return a guard callback method with for "g2"</li>
+     * <li>And {@link HappeningHandlerSubscription#getGuardCallback(String)}
+     * should return a guard callback method with for "g1"</li> *
+     * <li>And {@link HappeningHandlerSubscription#getGuardCallback(String)}
+     * should return a guard callback method with for "g2"</li>
      */
     @Test
     public void subscribingAbstractTaskWithGuardProvidersToTopicWithGuardCallbackShouldGetRegisteredInConfigTest() {
         final MockController mockController = new MockController();
         final String happeningHandlerMethod = "mockHappeningHandler";
-        final String providerMethod1 = "mockGuard1Provider";
-        final String providerMethod2 = "mockGuard2Provider";
         final BaboonConfig baboonConfig = new BaboonConfig();
         try {
             baboonConfig.addTopics(topicsPath03);
@@ -578,19 +585,22 @@ public class TasksAndHappeningHandlersSubscriptionTest {
             assertTrue(baboonConfig.getTopicByName(topicNamesDefined[2]).getSetGuardCallback().contains("g1"));
             assertTrue(baboonConfig.getTopicByName(topicNamesDefined[2]).getSetGuardCallback().contains("g2"));
             baboonConfig.subscribeToTopic(topicNamesDefined[2], mockController, happeningHandlerMethod);
-            Map<AbstractTask, Topic> subscriptionsMap = baboonConfig.getSubscriptionsUnmodifiableMap();
-            HappeningHandlerObject testHHO = new HappeningHandlerObject(mockController,
+            Map<Pair<Object, Method>, AbstractTaskSubscription> subscriptionsMap = baboonConfig.getSubscriptionsMap();
+            Pair<Object, Method> testHHOKey = new Pair<Object, Method>(mockController,
                     MethodDictionary.getMethod(mockController, happeningHandlerMethod));
             assertEquals(1, subscriptionsMap.size());
-            assertTrue(subscriptionsMap.keySet().contains(testHHO));
-            for (AbstractTask key : subscriptionsMap.keySet()) {
-                if (key.equals(testHHO)) {
-                    assertEquals(providerMethod1, key.getGuardCallback("g1").getName());
-                    assertEquals(providerMethod2, key.getGuardCallback("g2").getName());
-                    break;
-                }
+            assertTrue(subscriptionsMap.keySet().contains(testHHOKey));
+            try {
+                assertFalse(subscriptionsMap.get(testHHOKey).getGuardValue("g1"));
+                mockController.setGuard1Value(true);
+                assertTrue(subscriptionsMap.get(testHHOKey).getGuardValue("g1"));
+                assertFalse(subscriptionsMap.get(testHHOKey).getGuardValue("g2"));
+                mockController.setGuard2Value(true);
+                assertTrue(subscriptionsMap.get(testHHOKey).getGuardValue("g2"));
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                fail(e.getMessage());
             }
-            assertEquals(topicNamesDefined[2], subscriptionsMap.get(testHHO).getName());
+            assertEquals(topicNamesDefined[2], subscriptionsMap.get(testHHOKey).getTopic().getName());
         } catch (NotSubscribableException e) {
             fail(e.getMessage());
         } catch (NoSuchMethodException e) {
@@ -610,7 +620,8 @@ public class TasksAndHappeningHandlersSubscriptionTest {
      * "g1"</li>
      * <li>And the controller has not a method annotated with
      * {@link GuardProvider#value()} "g3"</li>
-     * <li>When I subscribe a {@link HappeningHandlerObject} to topic4</li>
+     * <li>When I subscribe a {@link HappeningHandlerSubscription} to
+     * topic4</li>
      * <li>Then a {@link NotSubscribableException} exception should be
      * thrown</li>
      */
