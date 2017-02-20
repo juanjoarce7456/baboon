@@ -1,6 +1,5 @@
 package org.unc.lac.baboon.main;
 
-
 import java.util.ArrayList;
 import java.util.Set;
 import org.reflections.Reflections;
@@ -10,8 +9,7 @@ import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.happeninghandleraspect.HappeningHandlerJoinPoint;
-import org.unc.lac.baboon.task.AbstractTaskSubscription;
-import org.unc.lac.baboon.task.TaskSubscription;
+import org.unc.lac.baboon.task.ComplexSecuentialTaskSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.PetriMonitor;
@@ -68,7 +66,7 @@ public class BaboonFramework {
             try {
                 appSetupObjects.add(app.newInstance());
             } catch (IllegalAccessException | InstantiationException e) {
-                
+
             }
         }
         for (BaboonApplication appSetup : appSetupObjects) {
@@ -82,10 +80,8 @@ public class BaboonFramework {
         } else {
             petriCore.initializePetriNet();
         }
-        for (AbstractTaskSubscription task : baboonConfig.getSubscriptionsMap().values()) {
-            if (task.getClass().equals(TaskSubscription.class)) {
-                dummiesExecutor.executeDummy(new DummyThread((TaskSubscription) task, petriCore));
-            }
+        for (ComplexSecuentialTaskSubscription task : baboonConfig.getTasksList()) {
+                dummiesExecutor.executeDummy(new DummyThread(task, petriCore));
         }
     }
 
@@ -120,7 +116,7 @@ public class BaboonFramework {
      */
     public static void createPetriCore(String pnmlFilePath, petriNetType type, TransitionsPolicy firingPolicy) {
         petriCore = new BaboonPetriCore(pnmlFilePath, type, firingPolicy);
-        HappeningHandlerJoinPoint.setObserver(new HappeningSynchronizer(baboonConfig,petriCore));
+        HappeningHandlerJoinPoint.setObserver(new HappeningSynchronizer(baboonConfig, petriCore));
     }
 
     /**
@@ -133,9 +129,14 @@ public class BaboonFramework {
      * 
      * @see Topic
      */
+    public static void subscribeToTopic(String topicName, Object object, String methodName, Class<?>[] parameterClasses,
+            Object... parameters) throws NotSubscribableException {
+        baboonConfig.subscribeToTopic(topicName, object, methodName, parameterClasses, parameters);
+    }
+
     public static void subscribeToTopic(String topicName, Object object, String methodName)
             throws NotSubscribableException {
-        baboonConfig.subscribeToTopic(topicName, object, methodName);
+        baboonConfig.subscribeToTopic(topicName, object, methodName, null);
     }
 
     /**
@@ -178,7 +179,14 @@ public class BaboonFramework {
     public static Integer[] getMarking() {
         return petriCore.getMarking();
     }
-
-
+    
+    public static void createNewComplexTask(String complexTaskName, String topicName) throws NotSubscribableException {
+    	baboonConfig.createNewComplexTask(complexTaskName, topicName);
+    }
+    
+    public static void appendTaskToComplexTask(String complexTaskName, Object object, String methodName,
+			Class<?>[] parameterClasses, Object... parameters) throws NotSubscribableException {
+    	baboonConfig.appendTaskToComplexTask(complexTaskName, object, methodName, parameterClasses, parameters);
+    }
 
 }

@@ -1,6 +1,8 @@
 package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -41,7 +43,7 @@ public class TopicsParserTest {
         final String[] expectedNames = { "topic1", "topic2", "topic3" };
         final String[] expectedPermissions = { "transition0", "transition2", "t6" };
         final String[][] expectedCallbacks = { { "t1", "t2", "tx" }, {}, { "pepe", "pedro", "juan" } };
-        final String[][] expectedSetGuardCallbacks = { {}, {}, { "g1", "g2", "g3" } };
+        final String[][][] expectedSetGuardCallbacks = { {}, {}, {{"g1", "g2", "g3"},{"g4"},{},{"g5", "g6"}} };
         try {
             HashMap<String, Topic> topics = parser.getTopicsFromJson(topicsPath01);
             assertEquals(expectedNames.length, topics.size());
@@ -49,16 +51,18 @@ public class TopicsParserTest {
             String[] permissions = new String[topics.size()];
             for (int i = 0; i < topics.size(); i++) {
                 names[i] = topics.get(expectedNames[i]).getName();
-                permissions[i] = topics.get(names[i]).getPermission();
+                permissions[i] = topics.get(names[i]).getPermission().get(0);
                 for (int j = 0; j < expectedNames.length; j++) {
                     if (expectedNames[j].equals(topics.get(names[i]).getName())) {
                         String[] actualCallbacks = new String[expectedCallbacks[i].length];
-                        String[] actualSetGuardCallbacks = new String[expectedSetGuardCallbacks[i].length];
                         actualCallbacks = topics.get(names[i]).getFireCallback().toArray(actualCallbacks);
-                        assertArrayEquals(expectedCallbacks[i], actualCallbacks);
-                        actualSetGuardCallbacks = topics.get(names[i]).getSetGuardCallback()
-                                .toArray(actualSetGuardCallbacks);
-                        assertArrayEquals(expectedSetGuardCallbacks[i], actualSetGuardCallbacks);
+                        assertArrayEquals(expectedCallbacks[i], actualCallbacks);                      
+                        ArrayList<String[]> actualSetGuardCallbacks = topics.get(names[i]).getSetGuardCallback();
+                        assertEquals(expectedSetGuardCallbacks[i].length,actualSetGuardCallbacks.size());                    
+                        for(int k=0; k < expectedSetGuardCallbacks[i].length; k++){
+                            assertArrayEquals(expectedSetGuardCallbacks[i][k], actualSetGuardCallbacks.get(k));
+                        }
+                        
                     }
                 }
             }

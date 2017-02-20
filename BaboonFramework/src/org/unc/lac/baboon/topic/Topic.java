@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.unc.lac.baboon.utils.TopicsJsonParser;
 
+import javassist.expr.NewArray;
+
 /**
  * Topic template. Instances of this class will be created when reading the
  * topics json file.
@@ -17,9 +19,9 @@ import org.unc.lac.baboon.utils.TopicsJsonParser;
  */
 public class Topic {
     private String name;
-    private String permission;
-    private ArrayList<String> fireCallback = new ArrayList<String>();
-    private ArrayList<String> setGuardCallback = new ArrayList<String>();
+    private ArrayList<String[]> setGuardCallback = new ArrayList<String[]>() ;
+    private ArrayList<String> permission;
+    private ArrayList<String> fireCallback= new ArrayList<String>();
 
     /**
      * Returns a {@link String} object describing the name of the {@link Topic}.
@@ -37,7 +39,7 @@ public class Topic {
      * 
      * @return permission of this Topic instance.
      */
-    public String getPermission() {
+    public ArrayList<String> getPermission() {
         return permission;
     }
 
@@ -51,8 +53,8 @@ public class Topic {
      * 
      * @see Collections#unmodifiableList(List)
      */
-    public List<String> getFireCallback() {
-        return Collections.unmodifiableList(fireCallback);
+    public ArrayList<String> getFireCallback() {
+        return fireCallback;
     }
 
     /**
@@ -67,8 +69,29 @@ public class Topic {
      * 
      * @see Collections#unmodifiableList(List)
      */
-    public List<String> getSetGuardCallback() {
-        return Collections.unmodifiableList(setGuardCallback);
+    public ArrayList<String[]> getSetGuardCallback() {
+        return setGuardCallback;
+    }
+    
+    /**
+     * Returns an unmodifiable {@link List} of {@link String} containing the set
+     * guard callback of the Topic. The set guard callback is a list of guards
+     * names that will be setted on the ending of the tasks or happenings
+     * subscribed to this topic by using methods annotated with
+     * {@link GuardProvider}. This methods should be present on the class that
+     * generated the set guard callback event.
+     * 
+     * @return The set guard callback of this Topic instance.
+     * 
+     * @see Collections#unmodifiableList(List)
+     */
+    public String[] getGuardCallback(int index) {
+        try{
+            return setGuardCallback.get(index);
+        }
+        catch(IndexOutOfBoundsException e){
+            return new String[]{};
+        }
     }
 
 }

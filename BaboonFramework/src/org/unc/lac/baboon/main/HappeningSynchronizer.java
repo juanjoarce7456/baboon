@@ -57,7 +57,7 @@ public class HappeningSynchronizer implements HappeningObserver {
         try {
             Method method = MethodDictionary.getMethod(target, methodName);
             HappeningHandlerSubscription happeningHandler = (HappeningHandlerSubscription) baboonConfig
-                    .getSubscriptionsMap().get(new Pair<Object, Method>(target, method));
+                    .getHappeningHandler(new Pair<Object, Method>(target, method));
             if (happeningHandler == null) {
                 throw new RuntimeException("This Happening Handler is not subscribed");
             } else {
@@ -89,9 +89,9 @@ public class HappeningSynchronizer implements HappeningObserver {
      *            object, and the topic with the permission and callbacks.
      */
     private void after(HappeningHandlerSubscription happeningHandlerSub) {
-        for (String guardCallback : happeningHandlerSub.getTopic().getSetGuardCallback()) {
+        for (String guardCallback : happeningHandlerSub.getTopic().getGuardCallback(0)) {
             try {
-                boolean result = happeningHandlerSub.getGuardValue(guardCallback);
+                boolean result = happeningHandlerSub.getGuardValue(guardCallback,0);
                 petriCore.setGuard(guardCallback, result);
             } catch (NullPointerException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException | IndexOutOfBoundsException | PetriNetException e) {
@@ -118,7 +118,7 @@ public class HappeningSynchronizer implements HappeningObserver {
      */
     private void before(HappeningHandlerSubscription happeningHandlerSub) {
         try {
-            petriCore.fireTransition(happeningHandlerSub.getTopic().getPermission(), false);
+            petriCore.fireTransition(happeningHandlerSub.getTopic().getPermission().get(0), false);
         } catch (IllegalArgumentException | IllegalTransitionFiringError | PetriNetException e) {
             throw new RuntimeException("Error while firing the permission transition", e);
         }

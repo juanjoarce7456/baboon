@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.unc.lac.baboon.task.TaskSubscription;
+import org.unc.lac.baboon.task.ComplexSecuentialTaskSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
@@ -26,13 +26,13 @@ public class DummyThread implements Callable<Void> {
     /**
      * The task to be executed.
      */
-    TaskSubscription task;
+    ComplexSecuentialTaskSubscription task;
     /**
      * The Petri core used to synchronize the execution of the task.
      */
     BaboonPetriCore petriCore;
 
-    public DummyThread(TaskSubscription task, BaboonPetriCore petriCore) {
+    public DummyThread(ComplexSecuentialTaskSubscription task, BaboonPetriCore petriCore) {
         if(task==null){
             throw new IllegalArgumentException("Task can not be null");
         }
@@ -55,21 +55,26 @@ public class DummyThread implements Callable<Void> {
      */
     @Override
     public Void call() {
+    	int secuenceStatus = 0;
+    	int maxStatus = task.getSize();
         while (true) {
             try {
-                petriCore.fireTransition(task.getTopic().getPermission(), false);
-                task.executeMethod();
-                for (String guardCallback : task.getTopic().getSetGuardCallback()) {
+                petriCore.fireTransition(task.getTopic().getPermission().get(secuenceStatus), false);
+                task.executeMethod(secuenceStatus);
+                for (String guardCallback : task.getTopic().getGuardCallback(secuenceStatus)) {
                     try{
-                        boolean result =  task.getGuardValue(guardCallback);
+                        boolean result =  task.getGuardValue(guardCallback,secuenceStatus);
                         petriCore.setGuard(guardCallback,result);
                     }
                     catch(NullPointerException e){
                         LOGGER.log(Level.SEVERE, "Cannot set a guard on callback", e);
                     }
                 }
-                for (String transitionCallback : task.getTopic().getFireCallback()) {
-                    petriCore.fireTransition(transitionCallback, true);
+                secuenceStatus = (secuenceStatus + 1) % maxStatus;
+                if(secuenceStatus == 0){
+	                for (String transitionCallback : task.getTopic().getFireCallback()) {
+	                    petriCore.fireTransition(transitionCallback, true);
+	                }
                 }
             } catch (IllegalArgumentException | IllegalTransitionFiringError | PetriNetException
                     | IllegalAccessException | InvocationTargetException e) {

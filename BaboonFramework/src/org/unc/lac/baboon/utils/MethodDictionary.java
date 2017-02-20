@@ -32,13 +32,13 @@ public class MethodDictionary {
      * @return a {@link Method} object resolved using object's class and
      *         methodName.
      */
-    public static Method getMethod(Object object, String methodName) throws NoSuchMethodException, SecurityException {
+    public static Method getMethod(Object object, String methodName, Class<?>... parameters) throws NoSuchMethodException, SecurityException {
         Class<?> c = object.getClass();
         Pair<Object, String> key = new Pair<Object, String>(object, methodName);
         if (methodDict.containsKey(key)) {
             return methodDict.get(key);
         } else {
-            Method m = c.getMethod(methodName);
+            Method m = c.getMethod(methodName, parameters);
             methodDict.put(key, m);
             return m;
         }
