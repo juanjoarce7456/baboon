@@ -3,7 +3,7 @@ package org.unc.lac.baboon.test.utils.tasks;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningHandler;
 import org.unc.lac.baboon.annotations.Task;
-//import org.unc.lac.baboon.test.cases.TasksAndHappeningHandlersSubscriptionTest;
+import org.unc.lac.baboon.test.cases.TasksAndHappeningHandlersSubscriptionTest;
 
 /**
  * MockController is used by {@link TasksAndHappeningHandlersSubscriptionTest}

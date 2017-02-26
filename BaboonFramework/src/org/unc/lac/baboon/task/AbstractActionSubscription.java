@@ -1,109 +1,122 @@
 package org.unc.lac.baboon.task;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
-import org.unc.lac.baboon.annotations.GuardProvider;
+
+import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
 
+/**
+ * This class defines an AbstractActionSubscription as a list of {@link Action}
+ * objects, which are subscribed to a topic. It is used internally by framework
+ * and should not be known by user.
+ *
+ * @author Ariel Ivan Rabinovich
+ * @author Juan Jose Arce Giacobbe
+ * @version 1.0
+ */
+
 public abstract class AbstractActionSubscription {
-	protected ArrayList<Object> objectsList;
-	protected ArrayList<Method> methodsList;
-	protected Topic topic;
-	protected ArrayList<HashMap<String, Method>> guardCallbackList;
 
-	public AbstractActionSubscription(Topic topic) {
-		this.objectsList = new ArrayList<Object>();
-		this.methodsList = new ArrayList<Method>();
-		this.guardCallbackList = new ArrayList<HashMap<String, Method>>();
-		this.topic = topic;
-	}
-
-	public boolean addAction(Object object, Method method) {
-		return (objectsList.add(object) && methodsList.add(method));
-	}
-
-	public Topic getTopic() {
-		return topic;
-	}
-
-	public int getSize() {
-		if (objectsList.size() != methodsList.size()) {
-			throw new RuntimeException("The task size is undefined");
-		}
-		return objectsList.size();
-	}
-	
-	public Object getObject(int actionIndex){
-		return objectsList.get(actionIndex);
-	}
-
-	/**
-	 * This method adds a new guard callback to the task. It is intended to be
-	 * used by the framework only, the user should not call this method.
-	 *
-	 * @param guardName
-	 *            The name of the guard to be set by the callback
-	 * @param callback
-	 *            The Method to call for obtaining the guard value. This method
-	 *            must be annotated with {@link GuardProvider} and must return a
-	 *            boolean value.
-	 * @throws IllegalArgumentException
-	 *             When guardName is empty or null, when callback is not
-	 *             annotated with {@link GuardProvider}, does not return a
-	 *             boolean or has parameters and last, when callback is not a
-	 *             method present in the object instance of this task.
-	 */
-	public void addGuardCallback(String guardName, Method callback) {
-		if (guardName == null || guardName.isEmpty()) {
-			throw new IllegalArgumentException("guardName cannot be empty");
-		}
-		if (!callback.isAnnotationPresent(GuardProvider.class)) {
-			throw new IllegalArgumentException("callback should be annotated with GuardProvider");
-		} else if (!callback.getReturnType().getTypeName().equals("boolean")) {
-			throw new IllegalArgumentException("callback should return a boolean value");
-		} else if (callback.getParameterCount() != 0) {
-			throw new IllegalArgumentException("callback should take no parameters");
-		} else if (!isMethodPresent(callback, objectsList.size() - 1)) {
-			throw new IllegalArgumentException("callback is not a Method of the object instance present in this task");
-		} else {
-			if(guardCallbackList.size() == (getSize() - 1)){
-				guardCallbackList.add(new HashMap<String,Method>());
-			}
-			guardCallbackList.get(guardCallbackList.size()-1).put(guardName, callback);
-		}
-
-	}
-	
     /**
-     * This method returns the value of the guard by executing the
-     * {@link GuardProvider} annotated method associated with the guard. It is
-     * intended to be used by the framework only, the user should not call this
-     * method.
-     * 
-     * @param guardName
-     *            The name of the guard whose value is to be known
-     * @return The value of the guard
-     *
-     * @throws InvocationTargetException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
+     * List of {@link Action} objects subscribed to topic
      */
-    public boolean getGuardValue(String guardName, int taskIndex)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Boolean result = (Boolean) guardCallbackList.get(taskIndex).get(guardName).invoke(objectsList.get(taskIndex));
+    protected ArrayList<Action> actionsList;
 
-        return result.booleanValue();
+    /**
+     * Topic to which the {@link Action} objects are subscribed
+     */
+    protected Topic topic;
+
+    /**
+     * Constructor.
+     * 
+     * @param topic
+     *            The topic to which {@link Action} objects will be subscribed
+     * 
+     * @throws NotSubscribableException
+     *             <li>When the topic is null</li>
+     *             <li>If there are guard callbacks on the topic and
+     *             {@link Topic#setGuardCallback} and {@link Topic#permission}
+     *             sizes are different.</li>
+     * 
+     */
+    public AbstractActionSubscription(Topic topic) throws NotSubscribableException {
+        if (topic == null) {
+            throw new NotSubscribableException("The topic cannot be null");
+        }
+        if (!topic.getSetGuardCallback().isEmpty()
+                && topic.getPermission().size() != topic.getSetGuardCallback().size()) {
+            throw new NotSubscribableException(
+                    "The permission array and the guardCallbackArray cannot be of different sizes");
+        }
+
+        this.actionsList = new ArrayList<Action>();
+        this.topic = topic;
     }
 
-	private boolean isMethodPresent(Method method, int taskIndex) {
-		for (Method m : objectsList.get(taskIndex).getClass().getMethods()) {
-			if (method.equals(m)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * This method appends the given action to the end of {@link #actionsList}
+     * 
+     * @param action
+     *            {@link Action} object to be appended to {@link #actionsList}.
+     *            The permission and guard callback corresponding to this
+     *            {@link Action} are determined by the order (or index).
+     * @return true if {@link #actionsList} changed as a result of the call
+     * 
+     * @throws NotSubscribableException
+     *             <li>If the {@link Action} object does not have a
+     *             {@link GuardProvider} annotated method to handle a guard
+     *             declared in the topic</li>
+     *
+     * @see {@link Topic#permission}
+     * @see {@link Topic#setGuardCallback}
+     * 
+     */
+    protected boolean addAction(Action action) throws NotSubscribableException {
+        for (String guardName : topic.getGuardCallback(actionsList.size())) {
+            if (!action.hasGuardProvider(guardName)) {
+                throw new NotSubscribableException(
+                        "The action does not have a GuardProvider to handle guard: " + guardName);
+            }
+        }
+        return actionsList.add(action);
+    }
+
+    /**
+     * This method returns the {@link Topic} element present in this
+     * subscription.
+     * 
+     * @return the {@link Topic} object to which the {@link Action} objects are
+     *         subscribed on this subscription
+     * 
+     */
+    public Topic getTopic() {
+        return topic;
+    }
+
+    /**
+     * This method returns the number of {@link Action} elements on
+     * {@link #actionsList}
+     * 
+     * @return the number of {@link Action} elements on {@link #actionsList}.
+     * 
+     */
+    public int getSize() {
+        return actionsList.size();
+    }
+
+    /**
+     * This method returns the {@link Action} element at specified actionIndex
+     * on {@link #actionsList}.
+     * 
+     * @param actionIndex
+     *            index of the {@link Action} object to return.
+     * @return the {@link Action} element at specified actionIndex on
+     *         {@link #actionsList}.
+     * 
+     */
+    protected Action getAction(int actionIndex) {
+        return actionsList.get(actionIndex);
+    }
 
 }
