@@ -308,7 +308,7 @@ public class BaboonConfig {
      * Creates a new {@link ComplexSecuentialTaskSubscription}
      * 
      * @param complexTaskName
-     *            A name to identify this complex task.
+     *            A name to identify this complex task. This name must be unique.
      * @param topicName
      *            The name of the topic to be used for the subscription
      * 

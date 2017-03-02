@@ -1,22 +1,22 @@
 package org.unc.lac.baboon.exceptions;
 
 import org.unc.lac.baboon.annotations.GuardProvider;
-public class MultipleGuardProvidersException extends Exception {
 
-    /**
-     * This exception is thrown when more than one method of the same class are
-     * declared as GuardProviders for the same guard name
-     * 
-     * @author Ariel Ivan Rabinovich
-     * @author Juan Jose Arce Giacobbe
-     * @version 1.0
-     * @see Exception
-     * @see GuardProvider
-     */
+/**
+ * This exception is thrown when more than one method of the same class are
+ * declared as GuardProviders for the same guard name
+ * 
+ * @author Ariel Ivan Rabinovich
+ * @author Juan Jose Arce Giacobbe
+ * @version 1.0
+ * @see Exception
+ * @see GuardProvider
+ */
+public class MultipleGuardProvidersException extends Exception {
     private static final long serialVersionUID = -5450191540499496764L;
 
     public MultipleGuardProvidersException() {
-        super();
+        super("The guard already has a GuardProvider method for this action.");
     }
 
     public MultipleGuardProvidersException(String message) {

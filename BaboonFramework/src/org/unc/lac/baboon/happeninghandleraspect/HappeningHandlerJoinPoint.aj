@@ -28,10 +28,9 @@ public aspect HappeningHandlerJoinPoint {
 
     /**
      * Before the execution of the {@link HappeningHandler} annotated method,
-     * this advice updates the {@link HappeningObserver} {@link #observer},
-     * providing the object instance executing the {@link HappeningHandler}
-     * annotated method, the signature of the {@link HappeningHandler} annotated
-     * method and the {@link State#BEFORE_EXECUTION} constant.
+     * this advice updates the {@link HappeningObserver} {@link #observer}. This
+     * is done to allow the framework to manage the synchronization of the
+     * {@link HappeningHandler} annotated method.
      */
     before(): happening(){
         observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.BEFORE_EXECUTION);
@@ -39,10 +38,9 @@ public aspect HappeningHandlerJoinPoint {
 
     /**
      * After the execution of the {@link HappeningHandler} annotated method,
-     * this advice updates the {@link HappeningObserver} {@link #observer},
-     * providing the object instance executing the {@link HappeningHandler}
-     * annotated method, the signature of the {@link HappeningHandler} annotated
-     * method and the {@link State#AFTER_EXECUTION} constant.
+     * this advice updates the {@link HappeningObserver} {@link #observer}. This
+     * is done to allow the framework to manage the synchronization of the
+     * {@link HappeningHandler} annotated method.
      */
     after() : happening(){
         observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.AFTER_EXECUTION);

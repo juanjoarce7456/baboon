@@ -11,7 +11,10 @@ import java.lang.annotation.Target;
  * {@link GuardProvider} is automatically resolved and registered after an
  * {@link Action} object is created. The methods annotated with
  * {@link GuardProvider} are used by Baboon Framework to get the boolean flag of
- * the guard declared on its {@link #value()} attribute.
+ * the guard declared on its {@link #value()} attribute, so a method annotated
+ * with {@link GuardProvider} must have a boolean return type. Also a method
+ * annotated with {@link GuardProvider} must not accept parameters on its
+ * signature.
  * 
  * The {@link #value()} attribute must contain the name of the guard whose
  * boolean value is to be provided by the method.

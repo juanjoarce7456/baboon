@@ -10,7 +10,7 @@ import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
 import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
- * An Action is an abstract class defined by
+ * A TaskAction is an abstract class that inherits from {@link Action}, defined by
  * <li>An object instance.</li>
  * <li>A {@link Task} or {@link HappeningHandler} annotated method, member of
  * the class of the object instance.</li>
