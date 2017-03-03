@@ -1,17 +1,17 @@
 [
-	{
-	"name":"topic1",
-	"permission":"transition0",
-	"fireCallback":["t1","t2","tx"]
-	},
-	{
-	"name":"topic2",
-	"permission":"transition2"
-	},
-	{
-	"name":"topic3",
-	"permission":"t6",
-	"fireCallback":["pepe","pedro","juan"],
-	"setGuardCallback":["g1","g2","g3"]
-	}
+    {
+    "name":"topic1",
+    "permission":["transition0"],
+    "fireCallback":["t1","t2","tx"]
+    },
+    {
+    "name":"topic2",
+    "permission":["transition2"]
+    },
+    {
+    "name":"topic3",
+    "permission":["t6"],
+    "fireCallback":["pepe","pedro","juan"],
+    "setGuardCallback": [["g1","g2","g3"],["g4"],[],["g5", "g6"]]
+    }
 ]

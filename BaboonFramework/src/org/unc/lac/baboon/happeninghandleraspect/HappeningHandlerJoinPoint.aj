@@ -2,7 +2,6 @@ package org.unc.lac.baboon.happeninghandleraspect;
 
 import org.unc.lac.baboon.annotations.HappeningHandler;
 import org.unc.lac.baboon.happeninghandleraspect.HappeningObserver.State;
-import org.unc.lac.baboon.topic.Topic;
 
 /**
  * In this Aspect are declared the pointcut and advices to be applied when a
@@ -29,9 +28,9 @@ public aspect HappeningHandlerJoinPoint {
 
     /**
      * Before the execution of the {@link HappeningHandler} annotated method,
-     * this advice fires the permission required to execute the method. This
-     * permission is obtained from the {@link Topic} to which the
-     * HappeningHandler was subscribed.
+     * this advice updates the {@link HappeningObserver} {@link #observer}. This
+     * is done to allow the framework to manage the synchronization of the
+     * {@link HappeningHandler} annotated method.
      */
     before(): happening(){
         observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.BEFORE_EXECUTION);
@@ -39,9 +38,9 @@ public aspect HappeningHandlerJoinPoint {
 
     /**
      * After the execution of the {@link HappeningHandler} annotated method,
-     * this advice fires the transition callback and sets the guard callback.
-     * These callbacks are obtained from the {@link Topic} to which the
-     * HappeningHandler was subscribed.
+     * this advice updates the {@link HappeningObserver} {@link #observer}. This
+     * is done to allow the framework to manage the synchronization of the
+     * {@link HappeningHandler} annotated method.
      */
     after() : happening(){
         observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.AFTER_EXECUTION);

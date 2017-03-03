@@ -1,7 +1,7 @@
 [
 	{
 	"name":"topic1",
-	"permission":"",
+	"permission":[""],
 	"fireCallback":["t1"]
 	},
     {
@@ -10,14 +10,14 @@
     },
     {
     "name":"topic3",
-    "permission":"t0",
+    "permission":["t0"],
     "fireCallback":["t1"],
-    "setGuardCallback":["g1","g2"]
+    "setGuardCallback":[["g1","g2"]]
     },
     {
     "name":"topic4",
-    "permission":"t0",
+    "permission":["t0"],
     "fireCallback":["t1"],
-    "setGuardCallback":["g1","g3"]
+    "setGuardCallback":[["g1","g3"]]
     }
 ]
