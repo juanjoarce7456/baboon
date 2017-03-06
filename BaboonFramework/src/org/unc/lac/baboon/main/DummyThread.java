@@ -81,10 +81,10 @@ public class DummyThread implements Callable<Void> {
             } catch (IllegalArgumentException e) {
                 if (permission == null || permission.isEmpty()) {
                     LOGGER.log(Level.SEVERE,
-                            "Tried to fire a transitionCallback without permission transition on topic "
+                            "Tried to fire a permission transition without permission transition on topic "
                                     + taskSubscription.getTopic().getName());
                 } else {
-                    LOGGER.log(Level.SEVERE, "Failed to fire the callback transition " + permission
+                    LOGGER.log(Level.SEVERE, "Failed to fire the permission transition " + permission
                             + " because it does not exists on petri net", e);
                 }
                 throw new RuntimeException("The permission transition does not exists on petri net", e);

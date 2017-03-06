@@ -106,12 +106,14 @@ public class HappeningSynchronizer implements HappeningObserver {
         for (String transitionCallback : happeningHandlerSubscription.getTopic().getFireCallback()) {
             try {
                 petriCore.fireTransition(transitionCallback, true);
-            }  catch (IllegalTransitionFiringError | PetriNetException e) {
+            } catch (IllegalTransitionFiringError | PetriNetException e) {
                 LOGGER.log(Level.SEVERE, "Error while firing the callback transition " + transitionCallback, e);
                 throw new RuntimeException("Error while firing the permission transition ", e);
             } catch (IllegalArgumentException e) {
                 if (transitionCallback == null || transitionCallback.isEmpty()) {
-                    LOGGER.log(Level.WARNING, "Tried to fire a transitionCallback without permission transition on topic " + happeningHandlerSubscription.getTopic().getName());
+                    LOGGER.log(Level.WARNING,
+                            "Tried to fire a transitionCallback without permission transition on topic "
+                                    + happeningHandlerSubscription.getTopic().getName());
                 } else {
                     LOGGER.log(Level.SEVERE, "Failed to fire the callback transition " + transitionCallback
                             + " because it does not exists on petri net", e);
@@ -131,22 +133,23 @@ public class HappeningSynchronizer implements HappeningObserver {
      *            object, and the topic with the permission and callbacks.
      */
     private void before(HappeningHandlerSubscription happeningHandlerSubscription) {
-        String permission = happeningHandlerSubscription.getTopic().getPermission().get(0);
-        try {
-            petriCore.fireTransition(permission, false);
-        } catch (IllegalTransitionFiringError | PetriNetException e) {
-            LOGGER.log(Level.SEVERE, "Error while firing the permission transition", e);
-            throw new RuntimeException("Error while firing the permission transition", e);
-        } catch (IllegalArgumentException e) {
-            if (permission == null || permission.isEmpty()) {
-                LOGGER.log(Level.WARNING, "Executing a HappenningHandler without permission transition");
-            } else {
-                LOGGER.log(Level.SEVERE, "Failed to fire the permission transition " + permission
-                        + " because it does not exists on petri net", e);
-                throw new RuntimeException("The permission transition does not exists on petri net", e);
+        if (!happeningHandlerSubscription.getTopic().getPermission().isEmpty()) {
+            String permission = happeningHandlerSubscription.getTopic().getPermission().get(0);
+            try {
+                petriCore.fireTransition(permission, false);
+            } catch (IllegalTransitionFiringError | PetriNetException e) {
+                LOGGER.log(Level.SEVERE, "Error while firing the permission transition", e);
+                throw new RuntimeException("Error while firing the permission transition", e);
+            } catch (IllegalArgumentException e) {
+                if (permission == null || permission.isEmpty()) {
+                    LOGGER.log(Level.WARNING, "Executing a HappenningHandler without permission transition");
+                } else {
+                    LOGGER.log(Level.SEVERE, "Failed to fire the permission transition " + permission
+                            + " because it does not exists on petri net", e);
+                    throw new RuntimeException("The permission transition does not exists on petri net", e);
+                }
             }
+
         }
-
     }
-
 }
