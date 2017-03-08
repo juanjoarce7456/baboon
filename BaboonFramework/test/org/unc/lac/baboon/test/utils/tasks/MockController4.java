@@ -6,7 +6,7 @@ import org.unc.lac.baboon.annotations.Task;
 import org.unc.lac.baboon.test.cases.BaboonConfigSubscriptionsTest;
 
 /**
- * MockController is used by {@link BaboonConfigSubscriptionsTest}
+ * MockController3 is used by {@link BaboonConfigSubscriptionsTest}
  * for testing purposes.
  * 
  * @author Ariel Ivan Rabinovich
@@ -15,7 +15,7 @@ import org.unc.lac.baboon.test.cases.BaboonConfigSubscriptionsTest;
  * @see Task
  * @see HappeningHandler
  */
-public class MockController {
+public class MockController4 {
 
     boolean guard1Value = false;
     boolean guard2Value = false;
@@ -48,12 +48,12 @@ public class MockController {
     }
 
     @GuardProvider("g1")
-    public boolean mockGuard1Provider() {
+    public boolean mockGuardProviderWithArguments(boolean a) {
         return guard1Value;
     }
 
     @GuardProvider("g2")
-    public boolean mockGuard2Provider() {
+    public boolean mockGuardProvider2() {
         return guard2Value;
     }
 
