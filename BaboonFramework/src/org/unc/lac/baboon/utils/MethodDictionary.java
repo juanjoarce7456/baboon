@@ -33,6 +33,9 @@ public class MethodDictionary {
      */
     public static Method getMethod(Object object, String methodName, Class<?>... parameterClasses)
             throws NoSuchMethodException, SecurityException {
+        if(methodName == null){
+            throw new NoSuchMethodException("Cannot Resolve method with null method name");
+        }
         Class<?> c = object.getClass();
         Pair<Object, String> key = new Pair<Object, String>(object, methodName);
         if (methodDict.containsKey(key)) {

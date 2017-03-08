@@ -19,5 +19,31 @@
     "permission":["t0"],
     "fireCallback":["t1"],
     "setGuardCallback":[["g1","g3"]]
+    },
+    {
+    "name":"topic5",
+    "permission":["t1","t2"],
+    "setGuardCallback":[["g1","g3"],[],["g2"]]
+    },
+    {
+    "name":"topic6",
+    "permission":["t1","t2","t3"],
+    "fireCallback":["t4","t5"],
+    "setGuardCallback":[["g1"],["g1"],["g2","g3"]]
+    },
+    {
+    "name":"topic7",
+    "permission":["t1","","t3"]
+    },
+    {
+    "name":"topic8",
+    "permission":["t1","t2","t3"],
+    "setGuardCallback":[["g1"],["g4"],["g2","g3"]]
+    },
+    {
+    "name":"topic9",
+    "permission":["t1","t2","t3"],
+    "setGuardCallback":[["g1"],[],[]]
     }
+]
 ]

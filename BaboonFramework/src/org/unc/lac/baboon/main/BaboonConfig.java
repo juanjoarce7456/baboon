@@ -203,7 +203,7 @@ public class BaboonConfig {
      *             <li>If the framework fails to resolve the method</li>
      *             <li>If there is a SecurityException when trying to resolve
      *             the method</li>
-     *             <li>If there's an exception resolving the
+     *             <li>If an exception is thrown when resolving the
      *             {@link Action#guardProviderMethodsMap}</li>
      *             <li>If the method is not annotated with
      *             {@link HappeningHandler} or {@link Task}</li>
@@ -308,7 +308,8 @@ public class BaboonConfig {
      * Creates a new {@link ComplexSecuentialTaskSubscription}
      * 
      * @param complexTaskName
-     *            A name to identify this complex task. This name must be unique.
+     *            A name to identify this complex task. This name must be
+     *            unique.
      * @param topicName
      *            The name of the topic to be used for the subscription
      * 
@@ -319,6 +320,7 @@ public class BaboonConfig {
      * @throws NotSubscribableException
      *             <li>If complexTaskName is empty String</li>
      *             <li>If complexTaskName is null</li>
+     *             <li>If complexTaskName is already registered</li>
      *             <li>If topicName is empty String</li>
      *             <li>When a topic with name topicName does not exist</li>
      *             <li>When the {@link Topic} has an empty
@@ -368,10 +370,12 @@ public class BaboonConfig {
      * @throws NotSubscribableException
      *             <li>If the object provided as argument is null</li>
      *             <li>If the methodName provided as argument is null</li>
+     *             <li>If complexTaskName is empty String</li>
+     *             <li>If complexTaskName is null</li>
      *             <li>If the framework fails to resolve the method</li>
      *             <li>If there is a SecurityException when trying to resolve
      *             the method</li>
-     *             <li>If there's an exception resolving the
+     *             <li>If an exception is thrown when resolving the
      *             {@link Action#guardProviderMethodsMap}</li>
      *             <li>If the method is not annotated with {@link Task}</li>
      *             <li>If the {@link TaskAction} object does not have a
@@ -390,6 +394,15 @@ public class BaboonConfig {
      */
     public void appendTaskToComplexTask(String complexTaskName, Object object, String methodName, Object... parameters)
             throws NotSubscribableException {
+        if (complexTaskName == null || complexTaskName.isEmpty()) {
+            throw new NotSubscribableException("Task name cannot be empty or null");
+        }
+        if (object == null) {
+            throw new NotSubscribableException("Cannot subscribe a null object");
+        }
+        if (methodName == null) {
+            throw new NotSubscribableException("Cannot subscribe a null method name");
+        }
         try {
             Class<?>[] paramClasses = new Class<?>[parameters.length];
             for (int i = 0; i < parameters.length; i++) {
