@@ -1,18 +1,31 @@
-%%This is a very basic article template.
-%%There is just one section and two subsections.
 \documentclass{report}
+\usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{tabularx}
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{float}
+\usepackage{subfigure}
+\usepackage{amsfonts}
+\usepackage[section]{placeins}
+\usepackage{hyperref}
 \begin{document}
-	\graphicspath{ {resources/images/} }
-	\include{./sections/EstudioDeCasos}
+    %Nombre templetizado para poder cambiarlo fácil hasta tenerlo definido
+    \newcommand{\nombreTesis}{Framework de Sincronización de Tareas Coordinado
+    por Redes de Petri}
+    %Nombre templetizada por si lo tenemos que cambiar
+    \newcommand{\nombreFramework}{Baboon}
+    \title{\nombreTesis}
+    \author{Ariel Iván Rabinovich, Juan José Arce Giacobbe}
+    \graphicspath{ {resources/images/} }
+    \include{./sections/MarcoTeorico/RedesDePetri}
+    \include{./sections/EstudioDeCasos}
     \include{./sections/Requerimientos}
     \include{./sections/Frameworks}
     \include{./sections/AspectOrientedProgramming}
+    \include{./sections/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
+    \include{./sections/Diseno/Diseno}
     \bibliography{./bibliografia}
 	\bibliographystyle{plain}
 \end{document}
