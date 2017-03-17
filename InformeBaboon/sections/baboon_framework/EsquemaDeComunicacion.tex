@@ -1,0 +1,97 @@
+\section{Esquema de Comunicación de \nombreFramework}
+La meta de este proyecto es que una red de Petri esté a cargo del manejo
+completo de la concurrencia y el asincronismo de un sistema informático,
+evitando a su vez un alto grado de acoplamiento entre la red y el software de
+usuario.
+
+Para explicar el esquema de comunicación de \nombreFramework , primero deben
+detallarse otros conceptos inherentes a la misma.
+
+
+\subsection{Condiciones de Ejecución Síncronas y Asíncronas}
+Las condiciones para la ejecución de una acción pueden ser:
+  \begin{itemize}
+	\item Síncronas: Por ejemplo, condiciones booleanas derivadas del estado del
+		sistema que realizan cambios en el flujo de instrucciones del mismo (saltos
+		condicionales).
+	\item Asíncronas: Por ejemplo, eventos provenientes del mundo exterior o
+		señales / mensajes entre hilos / procesos.
+  \end{itemize}
+  
+\subsection{Eventos Lógicos, Programáticos y Físicos}
+Los eventos de interés para el sistema pueden ser de tres tipos:
+  \begin{itemize}
+    \item Eventos Lógicos: eventos que son comprensibles por el monitor de
+    redes de Petri, y están inherentemente asociados a transiciones de la red
+    misma y sus colas
+    \item Eventos Programáticos: eventos que son comprensibles por el
+    subsistema de manejo de eventos y están asociados a acciones del
+    software de usuario.
+    \item Eventos Físicos: eventos reales que suceden en el mundo físico y
+    representan sucesos del dominio del problema. Pueden ser eventos fisicos de
+    salida (por ejemplo, al mover un actuador utilizando el programa), o de
+    entrada (por ejemplo el cambio de una variable física siendo monitoreada por
+    el programa).
+  \end{itemize}
+  
+  
+\subsection{Componentes de un sistema desarrollado con \nombreFramework}
+Se puede dividir un sistema desarrollado con \nombreFramework en tres partes.
+\begin{itemize}
+\item Por un lado existe un monitor de redes de Petri, encargado de analizar el
+cumplimiento de las condiciones para la ejecución de ciertas partes de código
+(acciones). 
+\item La segunda parte esta compuesta por un subsistema de manejo de eventos
+programáticos, que permite la separación de los eventos lógicos y programáticos
+del sistema, la suscripción a dichos eventos programáticos, y la sincronización
+y ejecución de las acciones de software suscriptas. El mismo actúa como un
+intermediario entre el código del usuario y el monitor de redes de Petri,
+permitiendo desacoplar la red de Petri del código de usuario. 
+\item Por último, el programa de usuario, que contiene todas las acciones
+concretas a realizar, con sus correspondientes suscripciones a eventos
+programáticos.
+\end{itemize}
+  
+  
+ 
+La propuesta para lograr el objetivo planteado es un modelo donde el monitor de
+red de Petri asume la responsabilidad de verificar las condiciones asíncronas y
+de mantener el estado del sistema. De esta forma será la red quien conozca y
+analice ese tipo de condiciones.
+Los tipos de condiciones que entran bajo consideración del monitor de Petri son:
+\begin{itemize}
+\item El disparo de eventos provenientes de sistemas externos que llegan en cualquier momento
+durante la ejecución y sin ningún orden establecido. Así los estados locales de la red son
+mantenidos en causalidad de los procesos que se ejecutan y explicitan los eventos
+externos.
+\item Condiciones de sincronización que permitan ordenar la realización de tareas en el tiempo.
+\item Condiciones impuestas por el dominio del problema. Así la red mantiene su estado en
+causalidad de las restricciones del problema.
+\end{itemize} \cite{chimp}
+\\
+Por otro lado, el subsistema manejador de eventos programáticos se encarga de
+desacoplar el software del usuario de la red de Petri para relacionar eventos
+físicos con eventos lógicos. De esta manera se consigue que las transiciones no
+queden asociadas directamente a acciones del programa y, por ende, no se le dé
+a la red semántica de un dominio de problema en particular.
+Esto trae aparejadas las siguientes ventajas:
+  \begin{itemize}
+	\item Las redes de Petri se vuelven más genéricas y por lo tanto reutilizables,
+    puesto que no hay semántica de un dominio de problema en ellas. Ergo una
+    misma red se puede utilizar para resolver problemas diferentes.
+	\item El modelo de red de Petri puede cambiar por completo sin afectar al
+       programa.
+ 	Simplemente reconfigurando los mapas de relación de eventos el sistema
+ 	continúa funcionando
+  \end{itemize} \cite{chimp}
+\\
+
+ El programa de usuario sólo se limitará a describir las acciones(que pueden
+ desencadenar eventos físicos de salida o manejar eventos físicos de entrada)
+ y asociarlas a los eventos programáticos que correspondan.
+ \\
+
+En este proyecto se utilizan redes de Petri no autónomas. Se dispone de las
+etiquetas especificadas en \emph{\color{red} CITA REQUERIDA}. La comunicación
+entre el subsistema de manejo de eventos programáticos y el monitor de Petri se
+realiza utilizando las interfaces proporcionadas por el monitor.
