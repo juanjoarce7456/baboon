@@ -1,0 +1,69 @@
+\section{Generación de Código Fuente}
+
+La idea de generación automática de código fuente y de código ejecutable es casi
+tan antigua como la programación en sí misma. De ser posible, ahorra mucho
+tiempo y costo de desarrollo de sistemas por lo que ha sido y es foco de
+investigación y desarrollo.
+
+La generación automática de código fuente está englobada por el concepto de
+\textit{Programación Automática}. El significado de este término ha avanzado
+junto a la programación a lo largo de los años:
+\begin{itemize}
+  \item En la década de 1940, se llamó de esta forma a la automatización del
+  proceso de perforar cintas de papel para escribir el programa
+  \cite{AutomaticProgrammingGorn}. Lo que Gorn llamó programación automática, es
+  en realidad un lenguaje assembler.
+  \item En el comienzo de los lenguajes de alto nivel se le llamó de esta manera
+  a los compiladores. Tanto es así que uno de los primeros compiladores se llamó
+  Autocode.
+  \item Actualmente se identifica este término como la generación de código
+  fuente escrito en un lenguaje de programación (compilable o interpretable a
+  código máquina) a partir de una descripción de más alto nivel.
+\end{itemize}
+
+En resumen, la programación automática siempre ha sido un eufemismo para la
+programación con un lenguaje de más alto nivel del disponible para el
+programador. Investigar en programación automática es simplemente desarrollar
+la implementación de lenguajes de programación de más alto nivel
+\cite{Parnas:1985:SAS:214956.214961}.
+
+Tomando esta definición de programación automática, se llega a que los 
+generadores automáticos de código fuente son en realidad traductores de un
+lenguaje de programación a otro. Esto brinda un mayor nivel de abstracción para
+el programador pero lo fuerza a especificar su software en un lenguaje
+provisto por el generador.
+
+Algunos ejemplos de generadores de código son:
+\begin{itemize}
+  \item \underline{Apache Thrift:} Desarrollado por Facebook y actualmente
+  liberado bajo licencia Apache, Thrift es un generador de servicios para múltiples lenguajes
+  orientado a la comunicación por medio de llamadas a procedimiento remoto
+  (remote procedure call – RPC). Para lograr esto expone un lenguaje de
+  definición de interfaces (interface definition language – IDL) propio,
+  utilizado para describir el servicio que luego Thrift generará en alguno de
+  los múltiples lenguajes que tolera.
+  \item \underline{Acceleo}: Es un generador de código que implementa el
+  estándar \textit{MOFM2T} desarrollado por The Eclipse Foundation y su código fuente
+  está liberado bajo licencia EPL. Acceleo permite la especificación del
+  software en modelos como UML (v1 y v2), EMF (eclipse model framework) y
+  lenguajes de modelado personalizados (DSL). Además permite especificar
+  plantillas definidas por el usuario. Genera código en múltiples lenguajes de
+  programación.
+  \item \underline{Actifsource:} Desarrollado por actifsource GmbH y de código
+  cerrado, es un generador de código a partir de modelos similares a UML. Soporta la
+  creación de múltiples modelos y la unión de estos, y la utilización de modelos
+  generados en cualquier software que tolere formato ecore, definido por el
+  Eclipse Modeling Framework. Está desarrollado como un plugin para Eclipse.
+  \item \underline{Spring Roo:} Desarrollado conjuntamente por DISID y Pitvotal
+  bajo licencia Apache 2.0, es un generador enfocado al desarrollo acelerado de
+  software empresarial en Java. La aplicación generada utiliza tecnologías Java
+  comunes como Spring Framework, Java Persistence API, Apache Maven, etc. A
+  diferencia de otros generadores de código, Roo expone una interfaz por línea
+  de comandos con sus propios comandos.
+  \item \underline{GeneXus:} Desarrollado por ARTech bajo licencia cerrada y con
+  primer lanzamiento en 1988, es un generador de código fuente a partir de un
+  lenguaje declarativo de alto nivel. A partir de este lenguaje, se genera
+  código fuente en C\#, COBOL, Java, Objective-C, RPG, Visual Basic,
+  Ruby y Visual FoxPro. Además tolera múltiples lenguajes para gestión de bases de
+  datos como Microsoft SQL, Oracle, DB2, Informix, PostgreSQL y MySQL.
+  \end{itemize}

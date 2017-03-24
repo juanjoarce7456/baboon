@@ -4,6 +4,8 @@
 \usepackage{amsmath, array}
 \usepackage{amssymb}
 \usepackage{tabularx}
+\usepackage{minted}
+\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{graphbox}
@@ -12,6 +14,16 @@
 \usepackage{subfigure}
 \usepackage{amsfonts}
 \usepackage[section]{placeins}
+\usepackage{hyperref}
+\hypersetup{
+     colorlinks,
+     citecolor=black,
+     filecolor=black,
+     linkcolor=black,
+     urlcolor=black
+}
+\date{}
+
 \begin{document}
     %Nombre templetizado para poder cambiarlo fácil hasta tenerlo definido
     \newcommand{\nombreTesis}{Framework de Sincronización de Tareas Coordinado
@@ -19,14 +31,34 @@
     %Nombre templetizada por si lo tenemos que cambiar
     \newcommand{\nombreFramework}{Baboon}
     \title{\nombreTesis}
-    \author{Ariel Iván Rabinovich, Juan José Arce Giacobbe}
+    \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
+        \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
     \graphicspath{ {resources/images/} }
-    \include{./sections/MarcoTeorico/RedesDePetri}
-    \include{./sections/EstudioDeCasos}
-    \include{./sections/Requerimientos}
-    \include{./sections/Frameworks}
-    \include{./sections/AspectOrientedProgramming}
-    \include{./sections/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
+    
+    \maketitle
+    
+    \tableofcontents
+    
+    \listoffigures
+    \listoftables
+    
+    \part{Marco Teórico}
+        \chapter{Modelos}
+            \include{./sections/MarcoTeorico/RedesDePetri}
+        \chapter{Paradigmas de Programación}
+            \include{./sections/MarcoTeorico/DataflowReactive}
+            \include{./sections/AspectOrientedProgramming}
+        \chapter{Frameworks y Genración de Código}
+            \include{./sections/MarcoTeorico/GeneracionDeCodigo}
+            \include{./sections/Frameworks}
+
+    \part{Desarrollo}
+        \chapter{Investigación}
+            \include{./sections/Requerimientos}
+        \chapter{Monitor de Concurrencia con Redes de Petri}
+            \include{./sections/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
+        \chapter{\nombreFramework \  Framework}
+            \include{./sections/EstudioDeCasos}
 
     \bibliography{./bibliografia}
 	\bibliographystyle{plain}

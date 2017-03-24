@@ -21,6 +21,9 @@ local.properties
 *.dvi
 *.pdf
 
+# minted plugin aux files
+_minted**
+
 # do not exclude libs
 !lib/*
 !resources/*
