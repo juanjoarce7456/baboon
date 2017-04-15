@@ -113,8 +113,9 @@ A fin de eliminar ambigüedades, se presenta una serie de definiciones sobre
 Redes de Petri.
 
 \begin{itemize}
-  \item [\underline{Definición 1}:] Una Red de Petri R está definida por la
-  tupla $(P, T, Pre, Post)$ donde:
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Una Red de Petri R está
+  definida por la tupla $(P, T, Pre, Post)$ donde:
   \begin{itemize}
     \item $ P = \{ p_1, p_2, \ldots, p_p \} $ un conjunto de plazas.\footnote{Se
     utiliza $p$ como la cantidad de plazas de la RdP en todo momento dentro de este informe por simplicidad para el lector}
@@ -131,7 +132,8 @@ Redes de Petri.
   $ Pre (p_i, t_j) $ contiene el peso del arco que va de $ p_i $ a $ t_j $, y
   $ Post (p_i, t_j) $ contiene el peso del arco que va de $ t_j $ a $ p_i $
 
-  \item [\underline{Definición 2}:] Una Red de Petri Marcada está
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Una Red de Petri Marcada está
   definida por el par $(R, M)$, donde R es una RdP y $ M : P \rightarrow
   \mathbb{N}^{p}$ (donde $\left\vert{P}\right\vert = p $) es una aplicación
   llamada \textit{marcado}.\\
@@ -141,7 +143,8 @@ Redes de Petri.
   La marca inicial se denota $m_{0}$ y da la cantidad inicial de tokens en todas
   las plazas de la red, por lo que especifica el estado inicial del sistema.
   
-  \item [\underline{Definición 3}:] Para una marca $m$, una transición $t_{j}$
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Para una marca $m$, una transición $t_{j}$
   está sensibilizada, y por lo tanto es disparable, si y solo si:\\
   $$ \forall p_{i} \in P, m(p_i) \geq Pre(p_{i}, t_{j}) $$
   Conceptualmente, una transición está sensibilizada si todas sus plazas de
@@ -158,7 +161,8 @@ Redes de Petri.
     \label{fig:transiciones_no_sensibilizadas}
   \end{figure}
   
-  \item [\underline{Definición 4}:] La estructura de una Red de Petri
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] La estructura de una Red de Petri
   se denota $ N = \{P, T, F, W\} $ donde,
   \begin{itemize}
     \item $P$ es en conjunto de plazas.
@@ -169,7 +173,8 @@ Redes de Petri.
     \item $W$ es la función de peso de los arcos.
   \end{itemize}
 
-  \item [\underline{Definición 5}:] Conjunto de transición y plaza de entrada y
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Conjunto de transición y plaza de entrada y
   de salida.
   \begin{itemize}
     \item[] El conjunto de las plazas de entrada a la transición $t$ se denota
@@ -195,7 +200,8 @@ tienen arcos que apuntan hacia $t_{j}$, el número de tokens presentes debe ser
 mayor o igual al peso de dicho arco.
 
 \begin{itemize}
-  \item [\underline{Definición 6}:] En una RdP, dada una marca $ m_{n}(p) $,
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] En una RdP, dada una marca $ m_{n}(p) $,
   cualquier transición $ t_{j} $ que se encuentre sensibilizada puede ser
   disparada, y su disparo lleva a una marca $ m_{n+1}(p)$ dada por:
   $$ m_{n+1}(p) = m_{n}(p) + Post(p_{i}, t_{j}) - Pre(p_{i}, t_{j}), \forall
@@ -217,7 +223,8 @@ mayor o igual al peso de dicho arco.
     \label{fig:disparo_transicion}
   \end{figure}
   
-  \item  [\underline{Definición 7}:] Matriz de Incidencia.\\
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Matriz de Incidencia.\\
   La matriz de incidencia de una RdP se define como,
   $$ I = Post - Pre $$
   \textbf{Notas:}
@@ -408,7 +415,8 @@ En las RdP con semántica de tiempo fuerte, se asume que el disparo de una
 transición toma un tiempo limitado, distinto de cero.
 
 \begin{itemize}
-  \item [\underline{Definición 8:}] Una Red de Petri Temporal con Semántica de
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Una Red de Petri Temporal con Semántica de
   Tiempo Fuerte es una tupla $(R, \Omega)$ donde:
   \begin{itemize}
     \item $R$ es una Red de Petri Ordinaria $R = \{P, T, F, W \}$
@@ -465,7 +473,8 @@ disparo de $t$ sólo será posible en el intervalo $[\theta + \alpha, \theta
 + \beta]$. \cite{PetriNetsFundamentals}
 
 \begin{itemize}
-  \item [\underline{Definición 9:}] Una Red de Petri Temporal con Semántica de
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Una Red de Petri Temporal con Semántica de
   Tiempo Débil es una tupla $(R, IS)$ donde:
   \begin{itemize}
     \item $R$ es una Red de Petri Ordinaria $R = \{P, T, F, W \}$
@@ -630,7 +639,8 @@ se denomina \textit{evento interno}. La ocurrencia de un evento no tiene
 duración. \cite{Hybrid_petri_nets}
 
 \begin{itemize}
-  \item [\underline{Definición 10:}] Una RdP sincronizada es una tupla
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Una RdP sincronizada es una tupla
   $RdP_{Sync} = \{R, E, Sync\}$ tal que:
   \begin{itemize}
     \item $R =  \{P,T,F,W\}$ es una Red de Petri marcada.
@@ -638,7 +648,8 @@ duración. \cite{Hybrid_petri_nets}
     \item $Sync : T \rightarrow (E \cup \{e\} ) $ donde $e$ es el evento
     que ocurre siempre.
   \end{itemize}
-  \item [\underline{Definición 11:}] En una RdP no autónoma, una transición $t$
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] En una RdP no autónoma, una transición $t$
    es \textit{inmediata} o \textit{automática} si es disparada $q$ veces cuando
    está \textit{q-sensibilizada} $\forall q > 0$, a menos que existan conflictos
    entre dos o más transiciones.
@@ -745,7 +756,8 @@ A fin de realizar esta comparación, es necesario previamente definir la
 composición de autómatas y de redes de Petri.\cite{Iordache:2006:SCC:1197724}
 
 \begin{itemize}
-  \item [\underline{Definición 12:}] Sean $G_{1} = (Q_{1}, \Sigma_{1},
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Sean $G_{1} = (Q_{1}, \Sigma_{1},
   \delta_{1}, s_{1}, F_{1})$ y $G_{2} = (Q_{2}, \Sigma_{2}, \delta_{2}, s_{2},
   F_{2})$ autómatas no determinísticos. La \textit{Composición Paralela} o
   \textit{Síncrona} de $G_{1}$ y $G_{2}$ es un autómata $G = G_{1} \parallel
@@ -754,7 +766,7 @@ composición de autómatas y de redes de Petri.\cite{Iordache:2006:SCC:1197724}
   s_{2}), F_{1} \times F_{2}) $$ donde $Ac$ es la función que elimina los estados no
  alcanzables de un autómata y $ \delta $ se define de la siguiente forma:
  \begin{itemize}
-   \item [\underline{Definición 12.1:}] Sea
+  \item [\underline{Definición \thedefinitionsCounter.1}:] Sea
    $$ \bar{\delta_{i}}(q,\alpha) =
    \left\{ 
      \begin{array}{lll}
@@ -815,7 +827,8 @@ composición de autómatas es (o está acotada por) el \textbf{producto} de la
 cantidad de estados de los autómatas que lo componen.
 
 \begin{itemize}
-  \item [\underline{Definición 13:}] Sean $R_{1} = (P_{1}, T_{1}, Pre_{1},
+  \stepcounter{definitionsCounter}
+  \item [\underline{Definición \thedefinitionsCounter}:] Sean $R_{1} = (P_{1}, T_{1}, Pre_{1},
   Pos_{1}, \rho_{1})$ y $R_{2} = (P_{2}, T_{2}, Pre_{2}, Pos_{2}, \rho_{2})$
   redes de Petri etiquetadas donde:
   \begin{itemize}
