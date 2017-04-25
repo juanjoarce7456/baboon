@@ -7,7 +7,7 @@ La programación orientada a aspectos es un paradigma de programación que tiene
 como objetivo incrementar la modularidad mediante la separación de intereses
 transversales (cross-cutting concerns). 
 Los intereses transversales son aspectos de un programa que afectan a otros
-intereses, son partes de un programa que dependen de, o afectan, muchas
+intereses. Son partes de un programa que afectan o dependen de muchas
 otras partes del sistema.
 Estos intereses usualmente no pueden separarse claramente del resto del
 sistema, y pueden resultar en duplicación de código o un alto grado de
@@ -18,19 +18,46 @@ Los intereses transversales son la base para el desarrollo de aspectos. Estos no
 pueden ser representados claramente en los paradigmas de programación orientado
 a objetos o programación procedural.
 La separación de intereses transversales se realiza añadiendo comportamientos
-adicionales al codigo existente (llamados advices) sin cambiar el
+adicionales al codigo existente (llamados consejos o advices) sin cambiar el
 código existente. En cambio especifica separadamente que codigo debe modificarse
 mediante la definición de pointcuts. 
- 
-\subsection{Ejecución}
+
+La programación orientada a aspectos complementa a la programación orientada a
+objetos al permitir al desarrollador modificar dinamicamente el modelo estático
+orientado a objetos para crear un sistema que puede crecer para cumplir nuevos
+requerimientos. Tal como los objetos en el mundo real pueden cambiar sus estados
+a lo largo de su vida, una aplicación puede adoptar nuevas características a
+medida que se va desarrollando. \cite{Introduction_To_Aspect}
 
 
-Un pointcut es un conjunto de joinpoints, que permiten
-determinar donde aplicar exactamente un advice de un aspecto. Generalmente
-se especifican utilizando nombres de clases o de métodos, en algunos casos
-utilizando expresiones regulares que hacen juego con estos nombres. Cuando la
-ejecución del programa alcanza uno de los joinpoints descriptos en el pointcut,
-una porción de código asociada al pointcut (llamada advice) es ejecutada. Esto
-permite al programador describir dónde y cuándo el codigo adicional debe
-ejecutarse. Esto proporciona la posibilidad de añadir aspectos a un código
-existente, o al diseño de un software con una clara separación de intereses.
+\subsection{Terminología}
+\begin{itemize}
+  \item Intereses Transversales (Cross-cutting concerns): Aunque la mayoría de
+  las clases en un modelo orientado a objetos está destinada a perfeccionar una función única y
+  específica, usualmente comparten requerimientos secundarios en común con otras
+  clases. Por ejemplo, se puede desear añadir mecanismos de logueo a las clases
+  dentro de la capa de acceso de datos y también a las clases en la capa de
+  interfaz de usuario cada vez que un hilo entre o salga de un método. Aunque la
+  funcionalidad principal de cada clase es muy diferente, el código necesario
+  para realizar la tarea secundaria is usualmente
+  idéntico.\cite{Introduction_To_Aspect}
+  
+  \item Consejos (Advices): Es el código adicional que se desea aplicar al
+  modelo existente. Siguiendo con el ejemplo anterior, es el código de logueo
+  que se quiere aplicar cada vez que un hilo ingrese o salga de un
+  método.\cite{Introduction_To_Aspect}
+  
+  \item Punto de unión (Join-point): Es el término que se le otorga al punto
+  de ejecución en la aplicación en el cual los intereses transversales deben ser
+  aplicados. En el ejemplo, un punto de unión es alcanzado cuando un hilo
+  ingresa a un método, y un segundo punto de unión es alcanzado cuando un hilo
+  sale de un método.
+  
+  \item Punto de corte (Point-cut): Un punto de corte es un conjunto de puntos
+  de unión. Un point-cut permite definir dónde aplicar exactamente un consejo,
+  lo cual permite la separación de intereses y ayuda a modularizar la lógica de
+  negocios \cite{Classification_Of_Pointcut_Language_Constructs}.
+  
+  \item Aspecto (Aspect): La combinación de un punto de corte y un consejo se
+  denomina aspecto. \cite{Introduction_To_Aspect}
+\end{itemize} 
