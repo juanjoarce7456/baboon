@@ -19,11 +19,11 @@
 \usepackage{scrextend}
 \addtokomafont{labelinglabel}{\sffamily}
 \hypersetup{
-     colorlinks,
+     colorlinks=true,
      citecolor=black,
      filecolor=black,
      linkcolor=black,
-     urlcolor=black
+     urlcolor=blue
 }
 \date{}
 \setcounter{secnumdepth}{3} % Add number to subsubsections
@@ -38,8 +38,10 @@
     \newcommand{\nombreTesis}{Framework de Sincronización de Tareas Coordinado
     por Redes de Petri}
     %Nombre templetizada por si lo tenemos que cambiar
-    \newcommand{\nombreFramework}{Baboon Framework}
-    
+    \newcommand{\nombreFramework}{Baboon}
+    %Nombre del monitor templetizado
+    \newcommand{\javapetriconcurrencymonitor}{Java Petri Concurrency Monitor }
+
     \title{\nombreTesis}
     \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
         \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
@@ -61,19 +63,19 @@
             \include{./sections/MarcoTeorico/RedesDePetri}
         \chapter{Paradigmas de Programación}
             \include{./sections/MarcoTeorico/DataflowReactive}
-            \include{./sections/AspectOrientedProgramming}
+            \include{./sections/MarcoTeorico/AspectOrientedProgramming}
             \include{./sections/MarcoTeorico/ObjectOrientedProgramming}
         \chapter{Frameworks y Generación de Código}
             \include{./sections/MarcoTeorico/GeneracionDeCodigo}
-            \include{./sections/Frameworks}
+            \include{./sections/MarcoTeorico/Frameworks}
         \chapter{Concurrencia}
             \include{./sections/MarcoTeorico/Concurrencia}
 
     \part{Desarrollo}
         \chapter{Investigación}
-            \include{./sections/Requerimientos}
+            \include{./sections/Desarrollo/Requerimientos}
         \chapter{Monitor de Concurrencia con Redes de Petri}
-            \include{./sections/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
+            \include{./sections/Desarrollo/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
         \chapter{\nombreFramework \  Framework}
             \include{./sections/baboon_framework/Eventos}
             \include{./sections/baboon_framework/ModosDeSincronizacion}
