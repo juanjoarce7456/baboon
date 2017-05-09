@@ -1,6 +1,12 @@
-\section{Análisis de Modelos con Redes de Petri}
+\section{Modos de Sincronización de Acciones utilizando Redes de Petri}
 \subsection{Petición de ejecución versus Aviso de ejecución.}
 \subsubsection{Estudio de la Red de Petri de una cinta transportadora}
+En esta sección se hará estudio de un caso de uso donde se pueden analizar
+diferentes formas de sincronizar una secuencia de acciones utilizando una red de
+Petri.\\
+
+\begin{labeling}{alligator}
+\item [Ejemplo]
 Cinta transportadora con 3 estaciones. Piezas son depositadas en la primer
 estación  de manera asincrónica. Cuando esto sucede, la cinta avanza a la
 estación 1, donde un operario realiza una transformación a la pieza. Una vez el
@@ -8,6 +14,7 @@ operario realizó la transformación, presiona un pulsador y la cinta avanza a l
 estación 2, donde un segundo operario empaqueta la pieza. Este segundo operario
 presiona otro pulsador al finalizar su tarea y luego la cinta avanza una vez
 más y la pieza cae en un contenedor.
+\end{labeling}
 
 \begin{figure}[H]
     \centering
@@ -16,70 +23,75 @@ más y la pieza cae en un contenedor.
     \label{fig:petri_cinta_transportadora_1}
 \end{figure}
 
-\subsubsection{Análisis de ejecución del caso de estudio en framework Chimp} 
-De acuerdo al modo de ejecución implementado por Chimp ~\cite{chimp}, el
-framework da aviso de eventos al monitor, desencadenando la ejecución de las tareas:
+\subsubsection{Análisis de ejecución del caso de estudio usando aviso de
+ejecución} 
+De acuerdo al modo de ejecución por aviso, es el resto del framework el
+responsable de dar aviso de eventos al monitor, desencadenando la ejecución de las acciones:
 \begin{enumerate}
-    \item Debe insertarse un evento en la cola de entrada de “t0” cuando el framework
-		detecte la llegada de una nueva pieza. Si la cinta Transportadora se encuentra
-		disponible, el monitor de petri dispara “t0” y se genera un evento que se
-		deposita en la cola de salida de “t0”.
-    \item Chimp lee el evento de salida de “t0” y realiza la acción “moverEst1”, que
-		mueve la pieza a la estación 1 y espera la acción del operador. Una vez que el
-		operador realiza su acción, presiona el pulsador generando un evento que Chimp
-		envía a la cola de  entrada de “t1”. El monitor de petri dispara “t1” y se
-		genera un evento que se deposita en la cola de salida de “t1”.
-    \item Chimp lee el evento de salida de “t1” y realiza la acción “moverEst2”, que
-		mueve la pieza a la estación 2 y espera la acción del operador. Una vez que el
-		operador realiza su acción, presiona el pulsador generando un evento que Chimp
-		envía a la cola de  entrada de “t2”. El monitor de petri dispara “t1” y se
-		genera un evento que se deposita en la cola de salida de “t2”.
-    \item Chimp lee el evento de salida de “t2 y realiza la accion “moverACont”, que
-		mueve la pieza al contenedor. Una vez terminada esa acción envía un evento a
-		la cola de entrada de “t3”. El monitor de petri dispara “t3” y libera la
-		cinta Transportadora para procesar otra pieza.
+    \item Debe insertarse un evento en la cola de entrada de “t0” cuando la
+    acción escuchando el sensor detecte la llegada de una nueva pieza. Si la
+    cinta Transportadora se encuentra disponible, el monitor de petri dispara
+    “t0” y se genera un evento que se deposita en la cola de salida de “t0”.
+    \item El manejador de eventos lee el evento de salida de “t0” y llama a
+    ejecutar la acción “moverEst1”, que mueve la pieza a la estación 1 y espera
+    el trabajo del operador. Una vez que el operador realiza su trabajo,
+    presiona el pulsador generando un evento que el manejador de eventos, a través del
+    mapa de eventos envía a la cola de entrada de “t1”. El monitor de petri
+    dispara “t1” y se genera un evento que se deposita en la cola de salida de
+    “t1”.
+    \item El manejador de eventos lee el evento de salida de “t1” y llama a
+    ejecutar la acción “moverEst2”, que mueve la pieza a la estación 2 y espera
+    el trabajo del operador. Una vez que el operador realiza su trabajo,
+    presiona el pulsador generando un evento que el framework envía a la cola
+    de  entrada de “t2”. El monitor de petri dispara “t1” y se genera un evento
+    que se deposita en la cola de salida de “t2”.
+    \item El manejador de eventos lee el evento de salida de “t2 y llama a
+    ejecutar la accion “moverACont”, que mueve la pieza al contenedor. Una vez
+    terminada esa acción envía un evento a la cola de entrada de “t3”. El
+    monitor de petri dispara “t3” y libera la cinta Transportadora para procesar otra pieza.
 \end{enumerate}
 
-El concepto de Dummy introducido en Chimp ~\cite{chimp} contempla únicamente
-casos de tareas sincrónicas. Esta forma de ejecución limita la funcionalidad de
-sincronización de la red de Petri, acotando su funcionamiento. Si bien es
-tentador suscribir las tareas a una transición informada, que avisa al framework
-cuando estan dadas las condiciones de ejecución, existe una gran desventaja al
-utilizar la ejecución dirigida por informes. Al utilizar la suscripción a
-transiciones informadas el framework está asumiendo una parte del rol de control
-de flujo de ejecución, lo cual debería delegarse por completo al monitor de
-redes de Petri. El framework debe decidir qué hacer con el informe que recibe
-desde la red (debe decidir si debe despertar un hilo o crear un hilo nuevo,
-decidir qué hilo despertar). En el caso particular de Chimp ~\cite{chimp} no
-existen hilos durmiendo en el monitor, desaprovechando una de las principales
-ventajas de la arquitectura del sistema.
+Si bien parece prometedor suscribir las tareas a una transición informada (que
+avisa al manejador de eventos cuando están dadas las condiciones de ejecución),
+tras analizar este modo de sincronización se llega a la conclusión de que existe
+una gran desventaja al utilizar la ejecución dirigida por informes. Al utilizar la
+suscripción a transiciones informadas el manejador de eventos y manejador de
+acciones están asumiendo una parte del rol de control de flujo de ejecución.
+Esta responsabilidad debería delegarse por completo al monitor de redes de
+Petri. En este caso, el manejador de eventos debe decidir qué hacer con el informe que
+recibe desde la red (debe decidir si debe despertar un hilo o crear un hilo
+nuevo, decidir qué hilo despertar). En el caso particular del framework
+realizado en ~\cite{chimp}, el utilizar este método de sincronización lleva a
+que no existan hilos durmiendo en el monitor, desaprovechando una de las
+principales ventajas de la arquitectura del sistema.
 \\
 Este problema se soluciona mediante el concepto de petición de ejecución, donde
 los hilos realizan disparos asincrónicos al monitor y son bloqueados si no
 pueden ejecutarse. Una vez que se cumplen las condiciones de ejecución de un
 hilo dormido el monitor es el encargado de despertarlo. De esta forma el control
 de flujo de ejecución se encuentra completamente integrado en el monitor de
-petri.
+petri. A continuación se analiza este modo.
 
-\subsubsection{Análisis de ejecución del caso de estudio por
-petición de ejecución al motor de petri} 
-Como se expuso anteriormente, una alternativa al método de ejecución de Chimp
-consiste una petición de ejecución al monitor por parte de los hilos que
-realizan tareas, sin tener en cuenta el estado actual de la red de Petri.
- El monitor es el encargado de dormir aquellas tareas que no pueden ser
- ejecutadas. Una vez que las condiciones son las adecuadas para realizar la
- tarea, el monitor se encarga de despertar al hilo encargado de ejecutarla.
+\subsubsection{Análisis de ejecución por petición de ejecución al monitor de
+petri}
+ Es una alternativa al modo de sincronización por aviso de ejecución. Consiste
+ en realizar una petición de ejecución al monitor por parte de los hilos que
+ realizan tareas, sin tener en cuenta el estado actual de la red de Petri.
+ El monitor es el encargado de dormir aquellos hilos cuyas acciones no
+ pueden ser ejecutadas en el momento. Una vez que las condiciones son las
+ adecuadas para realizar la tarea, el monitor se encarga de despertar al hilo
+ encargado de ejecutarla.
 \begin{enumerate}
     \item Se generan eventos que se encolan en la cola de entrada en “t0, t1,
     	t2 y t3”.
     \item El monitor duerme los hilos que generaron eventos para “t1, t2 y t3”
     	por no estar sensibilizadas las transiciones en ese momento.
     \item El monitor ejecuta “t0”. Y se envía un evento a la cola de salida de
-    	“t0”.
-    \item Chimp lee el evento de salida de “t0” y ejecuta “moverEst1”.
+    	“t0”, despertando al hilo durmiendo en dicha transición.
+    \item El hilo ejecuta “moverEst1”.
     \item Existe un problema, ya que al disparar “t0”, el monitor tiene
     	permitido disparar “t1”, pero la operación “moverEst1” aun no ha
-    	finalizado.
+    	finalizado, generando un problema de sincronización.
 \end{enumerate}
 Tras el análisis  del ejemplo anterior se llega a una serie de
 conclusiones. En primer lugar, es necesario que el framework de aviso al monitor
@@ -91,11 +103,12 @@ petición de ejecución permite concentrar el control del flujo de ejecución en
 el monitor.
 Sin embargo, dada la red de petri
 Figura~\ref{fig:petri_cinta_transportadora_1} se puede notar que surgen
-problemas de sincronización. Un ejemplo de estos problemas se origina al realizar una petición de ejecución de la tarea “moverEst2”, el monitor permite ejecutar esta
-tarea de forma inmediata, sin tener en cuenta si la tarea ``moverEst1'' ha
-finalizado. En consecuencia, utilizar un sistema de ejecución basado en
-peticiones requiere un nuevo modelo en red de Petri del problema que sea capaz
-de sincronizar los eventos de finalización de tarea.
+problemas de sincronización. Un ejemplo de estos problemas se origina al
+realizar una petición de ejecución de la tarea “moverEst2”, el monitor permite
+ejecutar esta tarea de forma inmediata, sin tener en cuenta si la tarea
+``moverEst1'' ha finalizado. En consecuencia, utilizar un sistema de ejecución
+basado en peticiones requiere un nuevo modelo en red de Petri del problema, que
+sea capaz de sincronizar los eventos de finalización de tarea.
 A continuación se analizan algunas alternativas de modelado orientadas a
 resolver este problema.
 
@@ -222,13 +235,13 @@ comenzar la ejecución de la ``tareaB'', se debe modificar el valor de la guarda
 ``Fin\_TareaA'' a ``false'', y de esta manera existe la posibilidad de perder
 eventos de finalización de la ``tarea A''.
 
-\subsubsection{Sincronización por Disparo Perenne de Aviso de
+\subsubsection{Sincronización por Disparo No Perenne de Aviso de
 Finalización de Tarea}
 Esta forma de solucionar la sincronización de tareas sincrónicas consecutivas
 supone añadir una nueva propiedad ``P'' a las transiciones. Los hilos que
 duermen en la cola de condición de una transición con propiedad ``P'' sólo
 se despiertan cuando la transición se encuentra habilitada y además un hilo
-externo realiza un disparo perenne sobre la transición.
+externo realiza un disparo no perenne sobre la transición.
 
 \begin{figure}[H]
     \centering
@@ -245,21 +258,24 @@ externo realiza un disparo perenne sobre la transición.
 	no estar sensibilizadas las transiciones en ese momento.
 	\item Se dispara ``t0'' y se coloca un token en ``moverEst1''. Comienza la
 	ejecución de la tarea ``moverEst1''. La transición ``t1'' no se dispara ya que
-	es de tipo ``P'' y solo puede dispararse de forma perenne por un hilo externo.
+	es de tipo ``P'' y solo puede dispararse de forma no perenne por un hilo
+	externo.
 	\item Finaliza la ejecución de ``moverEst1'' y un hilo dispara ``t1'' de forma
-	perenne para dar aviso de la finalización de la tarea.
+	no perenne para dar aviso de la finalización de la tarea.
 	\item Se despierta el hilo que
 	duerme en cola de condición de ``t1''. Se coloca un token en ``moverEst2'' y
 	comienza la ejecución de esta tarea. La transición ``t2'' no se dispara ya que
-	es de tipo ``P'' y solo puede dispararse de forma perenne por un hilo externo.
+	es de tipo ``P'' y solo puede dispararse de forma no perenne por un hilo
+	externo.
 	\item Finaliza la ejecución de ``moverEst2'' y un hilo dispara ``t2'' de forma
-	perenne para dar aviso de la finalización de la tarea.
+	no perenne para dar aviso de la finalización de la tarea.
 	\item  Se despierta el hilo que
 	duerme en cola de condición de ``t2''. Se coloca un token en ``moverACont'' y
 	comienza la ejecución de esta tarea. La transición ``t3'' no se dispara ya que
-	es de tipo ``P'' y solo puede dispararse de forma perenne por un hilo externo.
+	es de tipo ``P'' y solo puede dispararse de forma no perenne por un hilo
+	externo.
 	\item Finaliza la ejecución de ``moverACont'' y un hilo dispara ``t3'' de forma
-	perenne para dar aviso de la finalización de la tarea.
+	no perenne para dar aviso de la finalización de la tarea.
 	\item Se libera el recurso ``cintaTransp''.
 \end{enumerate}
 
@@ -269,13 +285,15 @@ Su principal desventaja consiste en que añade una nueva etiqueta a la
 petri, dificultando su demostración matemática. Esta solución supone añadir una
 interfaz al monitor de petri para dormir hilos en una cola de condición de una
 transición tipo P y que los hilos bloqueados en esta cola de condición sólo
-puedan liberarse por medio de un disparo perenne ocasionado por un hilo externo.
+puedan liberarse por medio de un disparo no perenne ocasionado por un hilo
+externo.
 El hilo que realiza el disparo sobre la transición debe realizar una operación
-release sobre la cola de condición de disparos perennes (sin importar si existen
-o no hilos bloqueados en la cola) para evitar la pérdida de eventos de
+release sobre la cola de condición de disparos no perennes (sin importar si
+existen o no hilos bloqueados en la cola) para evitar la pérdida de eventos de
 finalización de tarea.
 
 \subsubsection{Resumen}
+\label{sec:resumen_sincronizacion}
 Existen dos maneras de coordinar la ejecución de las tareas a partir de una red
 de Petri.\\ 
 La primera consiste en suscribir una tarea a una transición y que se
@@ -284,11 +302,12 @@ una tarea sincrónica, se dispara otra transición al finalizar la misma. Esta
 transición disparada tendrá suscripta la siguiente tarea a ejecutar e informará
 su disparo a dicha tarea. Este modo de ejecución tiene una desventaja
 importante que consiste en la descentralización del manejo de los hilos por
-parte del monitor, atribuyendole al framework parte de la responsabilidad de
-esta tarea. Al delegar en el framework el manejo del informe de una transición
-informada, es el mismo quien debe encargarse de despertar o crear el hilo que
-ejecute la tarea suscripta a dicha transición. De esta forma se desaprovecha
-una de las principales ventajas de la arquitectura de un sistema con monitor.\\
+parte del monitor, atribuyendole al manejador de eventos y al manejador de
+acciones parte de la responsabilidad de esta tarea. Al delegar el manejo del
+informe de una transición informada, se delega la responsabilidad de
+despertar o crear el hilo que ejecute la tarea suscripta a dicha transición. De
+esta forma se desaprovecha una de las principales ventajas de la arquitectura
+de un sistema con monitor.\\
 El segundo modo consiste en hilos pidiendo permiso de ejecución al monitor
 mediante el disparo de las transiciones correspondientes a las tareas que deben
 realizar. De esta forma el monitor duerme los hilos que no pueden ejecutarse y
@@ -296,9 +315,10 @@ despierta aquel hilo que duerma en la cola de condicion de la
 transición que se dispara. De esta forma el manejo de la concurrencia y de los
 hilos es llevado a cabo íntegramente por el monitor. Sin embargo, para
 sincronizar tareas dependientes entre sí (una debe comenzar luego de la
-finalización de la otra) debe existir una forma de dar aviso al framework de la
-finalización de una tarea.\\
-En esta sección se analizaron tres formas de realizar este aviso de finalización
+finalización de la otra) debe existir una forma de dar aviso al monitor de la
+finalización de una tarea. En este trabajo se adopta esta forma de
+sincronicación por petición de ejecución.\\
+En esta sección se analizaron tres formas de realizar el aviso de finalización
 de tareas en un modo de ejecución por petición, Por transición-plaza, por
 guardas y por transiciones tipo ``P''.\\
  Tras analizar estos tres modelos de redes de Petri se decidió optar por añadir
@@ -306,5 +326,10 @@ guardas y por transiciones tipo ``P''.\\
  desventaja de incrementar el número de plazas y transiciones de la red, con su
  inherente incremento de tamaño de matrices a procesar, permite utilizar una
  ejecución guiada por permiso de ejecución (centralizando el control de flujo
- de ejecución en el monitor) y además no añade conceptos nuevos a la red,
- facilitando el entendimiento de la misma y su ejecución.
+ de ejecución en el monitor). Además no añade conceptos nuevos a la red,
+ facilitando el entendimiento de la misma.
+ 
+ 
+ 
+ 
+ 

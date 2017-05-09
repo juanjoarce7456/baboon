@@ -15,6 +15,9 @@
 \usepackage{amsfonts}
 \usepackage[section]{placeins}
 \usepackage{hyperref}
+\usepackage{blindtext}
+\usepackage{scrextend}
+\addtokomafont{labelinglabel}{\sffamily}
 \hypersetup{
      colorlinks,
      citecolor=black,
@@ -36,6 +39,7 @@
     por Redes de Petri}
     %Nombre templetizada por si lo tenemos que cambiar
     \newcommand{\nombreFramework}{Baboon Framework}
+    
     \title{\nombreTesis}
     \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
         \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
@@ -71,8 +75,9 @@
         \chapter{Monitor de Concurrencia con Redes de Petri}
             \include{./sections/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
         \chapter{\nombreFramework \  Framework}
-            \include{./sections/EstudioDeCasos}
-            \include{./sections/baboon_framework/EsquemaDeComunicacion}
+            \include{./sections/baboon_framework/Eventos}
+            \include{./sections/baboon_framework/ModosDeSincronizacion}
+            \include{./sections/baboon_framework/TasksHappenings}
     \bibliography{./bibliografia}
 	\bibliographystyle{plain}
 \end{document}
