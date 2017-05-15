@@ -1,11 +1,13 @@
 \section{Modos de Sincronización de Acciones utilizando Redes de Petri}
+\label{sec:modos_sincronizacion}
 \subsection{Petición de ejecución versus Aviso de ejecución.}
 \subsubsection{Estudio de la Red de Petri de una cinta transportadora}
+\label{sec:sincronizacion_cinta_transportadora}
 En esta sección se hará estudio de un caso de uso donde se pueden analizar
 diferentes formas de sincronizar una secuencia de acciones utilizando una red de
 Petri.\\
 
-\begin{labeling}{alligator}
+\begin{labeling}{description}
 \item [Ejemplo]
 Cinta transportadora con 3 estaciones. Piezas son depositadas en la primer
 estación  de manera asincrónica. Cuando esto sucede, la cinta avanza a la
@@ -74,6 +76,7 @@ petri. A continuación se analiza este modo.
 
 \subsubsection{Análisis de ejecución por petición de ejecución al monitor de
 petri}
+\label{sec:sincronizacion_peticion_ejecucion}
  Es una alternativa al modo de sincronización por aviso de ejecución. Consiste
  en realizar una petición de ejecución al monitor por parte de los hilos que
  realizan tareas, sin tener en cuenta el estado actual de la red de Petri.
@@ -113,7 +116,8 @@ A continuación se analizan algunas alternativas de modelado orientadas a
 resolver este problema.
 
 \subsubsection{Sincronización por Transición-Plaza}
-Una posible solución a los problemas planteados en la sección anterior es
+\label{sec:sincronizacion_peticion_ejecucion_transicion_plaza}
+Una posible solución a los problemas planteados en la sección\ref{sec:sincronizacion_peticion_ejecucion} es
 modelar la red de la siguiente forma:\\
 
 \begin{figure}[H]
@@ -235,7 +239,7 @@ comenzar la ejecución de la ``tareaB'', se debe modificar el valor de la guarda
 ``Fin\_TareaA'' a ``false'', y de esta manera existe la posibilidad de perder
 eventos de finalización de la ``tarea A''.
 
-\subsubsection{Sincronización por Disparo No Perenne de Aviso de
+\subsubsection{Sincronización por Disparo Externo No Perenne de Aviso de
 Finalización de Tarea}
 Esta forma de solucionar la sincronización de tareas sincrónicas consecutivas
 supone añadir una nueva propiedad ``P'' a las transiciones. Los hilos que
@@ -326,8 +330,12 @@ guardas y por transiciones tipo ``P''.\\
  desventaja de incrementar el número de plazas y transiciones de la red, con su
  inherente incremento de tamaño de matrices a procesar, permite utilizar una
  ejecución guiada por permiso de ejecución (centralizando el control de flujo
- de ejecución en el monitor). Además no añade conceptos nuevos a la red,
- facilitando el entendimiento de la misma.
+ de ejecución en el monitor). Una ventaja extra de
+ este modo de sincronización es que no añade conceptos nuevos a la red,
+ facilitando el entendimiento de la misma. En procesos secuenciales, puede
+ contrarrestarse el aumento de tamaño de la RdP mediante el uso del
+ controlador de acciones descripto en la
+ sección~\ref{sec:complex_secuential_task_controller}.
  
  
  

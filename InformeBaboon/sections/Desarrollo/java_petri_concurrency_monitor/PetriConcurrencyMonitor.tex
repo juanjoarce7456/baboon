@@ -1,5 +1,5 @@
 \section{Introduccion}
-
+\label{sec:petri_concurrency_monitor_intro}
 Como se dijo en la sección [{\color{red}CITAR OBJETIVOS DONDE SE QUIERE
 SEPARARLA LÓGICA DEL CÓDIGO EJECUTANDO EL MODELO}], uno de los objetivos de este proyecto integrador es
 {\color{green} modelar sistemas reactivos para garantizar su correcto
@@ -20,7 +20,7 @@ ejecutar una RdP como {\color{red} motor} de la lógica de un sistema concurrent
 adentro de un monitor de concurrencia.
 
 \section{\javapetriconcurrencymonitor}
-
+\label{sec:java_petri_concurrency_monitor}
 \javapetriconcurrencymonitor es un monitor de concurrencia que ejecuta redes
 de petri, hecho en lenguaje de programación java.
 Brinda una interfaz de programación de aplicaciones (API) para ejecutar una RdP
@@ -324,7 +324,8 @@ es decir de una instancia de la clase \textit{``PetriMonitor''}. La forma de
 hacerlo es llamando a alguna de las sobrecargas de 
 \begin{minted}{java}
 PetriMonitor.fireTransition()
-\end{minted}.
+\end{minted}
+.
 
 Existen dos formas de disparar una transición: mediante el objeto
 \textit{Transition} o por nombre de la transición.
