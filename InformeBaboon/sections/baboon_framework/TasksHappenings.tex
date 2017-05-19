@@ -1,13 +1,46 @@
 \section{Clasificación de Eventos Físicos: \\ Eventos Task y Eventos Happening}
 \label{sec:clasificacion_eventos_fisicos} 
 Mediante un análisis de los eventos físicos de entrada y los eventos
-físicos de salida se determinó su relación con la RdP. Se
-observa que una acción que emite un evento físico de salida es desencadenada
-por decisiones tomadas unilateralmente dentro del monitor de Petri. Esto
-significa que dependenden exclusivamente del estado actual de la red.
-En cambio, una acción que se encarga de recibir y manejar un evento físico de
-entrada depende de la ocurrencia de dicho evento, sincronizada con la RdP
-mediante el uso del monitor.
+físicos de salida se determinó su relación con la RdP. 
+
+Se observa en la Figura~\ref{fig:actividades_evento_task} que una acción que
+emite un evento físico de salida es desencadenada por decisiones tomadas
+unilateralmente dentro del monitor de Petri.
+
+La utilización de petición de ejecución como modo de sincronización (ver
+sección~\ref{sec:sincronizacion_peticion_ejecucion}), posibilita realizar la
+petición en cualquier momento, sin tener en cuenta el estado de la RdP. Por eso,
+para todas aquellas acciones que emiten eventos físicos de salida, la petición
+de ejecución se realiza tan pronto como sea posible al inicio de la ejecución del
+programa. En consecuencia, en la Figura~\ref{fig:actividades_evento_task}, la
+única condición para el inicio de ejecución es la decisión que se toma dentro
+del monitor. Esto significa que la ejecución de dichas acciones depende
+exclusivamente del estado actual de la red.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{actividades_evento_task}
+	\caption{Diagrama de Actividades de la Ejecución de una Acción que Emite un
+	Evento Físico de Salida}
+	\label{fig:actividades_evento_task}
+\end{figure}
+
+En cambio, en la Figura~\ref{fig:actividades_evento_happening} se observa que
+una acción que se encarga de recibir y manejar un evento físico de entrada
+depende en primera instancia de la ocurrencia de dicho evento. Luego, también es
+sincronizada con la RdP mediante el uso del monitor. De este modo, las
+acciones que reciben eventos físicos de entrada presentan una resticción extra
+respecto a aquellas que emiten eventos físicos de salida.
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{actividades_evento_happening}
+	\caption{Diagrama de Actividades de la Ejecución de una Acción que Recibe un
+	Evento Físico de Entrada}
+	\label{fig:actividades_evento_happening}
+\end{figure}
 
 Desde este punto de vista, se decidió dar una clasificación más significativa a
 los eventos físicos. Esta clasificación estará presente a lo largo de todo
@@ -41,8 +74,6 @@ Controller respectivamente.
 
 \subsection{Ejecución de un Task Controller}
 \label{sec:ejecucion_task_controller}
-Haciendo un repaso por algunas características expuestas previamente, se procede
-a explicar la ejecución básica de un Task Controller.
 De acuerdo a lo expuesto en la sección~\ref{sec:resumen_sincronizacion}, el 
 modo de sincronización adoptado es el de petición de ejecución al monitor. 
 De esta forma se admiten disparos asíncronos a transiciones realizados desde
@@ -103,7 +134,7 @@ responsabilidades de sincronización.
 Las acciones del Happening Controller, al ser ejecutadas en el código de
 usuario, quedarían fuera del mecanismo de sincronización del monitor de Petri.
 Esto atenta contra el objetivo de delegar el asincronismo del sistema en la RdP.
-Este problema, puede ser resuelto mediante la utilización de herramientas de la
+Este problema es resuelto mediante la utilización de herramientas de la
 programacón orientada a aspectos (ver sección~\ref{sec:aop}). Se optó por
 encapsular las instrucciones de sincronización necesarias dentro de advices que responden a
 joinpoints definidos por la ejecución de Happening Controllers.
@@ -141,8 +172,8 @@ Happening Controller reaccione ante un evento físico de entrada, permitiendo
 que la llamada se realice en cualquier punto de la aplicación. Se debe destacar
 que si bien el usuario tiene la libertad de llamar al código del Happening
 Controller en cualquier momento, es el monitor quién determina si la
-ejecución será en el mismo momento en que es llamado o si el hilo debe ser
-bloqueado por falta de permisos.
+ejecución será en el momento de la llamada o si el hilo debe ser
+bloqueado por no cumplirse las condiciones para su ejecución.
 
 \begin{figure}[H]
 	\centering
@@ -178,3 +209,20 @@ secuenciales en un mismo hilo es que permite eliminar la plaza-transición incor
 Sincronización de petición de de ejecución (ver
 sección~\ref{sec:sincronizacion_peticion_ejecucion_transicion_plaza}).
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{ejecucion_complextask_controller_pt1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{ejecucion_complextask_controller_pt2}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{ejecucion_complextask_controller_pt3}
+	\caption{Pasos de la Ejecución de un Complex Secuential Task Controller con
+	Dos Acciones Task}
+	\label{fig:ejecucion_complextask_controller}
+\end{figure}

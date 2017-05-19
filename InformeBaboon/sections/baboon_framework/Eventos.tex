@@ -90,15 +90,15 @@ la Figura~\ref{fig:eventos_fisicos-logicos}.
 	\label{fig:eventos_fisicos-logicos}
 \end{figure}
 
-Luego de estudiar los ejemplos desarrollados utilizando Chimp Java Driver por
-sus creadores en \cite{chimp}, se logró determinar que la clasificación de los
+Los eventos físicos representados previamente en
+Figura~\ref{fig:eventos_fisicos-logicos} abarcan dos tipos de eventos. Uno de
+ellos está efectivamente relacionado con el hardware o software externos al
+sistema (mundo físico). El otro tipo de eventos está relacionado con el manejo
+de las acciones que van a realizar dichos elementos del mundo exterior, el cual
+se ejecuta a través del software del sistema.
+Por este motivo se determinó que la clasificación de los
 eventos en dos tipos no es suficiente para explicar la comunicación en un
-sistema de estas características. Esto se debe a que los eventos físicos
-representados previamente en Figura~\ref{fig:eventos_fisicos-logicos} abarcan dos
-tipos de eventos. Uno de ellos está efectivamente relacionado con el hardware o
-software externos al sistema (mundo físico). El otro tipo de eventos está
-relacionado con el manejo de las acciones que van a realizar dichos elementos
-del mundo exterior, el cual se ejecuta a través del software del sistema.
+sistema de estas características. 
 
 A partir de lo expuesto en el párrafo previo, se propone una nueva clasificación
 de eventos:
@@ -109,14 +109,11 @@ de eventos:
     misma y sus colas. Este tipo de eventos se comunica utilizando las
     interfaces proporcionadas por el monitor de redes de Petri.
     \item Eventos de Acción: Evento intermedio
-    entre los eventos físicos y lógicos. Este tipo de eventos debe ser
-    comprendido por un módulo del framework encargado de manejarlos. Sirven para
-    desencadenar acciones de software, que en última instancia se comunican con
-    el mundo exterior a través de los eventos físicos y con la red de petri a
-    través de los eventos lógicos. Son una traducción intermedia entre los
-    eventos físicos y lógicos, necesaria para desacoplar la red de Petri del
-    mundo Físico y permitir la inversión de control descripta en la
-    sección~\ref{sec:inversion_control}.
+    entre los eventos físicos y lógicos. Este tipo de eventos es manejado
+    por el framework durante la inicialización del sistema. Cumplen una función
+    de abstracción entre las acciones de software y los eventos lógicos,
+    necesaria para desacoplar la red de Petri del software y permitir la
+    inversión de control descripta en la sección~\ref{sec:inversion_control}.
     \item Eventos Físicos: suceden en el mundo físico y representan sucesos del
     dominio del problema. Este tipo de eventos se comunican a través de las
     interfaces que ofrezca el elemento del mundo exterior y el lenguaje Java.
@@ -126,48 +123,11 @@ de eventos:
 
 Teniendo en cuenta esta nueva clasificación de los eventos presentes en el
 sistema, se propone una nueva arquitectura de alto nivel
-(Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo}). De acuerdo a
-lo estudiado en la sección~\ref{sec:inversion_control} una característica
-principal de un framework es la inversión de control.
-De esta forma, el nuevo diagrama incorpora estos requerimientos en su diseño,
-además de la nueva clasificación eventos.
+(Sección~\ref{sec:arquitectura_alto_nivel}).
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=120mm]{arquitectura_petri-manejador-acciones-mundo}
-	\caption{Diagrama de Arquitectura de Alto Nivel}
-	\label{fig:arquitectura_petri-manejador-acciones-mundo}
-\end{figure}
-
-\subsection{Componentes de un sistema desarrollado con \nombreFramework}
-Como puede apreciarse en la
-Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo}, un sistema
-desarrollado con \nombreFramework puede dividirse en tres partes a nivel de arquitectura.
-\begin{itemize}
-\item Existe un monitor de redes de Petri, encargado de analizar el
-cumplimiento de las condiciones para la ejecución de ciertas partes de código
-(acciones). 
-\item La segunda parte esta compuesta por un subsistema manejador de eventos de
-acción y un subsistema manejador de ejecución de acciones. Estos subsistemas
-estan conectados con el monitor de redes de Petri y utilizan una capa de
-traducción para intercambiar eventos entre sí. De esta forma se permite la
-separación de los eventos lógicos y eventos de acción del sistema.\\
-A su vez, presenta un suscriptor de acciones, que ofrece al usuario las
-interfaces necesarias para asociar una acción a un evento de acción.\\
-Toda esta etapa actúa como intermediaria entre el
-código del usuario y el monitor de redes de Petri, permitiendo
-el desacoplamiento entre ambas partes.
-\item Por último, el programa de usuario contiene todas las acciones
-concretas a realizar, con sus correspondientes suscripciones a eventos
-de acción. Dichas acciones pueden comunicarse con el mundo exterior de
-cualquier forma deseada por el usuario desarrollador. Por esta razón, el manejo
-de los eventos físicos es responsabilidad del usuario.
-\end{itemize}
-
-
-\subsection{Condiciones de Ejecución en un Programa de Software}
-\label{sec:condiciones_ejecucion}
-Un sistema de software puede ser visto como una secuencia de acciones que son
+\subsection{Arquitectura de alto nivel de \nombreFramework}
+\label{sec:arquitectura_alto_nivel}
+Un sistema informático puede ser visto como una secuencia de acciones que son
 ejecutadas ante el cumplimiento de determinadas condiciones. Desde el punto de
 vista del programa que analiza dichas condiciones, se pueden clasificar
 en síncronas y asíncronas.
@@ -178,8 +138,10 @@ en síncronas y asíncronas.
 	\item Asíncronas: Por ejemplo, eventos provenientes del mundo exterior o
 		señales/mensajes entre hilos/procesos.
   \end{itemize}
-El objetivo de este trabajo es utilizar redes de Petri para controlar la
-ejecución de todas aquellas acciones que respondan a estos tipos de condiciones.
+
+El objetivo de este trabajo es implementar un framework dirigido por redes de
+Petri para controlar la ejecución de todas aquellas acciones que respondan a
+estos tipos de condiciones.
 De esta forma, será el monitor de redes de Petri quien analice las condiciones y
 explicite el estado del sistema. De esta manera, queda bajo consideración de la red:
 \begin{itemize}
@@ -194,19 +156,82 @@ explicite el estado del sistema. De esta manera, queda bajo consideración de la
   
   \item Condiciones impuestas por el dominio del problema. El monitor es el
   encargado de impedir la ejecución de una acción hasta que la misma pueda ser
-  realizada sin riesgos de sufrir problemas de concurrencia.
+  realizada sin riesgos.
 \end{itemize}
 
-Los controladores de acciones se ejecutan cuando el monitor de red de Petri lo
-dispone. El sistema de manejo de eventos de acción es el encargado de mantener
-la comunicación entre el monitor y el sistema de ejecución de acciones. El
-monitor es el encargado de bloquear o liberar los hilos de una acción de acuerdo
-a las condiciones de sincronizacion. Por otro lado, cuando una
+De acuerdo a lo estudiado en la sección~\ref{sec:inversion_control} una
+característica principal de un framework es la inversión de control. Por este
+motivo, el diseño de la arquitectura del framework contempla el control del
+flujo de ejecución del código de usuario.
+
+Como puede apreciarse en la
+Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo}, \nombreFramework
+Framework puede dividirse en tres partes a nivel de arquitectura:
+\begin{enumerate}
+  \item Un conjunto de módulos para la suscripción a eventos de acción (ver
+  sección 1 de Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo}) encargado de:
+  \begin{itemize}
+    \item Ofrecer interfaces para definir los eventos de acción del sistema.
+    \item Ofrecer interfaces para suscribir las acciones del sistema a los
+    eventos de acción correspondientes.
+    \item Ofrecer interfaces para definir las reglas de traducción entre eventos
+    de acción y eventos lógicos.
+    \item Encapsular las acciones junto a los eventos lógicos necesarios para su
+    sincronización.
+  \end{itemize}
+\item Un monitor de redes de Petri (ver sección 2 de
+Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo}). El mismo debe:
+	\begin{itemize}
+	  \item Brindar las interfaces para la incorporación del modelo de Red de Petri
+	  del sistema, el cual contiene la definición de los eventos
+	  lógicos.
+	  \item Garantizar el cumplimiento de las condiciones de sincronización y
+	  exclusión mutua de la concatenación de acciones.
+	\end{itemize}
+\item Un sistema ejecutor de las acciones definidas por el usuario (ver sección 3 de
+  Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo}). Se encarga de:
+  \begin{itemize}
+	  \item Intercambiar eventos lógicos con el monitor para asegurar la
+	  sincronización y exclusión mutua en la ejecución de las acciones.
+	  \item Ejecutar las acciones cuando las condiciones de ejecución
+	  estén dadas.
+	  \item Intercambiar eventos lógicos con el monitor para informar acerca de la
+	  finalización de la ejecución de una acción.
+	\end{itemize}
+\end{enumerate}
+
+Por su parte, el programa de usuario puede dividirse en:
+\begin{enumerate}
+  \item Una Red de Petri conteniendo el modelo de la lógica del sistema.
+  \item Tópicos que contienen la definición de los eventos de acción y sus
+  reglas de traducción a eventos lógicos.
+  \item El código de usuario. Contiene todas las acciones de software
+	concretas a realizar, con sus correspondientes suscripciones a eventos
+	de acción. Dichas acciones pueden comunicarse con el mundo exterior. Por esta
+	razón, el manejo de los eventos físicos es responsabilidad del usuario.
+\end{enumerate}
+
+\begin{framed}
+\textbf{Notas:} 
+\begin{itemize}
+\item Los controladores de acciones se ejecutan cuando el monitor de red de
+Petri lo dispone. El monitor es el encargado de bloquear o liberar los hilos de una
+acción de acuerdo a las condiciones de sincronizacion. Por otro lado, cuando una
 acción finaliza, el sistema de ejecución se encarga de dar aviso al monitor.
 
-Finalmente La definición y el desarrollo de dichas acciones, y su
+\item La definición y el desarrollo de las acciones de software, y su
 asociación a los eventos de acción correspondientes quedan a cargo del usuario
-desarrollador. Se resalta el hecho de que el usuario no decide en qué momento se
-ejecuta la acción, ya que con el fin de lograr la inversión de control,
-dicha responsabilidad es otorgada al monitor de redes de Petri.
+desarrollador. El usuario no decide en qué momento se ejecuta la acción, ya que
+con el fin de lograr la inversión de control, dicha responsabilidad es otorgada
+al monitor de redes de Petri.
+\end{itemize}
+\end{framed}
 
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=120mm]{arquitectura_framework}
+	\caption{Diagrama de Arquitectura de Alto Nivel}
+	\label{fig:arquitectura_petri-manejador-acciones-mundo}
+\end{figure}
