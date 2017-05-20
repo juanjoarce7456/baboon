@@ -1,45 +1,44 @@
 \section{Introduccion}
 
 Como se dijo en la sección [{\color{red}CITAR OBJETIVOS DONDE SE QUIERE
-SEPARARLA LÓGICA DEL CÓDIGO EJECUTANDO EL MODELO}], uno de los objetivos de este proyecto integrador es
-{\color{blue} modelar sistemas reactivos para garantizar su correcto
+SEPARAR LA LÓGICA DEL CÓDIGO EJECUTANDO EL MODELO}], uno de los objetivos de
+este proyecto integrador es {\color{blue} modelar sistemas reactivos para garantizar su correcto
 diseño}.
 Para esto se propone modelar el sistema con RdP (ver sección \ref{redes_de_petri}).
-Por otro lado, otro objetivo planteado es {\color{blue} separar la lógica de un
-sistema del código que implementa sus funcionalidades y su política de gestión
-de hilos}.
+Otro objetivo planteado es {\color{blue} separar la lógica de un sistema del
+código que implementa sus funcionalidades y su política de gestión de hilos}.
 Teniendo ambos objetivos es cuenta es que se propone que sea el propio modelo
-quien ejecute la lógica del sistema.
+quien guíe la ejecución lógica del sistema.
 
 Por su naturaleza, los sistemas reactivos son concurrentes y envían y reciben
 eventos del mundo exterior.
 Por esto se debe hacer una buena gestión de la concurrencia para asegurar su correcto
 funcionamiento, utilizando alguna de las técnicas vistas en
-la sección \ref{ProgramacionConcurrente} y para modelarlos se debe utilizar un
-modelo capaz modelar el envío y recepción eventos.
+la sección \ref{ProgramacionConcurrente} y para modelarlos se debe incluir en
+el modelo el envío y recepción de eventos.
 
-Como las RdP permiten modelar la concurrencia de forma muy expresiva y
-centralizada, resulta casi natural ejecutar una RdP como motor de la lógica de
-un sistema reactivo dentro de un monitor de concurrencia. Además, si se utiliza
-una RdP no autónoma, ésta se puede comunicar con el sistema a través del envío y
-recepción de eventos.
+Como el modelo de concurrencia obtenido por las RdP es centralizado, resulta
+casi natural ejecutar una RdP como lógica secuencial de un sistema reactivo
+dentro de un monitor de concurrencia. Luego, para relacionar los eventos con el
+monitor se utilizan RdP no autónomas.
 
 \section{\javapetriconcurrencymonitor}
 
 \javapetriconcurrencymonitor es un monitor de concurrencia que ejecuta redes
-de petri, hecho en lenguaje de programación java.
-Brinda una interfaz de programación de aplicaciones (API) para ejecutar una RdP
-de manera concurrente, protegida por la exclusión mutua del monitor.
+de petri, hecho en lenguaje de programación Java.
+Provee al usuario de una interfaz de programación de aplicaciones (API) para
+ejecutar una RdP, pretegiéndola de los problemas de concurrencia con la
+exclusion mutua del monitor.
 
-Entre sus principales características están:
+Brinda soporte para:
 \begin{itemize}
-  \item Soporte para Redes de Petri:
+  \item Redes de Petri:
   \begin{itemize}
     \item Plaza-Transición
     \item Temporales
   \end{itemize}
   
-  \item Soporte para tipos de arcos;
+  \item Tipos de arcos;
   \begin{itemize}
     \item Normal
     \item Lector o de Prueba
@@ -47,14 +46,12 @@ Entre sus principales características están:
     \item Reset
   \end{itemize}
   
-  \item Soporte de carga de RdP en lenguaje PNML (dialecto de TINA con leves
-  modificaciones {\color{red} ver anexo CITAR ANEXO})
-  \item Soporte para guardas
-  \item Soporte para transitiones automáticas
-  \item Soporte para subscripción a eventos en transiciones informadas
-  \item Soporte de políticas intercambiables y extensibles de prioridad de
-  disparo de transiciones
-  \item Soporte para disparos perennes
+  \item Carga de RdP en lenguaje PNML (dialecto de TINA)
+  \item Guardas
+  \item Transitiones automáticas
+  \item Subscripción a eventos en transiciones informadas
+  \item Políticas intercambiables y extensibles de prioridad de disparo
+  \item Disparos perennes y no-perennes
 
 \end{itemize}
 
@@ -65,10 +62,10 @@ Entre sus principales características están:
 \subsubsection{Formato del Archivo}
 
 \javapetriconcurrencymonitor utiliza el formato estándar PNML para descripción
-de redes de Petri, específicamente el dialecto del editor TINA.\cite{TinaSite}
+de redes de Petri, específicamente el dialecto del editor TINA\cite{TinaSite}.
 
 Para más información sobre el estándar PNML, el sitio online de referencia del
-lenguaje es \cite{PnmlSite}
+lenguaje es \cite{PnmlSite}.
 
 \begin{framed}
 \paragraph{Nota:}
@@ -184,15 +181,9 @@ El formato del mensaje es el siguiente:
 
 \paragraph{Generar y Anular una Suscripción a Eventos:}
 Para generar una suscripción a los eventos de una transición debe haber una
-implementación concreta de
-\begin{minted}{java}
-rx.Observer<String>
-\end{minted} 
+implementación concreta de \mint{java}|rx.Observer<String>|
 (\url{http://reactivex.io/RxJava/javadoc/rx/Observer.html}), que en su
-implementación de
-\begin{minted}{java}
-onNext()
-\end{minted} 
+implementación de \mint{java}|onNext()| 
 (\url{http://reactivex.io/RxJava/javadoc/rx/Observer.html#onNext(T)})
 maneje el mensaje de evento descripto en esta sección.
 
@@ -226,17 +217,10 @@ objeto \textit{Transition} y otra por nombre de transición.
 \end{minted}
 \end{figure}
 
-La suscripción a un evento devuelve un objeto
-\begin{minted}{java}
-Subscription
-\end{minted} 
+La suscripción a un evento devuelve un objeto \mint{java}|Subscription|
 (\url{http://reactivex.io/RxJava/javadoc/rx/Subscription.html}),
 que es usado para cancelar la suscripción.
-Una llamada a
-\begin{minted}{java}
-subscription.unsubscribe()
-\end{minted} 
-cancela la suscripción.
+Una llamada a \mint{java}|subscription.unsubscribe()| cancela la suscripción.
 
 \begin{framed}
 \textbf{Nota:} La generación y cancelación de suscripciones utiliza la
@@ -261,11 +245,7 @@ $t_{1}$.
 \end{figure}
 
 \begin{framed}
-\textbf{Nota:} Todas las guardas comienzan con valor {
-\begin{minted}{java}
-false
-\end{minted}
-} al
+\textbf{Nota:} Todas las guardas comienzan con valor \mint{java}|false| al
 principio de la ejecución del programa.
 \end{framed}
 
@@ -334,9 +314,7 @@ public void setUp() {
 El disparo de una transición se realiza en exclusión mutua dentro del monitor,
 es decir de una instancia de la clase \textit{``PetriMonitor''}. La forma de
 hacerlo es llamando a alguna de las alternativas del método
-\begin{minted}{java}
-PetriMonitor.fireTransition()
-\end{minted}.
+\mint{java}|PetriMonitor.fireTransition()|.
 
 Existen dos formas de disparar una transición: mediante el objeto
 \textit{Transition} o por nombre de la transición.
@@ -377,15 +355,9 @@ transición por cada una de las variantes.
 \end{figure}
 
 \paragraph{Disparos Perennes:}
-Existe un segundo parámetro para el disparo de una transición: {
-\begin{minted}{java}
-boolean notPerennialFire
-\end{minted}
-}. Tiene valor por defecto {
-\begin{minted}{java}
-false
-\end{minted}
-} e indica si el disparo a realizar es no-perenne.
+Existe un segundo parámetro para el disparo de una transición: 
+\mint{java}|boolean notPerennialFire|. Tiene valor por defecto
+\mint{java}|false| e indica si el disparo a realizar es no-perenne.
 
 Si se intenta disparar una transición no sensibilizada de forma perenne, el hilo
 que intenta hacer el disparo se bloquea en la cola de condición asociada. Por
@@ -457,24 +429,13 @@ Se puede asignar una política de transiciones al monitor de dos formas:
 Cualquier instancia de una clase que extienda la clase abstracta
 \textit{TransitionsPolicy} puede ser usada como política de transiciones.
 La forma de especificar la próxima transición a elegir sobre un conjunto es
-implementando el método {
-\begin{minted}{java}
-public int which(boolean[] enabled)
-\end{minted}
-} donde:
+implementando el método \mint{java}|public int which(boolean[] enabled)| donde:
 \begin{itemize}
     \item El array booleano recibido por parámetro está ordenado por índice de
     las transiciones en la matriz de incidencia, y se corresponde con el orden
-    del array de transiciones de {
-    \begin{minted}{java}
-PetriNet.getTransitions()
-    \end{minted}
-    }. Una posición con valor {
-    \begin{minted}{java}
-true
-    \end{minted}
-    } indica que la transición cuyo índice corresponde con la posición del
-    array, está sensibilizada.
+    del array de transiciones de \mint{java}|PetriNet.getTransitions()|. Una
+    posición con valor \mint{java}|true| indica que la transición cuyo índice
+    corresponde con la posición del array, está sensibilizada.
     \item El valor de retorno es el índice de la próxima transición a disparar.
 \end{itemize}
 

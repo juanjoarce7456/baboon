@@ -41,10 +41,11 @@ de poder diferenciarlos:
 \begin{itemize}
 	\stepcounter{definitionsCounter}
 	\item [\underline{Definición \thedefinitionsCounter :} ] Dos hilos
-	\footnote{En adelante, se hablará de concurrencia de hilos pero todo lo dicho
-	es igualmente válido para procesos a menos que se diga lo contrario.} son 
-	\textit{concurrentes} si la primera instrucción de uno de ellos se ejecuta
-	después de la primera del otro y antes de la última.
+	\footnote{En adelante, se hablará de concurrencia de hilos dado que los
+	sistemas de referencia son de memoria compartida. En el caso que corresponda
+	hablar de procesos se lo mencionará explícitamente.} son \textit{concurrentes}
+	si la primera instrucción de uno de ellos se ejecuta después de la primera del
+	otro y antes de la última.
 	\stepcounter{definitionsCounter}
 	\item [\underline{Definición \thedefinitionsCounter :} ] Dos hilos 	se están
 	ejecutando de manera \textit{paralela} si son concurrentes y la ejecución de
@@ -207,9 +208,9 @@ Algunos mecanismos para gestionar el uso de los datos compartidos son:
     \item Monitores: desarrollado en la sección \ref{monitores}
 \end{itemize}
 
-\subsubsection{Cooperación por Comunicación entre Hilos}
+\subsubsection{Cooperación por Comunicación entre Hilos o Procesos}
 
-Cuando los hilos cooperan por comunicación, participan en alcanzar un
+Cuando los hilos o procesos cooperan por comunicación, participan en alcanzar un
 objetivo en común. La comunicación es una manera de sincronizar o coordinar las
 distintas actividades.
 
@@ -218,9 +219,10 @@ canal y el mensaje. El envío y recepción de mensajes son explícitos.
 Las herramientas para este paso de mensajes están dadas por el lenguaje de
 programación, alguna biblioteca o por el sistema operativo.
 
-Al no haber compartición de datos entre los hilos, no es necesaria la
+Al no haber compartición de datos entre los hilos o procesos, no es necesaria la
 ejecución en exclusión mutua. Pese a esto, el interbloqueo y la inanición siguen
-siendo problemas que pueden afectar a los hilos \cite{SistOpStallings}.
+siendo problemas que pueden afectar a los hilos o proceos
+\cite{SistOpStallings}.
 
 \subsubsection{Competencia entre Hilos}
 
