@@ -1,6 +1,6 @@
 \section{Manejo de Guardas: \\ Guard Providers}
 \label{sec:guard_providers}
-Las guardas son un componente importante de las RdP autónomas utilizadas para
+Las guardas son un componente importante de las RdP no autónomas utilizadas para
 modelar los sistemas concurrentes (ver
 sección~\ref{guardas}). Las mismas
 permiten relacionar la RdP con el estado del medio, y representar condiciones de
@@ -18,8 +18,8 @@ Para lidiar con este problema se propone el concepto de Guard Provider. Un Guard
 Provider es un método asociado a una guarda que retorna una variable de tipo
 boolean. Este método es llamado automáticamente luego de ejecutar un controlador
 de acción que requiera modificar dicha guarda. Para lograr la llamada automática
-a un Guard Provider se utiliza reflection (ver sección~\ref{sec:reflection}). La
-finalidad de un método Guard Provider es definir en su retorno el valor que debe
+a un Guard Provider se utiliza reflection (ver sección~\ref{reflection}). La
+finalidad de un método Guard Provider retornar el valor que debe
 tomar la guarda asociada. 
 
 El concepto de Guard Provider permite limitar el acceso a las

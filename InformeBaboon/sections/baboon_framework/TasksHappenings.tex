@@ -19,8 +19,8 @@ exclusivamente del estado actual de la red.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{actividades_evento_task}
-	\caption{Diagrama de Actividades de la Ejecución de una Acción que Emite un
+	\includegraphics[width=120mm]{secuencia_evento_task}
+	\caption{Diagrama de Secuencia de la Ejecución de una Acción que Emite un
 	Evento Físico de Salida}
 	\label{fig:actividades_evento_task}
 \end{figure}
@@ -36,8 +36,8 @@ respecto a aquellas que emiten eventos físicos de salida.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=120mm]{actividades_evento_happening}
-	\caption{Diagrama de Actividades de la Ejecución de una Acción que Recibe un
+	\includegraphics[width=120mm]{secuencia_evento_happening}
+	\caption{Diagrama de Secuencia de la Ejecución de una Acción que Recibe un
 	Evento Físico de Entrada}
 	\label{fig:actividades_evento_happening}
 \end{figure}
@@ -51,12 +51,15 @@ el desarrollo del framework.
   de condiciones ya presentes en el monitor de redes de petri al momento de su
   emisión. Si bien el monitor no produce directamente eventos físicos, puede
   advertirse que un evento task tiene una relación directa con determinados
-  eventos lógicos.
+  eventos lógicos. Dichos eventos lógicos se encuentran definidos en un tópico
+  (evento de acción).
   \item Eventos Happening (Suceso): Eventos físicos de entrada. Son
   desencadenados por el mundo externo de manera totalmente asincrónica respecto
   al sistema. La ejecución de las acciones que reciben y manejan estos eventos
   es sincronizada por el monitor de redes de petri. De esta forma, el monitor
   conserva su responsabilidad frente al manejo del asincronismo del sistema.
+  Los eventos lógicos requeridos para la sincronización se encuentran definidos
+  en un tópico (evento de acción).
 \end{itemize}
 
 \section{Controladores de Acciones: \\ Task Controllers y Happening Controllers}
@@ -89,15 +92,15 @@ de Petri.
 
 Como corolario del analisis anterior se determina que la ejecución de un Task
 Controller puede ser encapsulada en un hilo al momento de inicialización del programa.
+El hilo se encarga de:
 \begin{enumerate}
-  \item Dicho hilo, debe realizar las peticiones de los permisos de sincronización al
+  \item Realizar las peticiones de los permisos de sincronización al
   monitor de forma directa, sin tener en cuenta el estado de la red.
-  \item  Una vez que el monitor otorga el permiso, el hilo debe ejecutar el
-  código correspondiente al Task Controller.
-  \item  Tras la ejecución, el hilo realiza el aviso de finalización al
-  monitor de Petri.
-  \item Estos pasos de ejecución deben repetirse de forma infinita, delegando así en el
-  monitor el control de la ejecución del hilo.
+  \item  Ejecutar el código correspondiente al Task Controller, una vez que el
+  monitor otorga el permiso.
+  \item  Realizar el aviso de finalización de ejecución al monitor de Petri.
+  \item Repetir los pasos de ejecución de forma infinita, delegando en el
+  monitor el control de la ejecución.
 \end{enumerate}
 
 La responsabilidad de la creación de los hilos para ejecutar los Task
@@ -121,23 +124,32 @@ desarrollador.
 \subsection{Ejecución de un Happening Controller}
 \label{sec:ejecucion_happening_controller}
 En la seccion~\ref{sec:clasificacion_eventos_fisicos} se explica que un Evento
-Happening se desencadena en el mundo externo y de forma asíncrona al sistema. Es
-por ello que un controlador de acción que reacciona ante estos
-eventos (Happening Controller) debe ser ejecutado dentro del contexto de un
-Listener u Observer del Evento Happening deseado.
-Para maximizar las libertades de elección del desarrollador en la recepción de
-eventos externos, la responsabilidad de crear estos Listeners se delega en el
-usuario. En consecuencia, el código de usuario es quien realiza la llamada a
-ejecución de un Happening Controller.
-En principio, esto podría generar un grave problema en cuanto a las
-responsabilidades de sincronización.
-Las acciones del Happening Controller, al ser ejecutadas en el código de
-usuario, quedarían fuera del mecanismo de sincronización del monitor de Petri.
-Esto atenta contra el objetivo de delegar el asincronismo del sistema en la RdP.
+Happening se desencadena en el mundo externo y de forma asíncrona al sistema. 
+En consecuencia, el código de usuario es quien realiza la llamada a ejecución
+de un Happening Controller encargado de manejar dicho evento.
+
+En principio, realizar una llamada desde el código de usuario podría generar un
+grave problema en cuanto a las responsabilidades de sincronización. Las
+acciones del Happening Controller quedarían fuera del mecanismo de
+sincronización del monitor de Petri, atentando contra el objetivo de delegar
+el asincronismo del sistema en la RdP.
 Este problema es resuelto mediante la utilización de herramientas de la
 programacón orientada a aspectos (ver sección~\ref{sec:aop}). Se optó por
-encapsular las instrucciones de sincronización necesarias dentro de advices que responden a
-joinpoints definidos por la ejecución de Happening Controllers.
+encapsular las instrucciones de sincronización necesarias dentro de advices que
+responden a joinpoints definidos por la ejecución de Happening Controllers.
+
+\begin{framed}
+\textbf{Nota:}
+	Un controlador de acción que reacciona ante
+	eventos Happening (Happening Controller) debe ser ejecutado dentro del
+	contexto de un Listener u Observer del evento deseado.
+	Para maximizar las libertades de elección del desarrollador en la recepción de
+	eventos externos, la responsabilidad de crear estos Listeners se delega en el
+	usuario.
+\end{framed}
+
+
+El flujo de ejecución de un Happening Controller es el siguiente:
 \begin{enumerate}
   \item Cuando el código de usuario hace un llamado a la ejecución del Happening
   Controller, la aplicación alcanza un joinpoint.
@@ -152,17 +164,17 @@ joinpoints definidos por la ejecución de Happening Controllers.
   joinpoint.
   \item En el momento en que se alcanza el joinpoint descripto en el punto
   anterior se aplica un advice que realiza el aviso de finalización de
-  ejecución al monitor. Este advice se aplica de forma automática, de manera
-  análoga a la descripta en el punto 2. 
+  ejecución al monitor. Este advice se aplica de manera análoga a la descripta
+  en el punto 2.
 \end{enumerate}
 
 \begin{framed}
-\textbf{Nota:} Los advices descriptos en esta sección son ejecutado por el
+\textbf{Nota:} Los advices descriptos en esta sección son ejecutados por el
 mismo hilo que ejecuta el código del Happening Controller. Dado que la llamada
 al código del Happening Controller es responsabilidad del usuario, es él quien
 debe generar el hilo encargado de ejecutar el código. Se recomienda no utilizar
 el hilo principal del programa para ejecutar Happening Controllers ya que puede
-llevar al interbloqueo del sistema.
+llevar al bloqueo del sistema.
 \end{framed}
 
 En conclusión, la sincronización de la ejecución de los Happening Controllers
@@ -189,25 +201,38 @@ bloqueado por no cumplirse las condiciones para su ejecución.
 \section{ComplexSecuentialTaskController}
 \label{sec:complex_secuential_task_controller}
 La ejecución de un Task Controller, definida en la
-sección~\ref{sec:ejecucion_task_controller}, no se adapta bien a
-problemas de caracter secuencial, como el que se estudia en la
+sección~\ref{sec:ejecucion_task_controller}, puede optimizarse para sistemas (o
+partes de sistemas) de caracter secuencial, como el que se estudia en la
 sección~\ref{sec:sincronizacion_cinta_transportadora}.
 Esto se debe a que no existe un paralelismo aprovechable en una secuencia de
 tareas dependientes, por lo que resulta innecesario utilizar un hilo
 por cada Task Controller correspondiente a cada tarea secuencial.
 
-Se propone agrupar dentro de un mismo hilo aquellos Task Controllers de acciones
-correspondientes a un proceso secuencial. Dicha agrupación es denominada
-Complex Secuential Task Controller. De esta manera, se reduce una gran parte de
-los hilos necesarios para ejecutar un sistema con tareas secuenciales.
+Se propone que aquellos Task Controllers de acciones
+correspondientes a un proceso secuencial sean ejecutados por un mismo hilo .
+Dicha agrupación es denominada Complex Secuential Task Controller. De esta
+manera, se reduce una gran parte de los hilos necesarios para ejecutar un
+sistema con tareas secuenciales.
 Para lograrlo, se incorpora una etapa de petición de permisos y una etapa de
 ejecución de controlador por cada Task Controller que forma parte del
 ComplexSecuentialTaskController. Cada una de estas etapas debe seguir el orden
 preestablecido por la secuencia de acciones que conforman el proceso secuencial.
+Dicho orden se establece en el tópico, al definir el evento de acción para la
+sincronización de la tarea compleja.
+
 Una gran ventaja de agrupar tareas
 secuenciales en un mismo hilo es que permite eliminar la plaza-transición incorporada por el Modo de
 Sincronización de petición de de ejecución (ver
 sección~\ref{sec:sincronizacion_peticion_ejecucion_transicion_plaza}).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=120mm]{simple_vs_complex_task_petri_net}
+	\caption{Comparación del modelo en RdP de un sistema con tres
+	acciones secuenciales para Task Controllers simples y para Complex Secuential
+	Task Controller.}
+	\label{fig:simple_task_vs_complex_task_petri_net}
+\end{figure}
 
 \begin{figure}[H]
 	\centering
