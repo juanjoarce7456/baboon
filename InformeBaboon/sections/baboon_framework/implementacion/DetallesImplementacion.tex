@@ -1,8 +1,14 @@
 \section{Implementación de \nombreFramework Framework}
-El framework fue implementado de acuerdo a los aspectos de diseño expuestos en
-las secciones anteriores. Es un framework de caja blanca (ver
-sección~\ref{sec:tipos_framework}), donde el usuario tiene la
-responsabilidad de definir componentes como:
+El framework se implementó de acuerdo a los aspectos de diseño expuestos en
+las secciones anteriores. El framework es de un tipo intermedio entre caja negra
+y caja blanca. Para utilizar la mayor parte de las funcionalidades ofrecidas, el
+usuario sólo debe conocer las interfaces que expone el framework para conectar
+los componentes. Sin embargo, para determinados casos de uso (por ejemplo para
+añadir políticas de disparo de transiciones) se requiere de la extensión de
+clases del framework.
+(ver sección~\ref{sec:tipos_framework}).
+El usuario tiene la responsabilidad de definir los siguientes componentes,
+previamente expuestos en el capítulo~\ref{cap:diseno_framework}:
 \begin{itemize} 
   \item Controladores de acciones.
   \item Tópicos.
@@ -27,8 +33,9 @@ La implementación de un controlador de acción queda definida por dos elementos
     \item \emph{@TaskController}
     \item \emph{@HappeningController}
   \end{itemize}
-  \item [Ejecutante de la Acción: ] Una instancia de la clase que contiene el
-  método.
+  \item [Ejecutante de la Acción: ] Es la instancia del objeto que ejecuta el
+  método. Este objeto pertenece a una clase que contiene la declaración
+  del método.
 \end{labeling}
 
 \subsection{Componentes del Framework}
@@ -49,8 +56,8 @@ módulos que componen el framework implementado:
 	  \end{itemize}
 	  
   \item \textbf{PetriCore: } Este componente es un wrapper sobre el monitor de
-  Redes de Petri descripto en la
-  Sección~\ref{sec:java_petri_concurrency_monitor}, y provee las interfaces del
+  Redes de Petri descripto en el
+  Capítulo~\ref{cap:petri_monitor}, y provee las interfaces del
   monitor al resto del framework.
   
   \item \textbf{BaboonApplication: } Es una interfaz Java que define dos
@@ -72,14 +79,14 @@ módulos que componen el framework implementado:
   \item \textbf{DummyThread: } Objeto que implementa la interfaz Callable y, en
   consecuencia, es ejecutable por un hilo. Encapsula el controlador de acción
   con los eventos lógicos necesarios para su sincronización. Se lo denomina
-  ``dummy'' (tonto) porque su función es intercambiar eventos lógicos de
-  sincronización con el monitor, que ya han sido definidos en el tópico, y
-  ejecutar acciones, que ya han sido definidas en el TaskController.
+  ``dummy'' (tonto) porque no posee información propia, simplemente envía los
+  eventos de sincronización de acuerdo a los contenidos del tópico y ejecuta
+  las acciones embebidas en el TaskController.
   
   \item \textbf{DummiesExecutor: } Pool de hilos encargado de ejecutar los
   objetos DummyThread.
   
-  \item \textbf{HappeningControllerJoinpoints: } Objeto de AspectJ donde se
+  \item \textbf{HappeningControllerJoinpoints: } Aspect donde se
   definen los puntos de unión del sistema y los advices que se aplican en
   dichos puntos.
   Es observable por aquellos objetos que implementen la interfaz
@@ -100,7 +107,7 @@ módulos que componen el framework implementado:
   
   \item \textbf{HappeningControllerSyncronizer: } Objeto que implementa la
   interfaz JoinPointObserver. Se suscribe como observador del objeto
-  HappeningControllerJoinpoint. Cuando se alcanza un joinpoint intercambia con
+  HappeningControllerJoinpoint. Cuando se alcanza un joinpoint, intercambia con
   el monitor los eventos lógicos necesarios para la sincronización del
   HappeningController. Obtiene los eventos lógicos utilizando las
   interfaces de BaboonConfig para consultar las suscripciones a tópicos.
@@ -153,8 +160,7 @@ módulos que componen el framework implementado:
   Figura~\ref{fig:diagrama_secuencia_implementacion_ejecucion_task_controller}):
   	\begin{enumerate}
   	  \item El pool de hilos DummiesExecutor llama a ejecutar el método
-  	  \emph{call()} del DummyThread (el DummyThread encapsula al TaskController y
-  	  al Tópico suscripto).
+  	  \emph{call()} del DummyThread.
   	  \item El método \emph{call()} del DummyThread inicia un bucle infinito
   	  \item Utilizando el tópico de la suscripción se obtiene la transición que
   	  conforma el permiso de ejecución.
