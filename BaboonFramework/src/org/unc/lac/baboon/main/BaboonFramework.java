@@ -5,7 +5,7 @@ import java.util.Set;
 import org.reflections.Reflections;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
-import org.unc.lac.baboon.action_controller.HappeningActionController;
+import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;

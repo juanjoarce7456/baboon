@@ -1,7 +1,7 @@
 package org.unc.lac.baboon.subscription;
 
-import org.unc.lac.baboon.action_controller.ActionController;
-import org.unc.lac.baboon.action_controller.TaskActionController;
+import org.unc.lac.baboon.actioncontroller.ActionController;
+import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.subscription.AbstractActionControllerSubscription;
 import org.unc.lac.baboon.topic.Topic; 

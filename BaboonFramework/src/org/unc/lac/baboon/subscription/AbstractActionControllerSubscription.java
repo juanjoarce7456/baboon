@@ -2,7 +2,7 @@ package org.unc.lac.baboon.subscription;
 
 import java.util.ArrayList;
 
-import org.unc.lac.baboon.action_controller.ActionController;
+import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
 

@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.unc.lac.baboon.action_controller.TaskActionController;
+import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.petri.BaboonPetriCore;
 import org.unc.lac.baboon.subscription.AbstractTaskControllerSubscription;
 import org.unc.lac.baboon.subscription.ComplexSecuentialTaskControllerSubscription;

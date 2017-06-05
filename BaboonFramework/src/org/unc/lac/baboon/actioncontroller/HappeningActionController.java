@@ -1,8 +1,8 @@
-package org.unc.lac.baboon.action_controller;
+package org.unc.lac.baboon.actioncontroller;
 
 import java.lang.reflect.Method;
 
-import org.unc.lac.baboon.action_controller.ActionController;
+import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;

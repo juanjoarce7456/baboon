@@ -1,4 +1,4 @@
-package org.unc.lac.baboon.action_controller;
+package org.unc.lac.baboon.actioncontroller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
