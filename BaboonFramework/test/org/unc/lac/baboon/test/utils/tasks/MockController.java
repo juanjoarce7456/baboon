@@ -1,41 +1,41 @@
 package org.unc.lac.baboon.test.utils.tasks;
 
 import org.unc.lac.baboon.annotations.GuardProvider;
-import org.unc.lac.baboon.annotations.HappeningHandler;
-import org.unc.lac.baboon.annotations.Task;
-import org.unc.lac.baboon.test.cases.TasksAndHappeningHandlersSubscriptionTest;
+import org.unc.lac.baboon.annotations.HappeningController;
+import org.unc.lac.baboon.annotations.TaskController;
+import org.unc.lac.baboon.test.cases.TasksAndHappeningControllersSubscriptionTest;
 
 /**
- * MockController is used by {@link TasksAndHappeningHandlersSubscriptionTest}
+ * MockController is used by {@link TasksAndHappeningControllersSubscriptionTest}
  * for testing purposes.
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * 
- * @see Task
- * @see HappeningHandler
+ * @see TaskController
+ * @see HappeningController
  */
 public class MockController {
 
     boolean guard1Value = false;
     boolean guard2Value = false;
 
-    @HappeningHandler
-    public void mockHappeningHandler() {
+    @HappeningController
+    public void mockHappeningController() {
     }
 
-    @Task
+    @TaskController
     public void mockTask() {
     }
 
     public void mockNotSubscribableMethod() {
     }
 
-    @HappeningHandler
-    public void mockHappeningHandler2() {
+    @HappeningController
+    public void mockHappeningController2() {
     }
 
-    @Task
+    @TaskController
     public void mockTask2() {
     }
 

@@ -19,7 +19,7 @@ public interface BaboonApplication {
 
     /**
      * This method gets called automatically on application initialization. This
-     * method should be used for subscribing tasks and happenings to specific
+     * method should be used for subscribing taskControllers and happeningControllers to specific
      * events.
      */
     public void subscribe();

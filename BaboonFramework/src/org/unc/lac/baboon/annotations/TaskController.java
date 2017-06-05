@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * be subscribed to a {@link Topic}, allowing Baboon framework to handle its
  * execution. After subscribing a Task annotated method (and the object instance
  * to execute the method) to a topic, the framework automatically creates a
- * Thread for running the task based on topic's permission and the decisions
+ * Thread for running the taskController based on topic's permission and the decisions
  * {@link PetriMonitor} takes. After a Task annotated method ends its execution,
  * the framework automatically fires the transitions and sets the guards
  * specified by the subscribed topic's fire callback and set guard callback.
@@ -21,5 +21,5 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface Task {
+public @interface TaskController {
 }

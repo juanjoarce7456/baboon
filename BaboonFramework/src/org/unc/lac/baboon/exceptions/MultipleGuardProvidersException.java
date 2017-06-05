@@ -16,7 +16,7 @@ public class MultipleGuardProvidersException extends Exception {
     private static final long serialVersionUID = -5450191540499496764L;
 
     public MultipleGuardProvidersException() {
-        super("The guard already has a GuardProvider method for this action.");
+        super("The guard already has a GuardProvider method for this actionController.");
     }
 
     public MultipleGuardProvidersException(String message) {

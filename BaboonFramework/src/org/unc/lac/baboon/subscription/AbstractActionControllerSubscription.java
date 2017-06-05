@@ -1,12 +1,12 @@
-package org.unc.lac.baboon.task;
+package org.unc.lac.baboon.subscription;
 
 import java.util.ArrayList;
 
+import org.unc.lac.baboon.action_controller.ActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
 
-/**
- * This class defines an AbstractActionSubscription as a list of {@link Action}
+/* This class defines an AbstractActionControllerSubscription as a list of {@link ActionController}
  * objects, which are subscribed to a topic. It is used internally by framework
  * and should not be known by user.
  *
@@ -15,15 +15,15 @@ import org.unc.lac.baboon.topic.Topic;
  * @version 1.0
  */
 
-public abstract class AbstractActionSubscription {
+public abstract class AbstractActionControllerSubscription {
 
     /**
-     * List of {@link Action} objects subscribed to topic
+     * List of {@link ActionController} objects subscribed to topic
      */
-    protected ArrayList<Action> actionsList;
+    protected ArrayList<ActionController> actionsList;
 
     /**
-     * Topic to which the {@link Action} objects are subscribed
+     * Topic to which the {@link ActionController} objects are subscribed
      */
     protected Topic topic;
 
@@ -31,7 +31,7 @@ public abstract class AbstractActionSubscription {
      * Constructor.
      * 
      * @param topic
-     *            The topic to which {@link Action} objects will be subscribed
+     *            The topic to which {@link ActionController} objects will be subscribed
      * 
      * @throws NotSubscribableException
      *             <li>When the topic is null</li>
@@ -40,7 +40,7 @@ public abstract class AbstractActionSubscription {
      *             sizes are different.</li>
      * 
      */
-    public AbstractActionSubscription(Topic topic) throws NotSubscribableException {
+    public AbstractActionControllerSubscription(Topic topic) throws NotSubscribableException {
         if (topic == null) {
             throw new NotSubscribableException("The topic cannot be null");
         }
@@ -50,21 +50,21 @@ public abstract class AbstractActionSubscription {
                     "The permission array and the guardCallbackArray cannot be of different sizes");
         }
 
-        this.actionsList = new ArrayList<Action>();
+        this.actionsList = new ArrayList<ActionController>();
         this.topic = topic;
     }
 
     /**
-     * This method appends the given action to the end of {@link #actionsList}
+     * This method appends the given actionController to the end of {@link #actionsList}
      * 
-     * @param action
-     *            {@link Action} object to be appended to {@link #actionsList}.
+     * @param actionController
+     *            {@link ActionController} object to be appended to {@link #actionsList}.
      *            The permission and guard callback corresponding to this
-     *            {@link Action} are determined by the order (or index).
+     *            {@link ActionController} are determined by the order (or index).
      * @return true if {@link #actionsList} changed as a result of the call
      * 
      * @throws NotSubscribableException
-     *             <li>If the {@link Action} object does not have a
+     *             <li>If the {@link ActionController} object does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
      *
@@ -72,21 +72,21 @@ public abstract class AbstractActionSubscription {
      * @see {@link Topic#setGuardCallback}
      * 
      */
-    protected boolean addAction(Action action) throws NotSubscribableException {
+    protected boolean addAction(ActionController actionController) throws NotSubscribableException {
         for (String guardName : topic.getGuardCallback(actionsList.size())) {
-            if (!action.hasGuardProvider(guardName)) {
+            if (!actionController.hasGuardProvider(guardName)) {
                 throw new NotSubscribableException(
-                        "The action does not have a GuardProvider to handle guard: " + guardName);
+                        "The actionController does not have a GuardProvider to handle guard: " + guardName);
             }
         }
-        return actionsList.add(action);
+        return actionsList.add(actionController);
     }
 
     /**
      * This method returns the {@link Topic} element present in this
      * subscription.
      * 
-     * @return the {@link Topic} object to which the {@link Action} objects are
+     * @return the {@link Topic} object to which the {@link ActionController} objects are
      *         subscribed on this subscription
      * 
      */
@@ -95,10 +95,10 @@ public abstract class AbstractActionSubscription {
     }
 
     /**
-     * This method returns the number of {@link Action} elements on
+     * This method returns the number of {@link ActionController} elements on
      * {@link #actionsList}
      * 
-     * @return the number of {@link Action} elements on {@link #actionsList}.
+     * @return the number of {@link ActionController} elements on {@link #actionsList}.
      * 
      */
     public int getSize() {
@@ -106,16 +106,16 @@ public abstract class AbstractActionSubscription {
     }
 
     /**
-     * This method returns the {@link Action} element at specified actionIndex
+     * This method returns the {@link ActionController} element at specified actionIndex
      * on {@link #actionsList}.
      * 
      * @param actionIndex
-     *            index of the {@link Action} object to return.
-     * @return the {@link Action} element at specified actionIndex on
+     *            index of the {@link ActionController} object to return.
+     * @return the {@link ActionController} element at specified actionIndex on
      *         {@link #actionsList}.
      * 
      */
-    protected Action getAction(int actionIndex) {
+    protected ActionController getAction(int actionIndex) {
         return actionsList.get(actionIndex);
     }
 

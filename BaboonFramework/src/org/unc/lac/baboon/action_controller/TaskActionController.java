@@ -1,20 +1,21 @@
-package org.unc.lac.baboon.task;
+package org.unc.lac.baboon.action_controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.unc.lac.baboon.action_controller.ActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
-import org.unc.lac.baboon.annotations.HappeningHandler;
-import org.unc.lac.baboon.annotations.Task;
+import org.unc.lac.baboon.annotations.HappeningController;
+import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
 import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
- * A TaskAction is an abstract class that inherits from {@link Action}, defined by
+ * A TaskAction is an abstract class that inherits from {@link ActionController}, defined by
  * <li>An object instance.</li>
- * <li>A {@link Task} or {@link HappeningHandler} annotated method, member of
+ * <li>A {@link TaskController} or {@link HappeningController} annotated method, member of
  * the class of the object instance.</li>
- * <li>An array of parameters to be used as {@link Action#actionMethod}
+ * <li>An array of parameters to be used as {@link ActionController#actionMethod}
  * arguments.</li>
  * <li>A set of {@link GuardProvider} annotated methods, member of the class of
  * the object instance, that are organized in a Map indexed by the guard name
@@ -24,9 +25,9 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  */
-public class TaskAction extends Action {
+public class TaskActionController extends ActionController {
     /**
-     * The array of parameters to be used as {@link Action#actionMethod}
+     * The array of parameters to be used as {@link ActionController#actionMethod}
      * arguments.
      */
     private Object[] parameters;
@@ -38,10 +39,10 @@ public class TaskAction extends Action {
      * {@link #guardProviderMethodsMap}
      * 
      * @param actionObject
-     *            The object instance of the action
+     *            The object instance of the actionController
      * @param actionMethod
-     *            A {@link Task} or {@link HappeningHandler} annotated method
-     *            for this action, must be a member of {#actionObject} class
+     *            A {@link TaskController} or {@link HappeningController} annotated method
+     *            for this actionController, must be a member of {#actionObject} class
      * @param parameters
      *            Varargs used as list of arguments for {@link #actionMethod}
      * 
@@ -57,14 +58,14 @@ public class TaskAction extends Action {
      *             <li>When the actionObject provided is null</li>
      *             <li>When the actionMethod provided is null</li>-
      *             <li>When the actionMethod provided is not annotated with
-     *             {@link Task}</li>
+     *             {@link TaskController}</li>
      * 
      */
-    public TaskAction(Object actionObject, Method actionMethod, Object... parameters)
+    public TaskActionController(Object actionObject, Method actionMethod, Object... parameters)
             throws MultipleGuardProvidersException, InvalidGuardProviderMethod, IllegalArgumentException {
         super(actionObject, actionMethod);
-        if (!actionMethod.isAnnotationPresent(Task.class)) {
-            throw new IllegalArgumentException("Method must be annotated with Task");
+        if (!actionMethod.isAnnotationPresent(TaskController.class)) {
+            throw new IllegalArgumentException("Method must be annotated with TaskController");
         }
         this.parameters = parameters;
     }
