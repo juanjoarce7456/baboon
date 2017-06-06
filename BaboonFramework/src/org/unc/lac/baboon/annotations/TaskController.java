@@ -6,12 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation should be used on methods. A method annotated with Task can
+ * This annotation should be used on methods. A method annotated with TaskController can
  * be subscribed to a {@link Topic}, allowing Baboon framework to handle its
- * execution. After subscribing a Task annotated method (and the object instance
+ * execution. After subscribing a TaskController annotated method (and the object instance
  * to execute the method) to a topic, the framework automatically creates a
  * Thread for running the taskController based on topic's permission and the decisions
- * {@link PetriMonitor} takes. After a Task annotated method ends its execution,
+ * {@link PetriMonitor} takes. After a TaskController annotated method ends its execution,
  * the framework automatically fires the transitions and sets the guards
  * specified by the subscribed topic's fire callback and set guard callback.
  * 
