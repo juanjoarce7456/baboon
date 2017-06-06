@@ -143,7 +143,7 @@ public class HappeningControllerSynchronizer implements JoinPointObserver {
                 throw new RuntimeException("Error while firing the permission transition", e);
             } catch (IllegalArgumentException e) {
                 if (permission == null || permission.isEmpty()) {
-                    LOGGER.log(Level.WARNING, "Executing a HappenningHandler without permission transition");
+                    LOGGER.log(Level.WARNING, "Executing a HappenningController without permission transition");
                 } else {
                     LOGGER.log(Level.SEVERE, "Failed to fire the permission transition " + permission
                             + " because it does not exists on petri net", e);
