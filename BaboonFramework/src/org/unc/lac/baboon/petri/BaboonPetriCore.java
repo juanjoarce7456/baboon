@@ -1,4 +1,4 @@
-package org.unc.lac.baboon.main;
+package org.unc.lac.baboon.petri;
 
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;

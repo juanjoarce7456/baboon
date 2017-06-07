@@ -1,17 +1,18 @@
-package org.unc.lac.baboon.task;
+package org.unc.lac.baboon.actioncontroller;
 
 import java.lang.reflect.Method;
 
+import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
-import org.unc.lac.baboon.annotations.HappeningHandler;
-import org.unc.lac.baboon.annotations.Task;
+import org.unc.lac.baboon.annotations.HappeningController;
+import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
 import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
- * A HappeningHandlerAction is a class defined by
+ * A HappeningControllerAction is a class defined by
  * <li>An object instance.</li>
- * <li>A {@link HappeningHandler} annotated method, member of
+ * <li>A {@link HappeningController} annotated method, member of
  * the class of the object instance.</li>
  * <li>A set of {@link GuardProvider} annotated methods, member of the class of
  * the object instance, that are organized in a Map indexed by the guard name
@@ -21,7 +22,7 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  */
-public class HappeningHandlerAction extends Action {
+public class HappeningActionController extends ActionController {
 
     /**
      * Constructor. Sets the {@link #actionObject}, the {@link #actionMethod}
@@ -30,10 +31,10 @@ public class HappeningHandlerAction extends Action {
      * {@link #guardProviderMethodsMap}
      * 
      * @param actionObject
-     *            The object instance of the action
+     *            The object instance of the actionController
      * @param actionMethod
-     *            A {@link Task} or {@link HappeningHandler} annotated method
-     *            for this action, must be a member of {#actionObject} class
+     *            A {@link TaskController} or {@link HappeningController} annotated method
+     *            for this actionController, must be a member of {#actionObject} class
      * 
      * @throws MultipleGuardProvidersException
      *             <li>When more than one {@link GuardProvider} annotated
@@ -46,14 +47,14 @@ public class HappeningHandlerAction extends Action {
      * @throws IllegalArgumentException
      *             <li>When the actionObject provided is null</li>
      *             <li>When the actionMethod provided is null</li>
-     *             <li>When the actionMethod provided is not annotated with {@link HappeningHandler}</li>
+     *             <li>When the actionMethod provided is not annotated with {@link HappeningController}</li>
      * 
      */
-    public HappeningHandlerAction(Object actionObject, Method actionMethod)
+    public HappeningActionController(Object actionObject, Method actionMethod)
             throws MultipleGuardProvidersException, InvalidGuardProviderMethod, IllegalArgumentException {
         super(actionObject, actionMethod);
-        if(!actionMethod.isAnnotationPresent(HappeningHandler.class)){
-            throw new IllegalArgumentException("Method must be annotated with HappeningHandler");
+        if(!actionMethod.isAnnotationPresent(HappeningController.class)){
+            throw new IllegalArgumentException("Method must be annotated with HappeningController");
         }
 
     }

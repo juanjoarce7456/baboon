@@ -12,7 +12,7 @@ import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory
  * TaskExecutionAppSetup is used by {@link TaskExecutionTest} for testing
  * purposes. It creates a {@link TaskExecutionController}. Also a pnml file and
  * a topics file are used to initialize the framework. Finally it subscribes the
- * {@link TaskExecutionController#increaseNumber()} task to "topic1".
+ * {@link TaskExecutionController#increaseNumber()} taskController to "topic1".
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe

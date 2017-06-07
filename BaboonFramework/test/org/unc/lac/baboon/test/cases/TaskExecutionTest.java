@@ -14,11 +14,11 @@ public class TaskExecutionTest {
      * {@link BaboonApplication} interface</li>
      * <li> And The setup interface has a pnml file describing a petri net </li>
      * <li> And the setup has a {@link TaskExecutionController} </li>
-     * <li> And the {@link TaskExecutionController} has a Task ({@link TaskExecutionController#increaseNumber()}) that increases a number by one </li>
-     * <li> And the setup interface subscribed this task to the petri net </li>
-     * <li> And the petri net limits the execution of the task to five times </li>
+     * <li> And the {@link TaskExecutionController} has a TaskController ({@link TaskExecutionController#increaseNumber()}) that increases a number by one </li>
+     * <li> And the setup interface subscribed this taskController to the petri net </li>
+     * <li> And the petri net limits the execution of the taskController to five times </li>
      * <li> When I run the BaboonFramework main application </li>
-     * <li> And I wait for the task execution </li>
+     * <li> And I wait for the taskController execution </li>
      * <li> Then the number of the {@link TaskExecutionController} is 5 </li>
      */
     @Test

@@ -1,27 +1,29 @@
-package org.unc.lac.baboon.main;
+package org.unc.lac.baboon.execution;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.unc.lac.baboon.task.AbstractTaskSubscription;
-import org.unc.lac.baboon.task.ComplexSecuentialTaskSubscription;
-import org.unc.lac.baboon.task.SimpleTaskSubscription;
-import org.unc.lac.baboon.task.TaskAction;
+
+import org.unc.lac.baboon.actioncontroller.TaskActionController;
+import org.unc.lac.baboon.petri.BaboonPetriCore;
+import org.unc.lac.baboon.subscription.AbstractTaskControllerSubscription;
+import org.unc.lac.baboon.subscription.ComplexSecuentialTaskControllerSubscription;
+import org.unc.lac.baboon.subscription.SimpleTaskControllerSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 
 /**
- * A {@link Callable} object that executes a {@link AbstractTaskSubscription}.
+ * A {@link Callable} object that executes a {@link AbstractTaskControllerSubscription}.
  * This is the wrapper of a thread that asks the Petri monitor for permission to
- * execute a simple task, executes it and after sets the guard callback
- * associated to this task.
+ * execute a simple taskController, executes it and after sets the guard callback
+ * associated to this taskController.
  * 
- * It repeats this process for all the simple tasks in the
- * {@link AbstractTaskSubscription} and finally, after the execution of the last
- * task, fires the transition callback. After setting the callback, the thread
- * starts the task execution process over again.
+ * It repeats this process for all the simple taskControllers in the
+ * {@link AbstractTaskControllerSubscription} and finally, after the execution of the last
+ * taskController, fires the transition callback. After setting the callback, the thread
+ * starts the taskController execution process over again.
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -31,15 +33,15 @@ import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 public class DummyThread implements Callable<Void> {
     private final static Logger LOGGER = Logger.getLogger(DummyThread.class.getName());
     /**
-     * The task to be executed.
+     * The taskController to be executed.
      */
-    AbstractTaskSubscription taskSubscription;
+    AbstractTaskControllerSubscription taskSubscription;
     /**
-     * The Petri core used to synchronize the execution of the task.
+     * The Petri core used to synchronize the execution of the taskController.
      */
     BaboonPetriCore petriCore;
 
-    public DummyThread(AbstractTaskSubscription taskSubscription, BaboonPetriCore petriCore) {
+    public DummyThread(AbstractTaskControllerSubscription taskSubscription, BaboonPetriCore petriCore) {
         if (taskSubscription == null) {
             throw new IllegalArgumentException("Task can not be null");
         }
@@ -52,18 +54,18 @@ public class DummyThread implements Callable<Void> {
 
     /**
      * This method asks the Petri monitor for permission to execute a simple
-     * task, executes it and after sets the guard callback associated to this
-     * task.
+     * taskController, executes it and after sets the guard callback associated to this
+     * taskController.
      * 
-     * Repeats this process for all the simple tasks in the
-     * {@link AbstractTaskSubscription} and finally, after the execution of the
-     * last task, fires the transition callback. After setting the callback, the
-     * thread starts the task execution process over again.
+     * Repeats this process for all the simple taskControllers in the
+     * {@link AbstractTaskControllerSubscription} and finally, after the execution of the
+     * last taskController, fires the transition callback. After setting the callback, the
+     * thread starts the taskController execution process over again.
      * 
      * @see Topic
-     * @see AbstractTaskSubscription
-     * @see ComplexSecuentialTaskSubscription
-     * @see SimpleTaskSubscription
+     * @see AbstractTaskControllerSubscription
+     * @see ComplexSecuentialTaskControllerSubscription
+     * @see SimpleTaskControllerSubscription
      * 
      */
     @Override
@@ -71,7 +73,7 @@ public class DummyThread implements Callable<Void> {
         int secuenceStatus = 0;
         int maxStatus = taskSubscription.getSize();
         while (true) {
-            TaskAction task = taskSubscription.getAction(secuenceStatus);
+            TaskActionController taskController = taskSubscription.getAction(secuenceStatus);
             String permission = taskSubscription.getTopic().getPermission().get(secuenceStatus);
             try {
                 petriCore.fireTransition(permission, false);
@@ -91,15 +93,15 @@ public class DummyThread implements Callable<Void> {
             }
 
             try {
-                task.executeMethod();
+                taskController.executeMethod();
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-                LOGGER.log(Level.SEVERE, "Error when trying to execute the method " + task.getMethodName(), e1);
-                throw new RuntimeException("Error when trying to execute the method " + task.getMethodName(), e1);
+                LOGGER.log(Level.SEVERE, "Error when trying to execute the method " + taskController.getMethodName(), e1);
+                throw new RuntimeException("Error when trying to execute the method " + taskController.getMethodName(), e1);
             }
             for (String guardCallback : taskSubscription.getTopic().getGuardCallback(secuenceStatus)) {
                 boolean result;
                 try {
-                    result = task.getGuardValue(guardCallback);
+                    result = taskController.getGuardValue(guardCallback);
                     petriCore.setGuard(guardCallback, result);
                 } catch (NullPointerException | IllegalAccessException | IllegalArgumentException
                         | InvocationTargetException | IndexOutOfBoundsException | PetriNetException e) {

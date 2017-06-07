@@ -1,18 +1,18 @@
-package org.unc.lac.baboon.task;
+package org.unc.lac.baboon.actioncontroller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import org.unc.lac.baboon.annotations.GuardProvider;
-import org.unc.lac.baboon.annotations.HappeningHandler;
-import org.unc.lac.baboon.annotations.Task;
+import org.unc.lac.baboon.annotations.HappeningController;
+import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
 import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
- * An Action is an abstract class defined by
+ * An ActionController is an abstract class defined by
  * <li>An object instance.</li>
- * <li>A {@link Task} or {@link HappeningHandler} annotated method, member of
+ * <li>A {@link TaskController} or {@link HappeningController} annotated method, member of
  * the class of the object instance.</li>
  * <li>A set of {@link GuardProvider} annotated methods, member of the class of
  * the object instance, that are organized in a Map indexed by the guard name
@@ -22,21 +22,21 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  */
-public abstract class Action {
+public abstract class ActionController {
 
     /**
-     * The object instance of this action
+     * The object instance of this actionController
      */
     protected Object actionObject;
     /**
-     * The {@link Task} or {@link HappeningHandler} annotated method of this
-     * action, must be a member of {#actionObject} class
+     * The {@link TaskController} or {@link HappeningController} annotated method of this
+     * actionController, must be a member of {#actionObject} class
      */
     protected Method actionMethod;
 
     /**
      * The {@link Map} of {@link GuardProvider} annotated methods of this
-     * action. They must be members of {#actionObject} class. The map is indexed
+     * actionController. They must be members of {#actionObject} class. The map is indexed
      * by guard names, taken from {@link GuardProvider#value()}.
      */
     protected HashMap<String, Method> guardProviderMethodsMap;
@@ -48,10 +48,10 @@ public abstract class Action {
      * {@link #guardProviderMethodsMap}
      * 
      * @param actionObject
-     *            The object instance of the action
+     *            The object instance of the actionController
      * @param actionMethod
-     *            A {@link Task} or {@link HappeningHandler} annotated method
-     *            for this action, must be a member of {#actionObject} class
+     *            A {@link TaskController} or {@link HappeningController} annotated method
+     *            for this actionController, must be a member of {#actionObject} class
      * 
      * @throws MultipleGuardProvidersException
      *             <li>When more than one {@link GuardProvider} annotated
@@ -66,7 +66,7 @@ public abstract class Action {
      *             <li>When the actionMethod provided is null</li>
      * 
      */
-    public Action(Object actionObject, Method actionMethod)
+    public ActionController(Object actionObject, Method actionMethod)
             throws MultipleGuardProvidersException, InvalidGuardProviderMethod, IllegalArgumentException {
         if (actionObject == null) {
             throw new IllegalArgumentException("The object cannot be null");

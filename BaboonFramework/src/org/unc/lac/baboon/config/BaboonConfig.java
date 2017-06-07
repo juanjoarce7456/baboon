@@ -1,24 +1,23 @@
-package org.unc.lac.baboon.main;
+package org.unc.lac.baboon.config;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import org.javatuples.Pair;
-import org.unc.lac.baboon.annotations.GuardProvider;
-import org.unc.lac.baboon.annotations.HappeningHandler;
-import org.unc.lac.baboon.annotations.Task;
+import org.unc.lac.baboon.actioncontroller.ActionController;
+import org.unc.lac.baboon.actioncontroller.HappeningActionController;
+import org.unc.lac.baboon.actioncontroller.TaskActionController;
+import org.unc.lac.baboon.annotations.HappeningController;
+import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
 import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
-import org.unc.lac.baboon.task.Action;
-import org.unc.lac.baboon.task.ComplexSecuentialTaskSubscription;
-import org.unc.lac.baboon.task.HappeningHandlerAction;
-import org.unc.lac.baboon.task.HappeningHandlerSubscription;
-import org.unc.lac.baboon.task.SimpleTaskSubscription;
-import org.unc.lac.baboon.task.TaskAction;
+import org.unc.lac.baboon.subscription.ComplexSecuentialTaskControllerSubscription;
+import org.unc.lac.baboon.subscription.HappeningControllerSubscription;
+import org.unc.lac.baboon.subscription.SimpleTaskControllerSubscription;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
@@ -27,8 +26,8 @@ import org.unc.lac.baboon.utils.TopicsJsonParser;
  * Configuration Class. This class allows to import a json file containing the
  * {@link Topic} objects description of the system.
  * <p>
- * Also, this class contains the method for subscribing {@link HappeningHandler}
- * and {@link Task} annotated methods (and the instance of the object supposed
+ * Also, this class contains the method for subscribing {@link HappeningController}
+ * and {@link TaskController} annotated methods (and the instance of the object supposed
  * to run this methods) to a {@link Topic}
  * </p>
  * 
@@ -38,25 +37,25 @@ import org.unc.lac.baboon.utils.TopicsJsonParser;
  */
 public class BaboonConfig {
     /**
-     * Map containing all the {@link HappeningHandlerSubscription} subscriptions
+     * Map containing all the {@link HappeningControllerSubscription} subscriptions
      * registered in this {@link BaboonConfig}, indexed by a {@link Pair} of
-     * {@link HappeningHandlerAction#actionObject} and
-     * {@link HappeningHandlerAction#actionMethod}
+     * {@link HappeningActionController#actionObject} and
+     * {@link HappeningActionController#actionMethod}
      */
-    private HashMap<Pair<Object, Method>, HappeningHandlerSubscription> happeningHandlerSubscriptionsMap = new HashMap<Pair<Object, Method>, HappeningHandlerSubscription>();
+    private HashMap<Pair<Object, Method>, HappeningControllerSubscription> happeningControllerSubscriptionsMap = new HashMap<Pair<Object, Method>, HappeningControllerSubscription>();
 
     /**
-     * List containing all the {@link SimpleTaskSubscription} subscriptions
+     * List containing all the {@link SimpleTaskControllerSubscription} subscriptions
      * registered in this {@link BaboonConfig}.
      */
-    private ArrayList<SimpleTaskSubscription> simpleTaskSubscriptionsList = new ArrayList<SimpleTaskSubscription>();
+    private ArrayList<SimpleTaskControllerSubscription> simpleTaskSubscriptionsList = new ArrayList<SimpleTaskControllerSubscription>();
 
     /**
-     * Map containing all the {@link ComplexSecuentialTaskSubscription}
+     * Map containing all the {@link ComplexSecuentialTaskControllerSubscription}
      * subscriptions registered in this {@link BaboonConfig}, indexed by name
      * given by user.
      */
-    private HashMap<String, ComplexSecuentialTaskSubscription> complexTaskMap = new HashMap<String, ComplexSecuentialTaskSubscription>();
+    private HashMap<String, ComplexSecuentialTaskControllerSubscription> complexTaskMap = new HashMap<String, ComplexSecuentialTaskControllerSubscription>();
 
     /**
      * Map of Topics registered this {@link BaboonConfig}, indexed by the names
@@ -65,76 +64,76 @@ public class BaboonConfig {
     private HashMap<String, Topic> topicsList = new HashMap<String, Topic>();
 
     /**
-     * Returns the {@link HappeningHandlerSubscription} mapped to key on
-     * {@link #happeningHandlerSubscriptionsMap}
+     * Returns the {@link HappeningControllerSubscription} mapped to key on
+     * {@link #happeningControllerSubscriptionsMap}
      * 
      * @param key
      *            a {@link Pair} of an {@link Object} and a {@link Method}
-     *            annotated with {@link HappeningHandler} whose associated
-     *            {@link HappeningHandlerSubscription} is to be returned.
-     * @return a {@link HappeningHandlerSubscription} to which the specified key
+     *            annotated with {@link HappeningController} whose associated
+     *            {@link HappeningControllerSubscription} is to be returned.
+     * @return a {@link HappeningControllerSubscription} to which the specified key
      *         is mapped, or null if this map contains no mapping for the key.
      * 
      */
-    public HappeningHandlerSubscription getHappeningHandler(Pair<Object, Method> key) {
-        return happeningHandlerSubscriptionsMap.get(key);
+    public HappeningControllerSubscription getHappeningController(Pair<Object, Method> key) {
+        return happeningControllerSubscriptionsMap.get(key);
     }
 
     /**
-     * This method returns the number of {@link HappeningHandlerSubscription}
+     * This method returns the number of {@link HappeningControllerSubscription}
      * objects that are mapped to a key on
-     * {@link #happeningHandlerSubscriptionsMap}
+     * {@link #happeningControllerSubscriptionsMap}
      * 
-     * @return the number of {@link HappeningHandlerSubscription} objects that
-     *         are mapped to a key on {@link #happeningHandlerSubscriptionsMap}
+     * @return the number of {@link HappeningControllerSubscription} objects that
+     *         are mapped to a key on {@link #happeningControllerSubscriptionsMap}
      * 
      */
-    public int getHappeningHandlerCount() {
-        return happeningHandlerSubscriptionsMap.size();
+    public int getHappeningControllerCount() {
+        return happeningControllerSubscriptionsMap.size();
     }
 
     /**
      * This method returns a {@link Collection} containing all the
-     * {@link SimpleTaskSubscription} subscriptions registered in this
+     * {@link SimpleTaskControllerSubscription} subscriptions registered in this
      * {@link BaboonConfig}.
      * 
      * @return a {@link Collection} containing all the
-     *         {@link SimpleTaskSubscription} subscriptions registered in this
+     *         {@link SimpleTaskControllerSubscription} subscriptions registered in this
      *         {@link BaboonConfig}.
      * 
      */
-    public Collection<SimpleTaskSubscription> getSimpleTasksCollection() {
+    public Collection<SimpleTaskControllerSubscription> getSimpleTasksCollection() {
         return simpleTaskSubscriptionsList;
     }
 
     /**
      * This method returns a {@link Collection} containing all the
-     * {@link ComplexSecuentialTaskSubscription} subscriptions registered in
+     * {@link ComplexSecuentialTaskControllerSubscription} subscriptions registered in
      * this {@link BaboonConfig}.
      * 
      * @return a {@link Collection} containing all the
-     *         {@link ComplexSecuentialTaskSubscription} subscriptions
+     *         {@link ComplexSecuentialTaskControllerSubscription} subscriptions
      *         registered in this {@link BaboonConfig}.
      */
-    public Collection<ComplexSecuentialTaskSubscription> getComplexSecuentialTasksCollection() {
+    public Collection<ComplexSecuentialTaskControllerSubscription> getComplexSecuentialTasksCollection() {
         return complexTaskMap.values();
     }
 
     /**
-     * Returns the {@link ComplexSecuentialTaskSubscription} mapped to name on
+     * Returns the {@link ComplexSecuentialTaskControllerSubscription} mapped to name on
      * {@link #complexTaskMap}
      * 
      * @param name
      *            A name given by user on the creation of a new
-     *            {@link ComplexSecuentialTaskSubscription}, by using
+     *            {@link ComplexSecuentialTaskControllerSubscription}, by using
      *            {@link #createNewComplexTask(String, String)}
      * 
-     * @return a {@link ComplexSecuentialTaskSubscription} to which the
+     * @return a {@link ComplexSecuentialTaskControllerSubscription} to which the
      *         specified name is mapped, or null if this map contains no mapping
      *         for the name.
      * 
      */
-    public ComplexSecuentialTaskSubscription getComplexSecuentialTask(String name) {
+    public ComplexSecuentialTaskControllerSubscription getComplexSecuentialTask(String name) {
         return complexTaskMap.get(name);
     }
 
@@ -166,28 +165,28 @@ public class BaboonConfig {
     /**
      * Subscribes an object instance, a method and the arguments of this method
      * to one topic. The method to be subscribed must be annotated with
-     * {@link HappeningHandler} or {@link Task}. A
-     * {@link HappeningHandlerSubscription} or {@link SimpleTaskSubscription} is
+     * {@link HappeningController} or {@link TaskController}. A
+     * {@link HappeningControllerSubscription} or {@link SimpleTaskControllerSubscription} is
      * created.
      * 
      * @param topicName
      *            The name of the topic to be used for the subscription
      * @param object
-     *            The object instance to subscribe on a new {@link TaskAction}
-     *            or {@link HappeningHandlerAction} as
-     *            {@link Action#actionObject}
+     *            The object instance to subscribe on a new {@link TaskActionController}
+     *            or {@link HappeningActionController} as
+     *            {@link ActionController#actionObject}
      * @param methodName
      *            The name of the method to subscribe on a new
-     *            {@link TaskAction} or {@link HappeningHandlerAction} as
-     *            {@link Action#actionMethod}
+     *            {@link TaskActionController} or {@link HappeningActionController} as
+     *            {@link ActionController#actionMethod}
      * @param parameters
      *            <li>The parameters to be used as arguments of the method on
-     *            the new {@link TaskAction} or {@link HappeningHandlerAction}.
+     *            the new {@link TaskActionController} or {@link HappeningActionController}.
      *            This parameters are used along with the methodName to resolve
      *            the right method to use.</li>
-     *            <li>When registering a {@link HappeningHandlerAction}
+     *            <li>When registering a {@link HappeningActionController}
      *            parameters will be used only to determine the method, since
-     *            the execution of {@link HappeningHandler} annotated methods is
+     *            the execution of {@link HappeningController} annotated methods is
      *            triggered by user software but synchronized by Baboon
      *            framework. In this case, mock instances of the classes
      *            required by the method could be used, allowing the framework
@@ -204,31 +203,31 @@ public class BaboonConfig {
      *             <li>If there is a SecurityException when trying to resolve
      *             the method</li>
      *             <li>If there's an exception resolving the
-     *             {@link Action#guardProviderMethodsMap}</li>
+     *             {@link ActionController#guardProviderMethodsMap}</li>
      *             <li>If the method is not annotated with
-     *             {@link HappeningHandler} or {@link Task}</li>
-     *             <li>When trying to subscribe a {@link HappeningHandlerAction}
+     *             {@link HappeningController} or {@link TaskController}</li>
+     *             <li>When trying to subscribe a {@link HappeningActionController}
      *             that is already subscribed</li>
-     *             <li>When trying to subscribe a {@link TaskAction} to a
+     *             <li>When trying to subscribe a {@link TaskActionController} to a
      *             {@link Topic} with empty {@link Topic#permission}</li>
      *             <li>If the permission transition name is an empty String for
-     *             a {@link SimpleTaskSubscription}</li>
+     *             a {@link SimpleTaskControllerSubscription}</li>
      *             <li>If the permission transition name is null for a
-     *             {@link SimpleTaskSubscription}</li>
+     *             {@link SimpleTaskControllerSubscription}</li>
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
-     *             <li>If the {@link Action#actionObject} does not have a
+     *             <li>If the {@link ActionController#actionObject} does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
      *
      * 
      * @see Topic
-     * @see Action
-     * @see TaskAction
-     * @see HappeningHandlerAction
-     * @see SimpleTaskSubscription
-     * @see ComplexSecuentialTaskSubscription
+     * @see ActionController
+     * @see TaskActionController
+     * @see HappeningActionController
+     * @see SimpleTaskControllerSubscription
+     * @see ComplexSecuentialTaskControllerSubscription
      */
     public void subscribeToTopic(String topicName, Object object, String methodName, Object... parameters)
             throws NotSubscribableException {
@@ -253,48 +252,48 @@ public class BaboonConfig {
         Method method;
         try {
             method = MethodDictionary.getMethod(object, methodName, paramClasses);
-            if (method.isAnnotationPresent(HappeningHandler.class)) {
-                HappeningHandlerAction happeningHandler;
+            if (method.isAnnotationPresent(HappeningController.class)) {
+                HappeningActionController happeningController;
                 try {
-                    happeningHandler = new HappeningHandlerAction(object, method);
+                    happeningController = new HappeningActionController(object, method);
 
                     Pair<Object, Method> key = new Pair<Object, Method>(object, method);
-                    HappeningHandlerSubscription happeningHandlerSubscription = new HappeningHandlerSubscription(topic,
-                            happeningHandler);
-                    if (happeningHandlerSubscriptionsMap.putIfAbsent(key, happeningHandlerSubscription) != null) {
+                    HappeningControllerSubscription happeningControllerSubscription = new HappeningControllerSubscription(topic,
+                            happeningController);
+                    if (happeningControllerSubscriptionsMap.putIfAbsent(key, happeningControllerSubscription) != null) {
                         throw new NotSubscribableException(
-                                "The happening handler is already subscribed to another topic.");
+                                "The happeningController is already subscribed to another topic.");
                     }
                 } catch (MultipleGuardProvidersException | InvalidGuardProviderMethod e) {
                     throw new NotSubscribableException("Error resolving GuardProvider Methods", e);
                 } catch (IllegalArgumentException e) {
-                    throw new NotSubscribableException("Error creating HappeningHandlerAction", e);
+                    throw new NotSubscribableException("Error creating HappeningActionController", e);
                 }
-            } else if (method.isAnnotationPresent(Task.class)) {
+            } else if (method.isAnnotationPresent(TaskController.class)) {
                 if (topic.getPermission().isEmpty()) {
                     throw new NotSubscribableException(
-                            "Cannot subscribe a task to a topic with empty permission array.");
+                            "Cannot subscribe a taskController to a topic with empty permission array.");
                 } else if (topic.getPermission().get(0).isEmpty()) {
                     throw new NotSubscribableException(
-                            "The permission cannot be an empty String for a task subscription");
+                            "The permission cannot be an empty String for a taskController subscription");
                 } else if (topic.getPermission().get(0) == null) {
                     throw new NotSubscribableException(
-                            "The topic's permission cannot be null for a task subscription.");
+                            "The topic's permission cannot be null for a taskController subscription.");
                 }
-                TaskAction task;
+                TaskActionController taskController;
                 try {
-                    task = new TaskAction(object, method, parameters);
-                    SimpleTaskSubscription taskSubscription = new SimpleTaskSubscription(topic, task);
+                    taskController = new TaskActionController(object, method, parameters);
+                    SimpleTaskControllerSubscription taskSubscription = new SimpleTaskControllerSubscription(topic, taskController);
                     simpleTaskSubscriptionsList.add(taskSubscription);
                 } catch (MultipleGuardProvidersException | InvalidGuardProviderMethod e) {
                     throw new NotSubscribableException("Error resolving GuardProvider Methods", e);
                 } catch (IllegalArgumentException e) {
-                    throw new NotSubscribableException("Error creating TaskAction", e);
+                    throw new NotSubscribableException("Error creating TaskActionController", e);
                 }
 
             } else {
                 throw new NotSubscribableException(
-                        "The method should be annotated with HappeningHandler or Task annotations");
+                        "The method should be annotated with HappeningController or TaskController annotations");
             }
         } catch (NoSuchMethodException e) {
             throw new NotSubscribableException("This method does not exist on object provided", e);
@@ -305,16 +304,16 @@ public class BaboonConfig {
     }
 
     /**
-     * Creates a new {@link ComplexSecuentialTaskSubscription}
+     * Creates a new {@link ComplexSecuentialTaskControllerSubscription}
      * 
      * @param complexTaskName
-     *            A name to identify this complex task. This name must be unique.
+     *            A name to identify this complex taskController. This name must be unique.
      * @param topicName
      *            The name of the topic to be used for the subscription
      * 
      * @see Topic
-     * @see ComplexSecuentialTaskSubscription
-     * @see TaskAction
+     * @see ComplexSecuentialTaskControllerSubscription
+     * @see TaskActionController
      * 
      * @throws NotSubscribableException
      *             <li>If complexTaskName is empty String</li>
@@ -330,39 +329,39 @@ public class BaboonConfig {
     public void createNewComplexTask(String complexTaskName, String topicName) throws NotSubscribableException {
         Topic topic = getTopicByName(topicName);
         if (complexTaskName == null || complexTaskName.isEmpty()) {
-            throw new NotSubscribableException("Task name cannot be empty or null");
+            throw new NotSubscribableException("TaskController name cannot be empty or null");
         }
         if (topicName == null || topic == null) {
-            throw new NotSubscribableException("Cannot create a complex task with a null topic");
+            throw new NotSubscribableException("Cannot create a complex taskController with a null topic");
         }
         if (topic.getPermission().isEmpty()) {
-            throw new NotSubscribableException("The topic permission array cannot be empty for a task subscription");
+            throw new NotSubscribableException("The topic permission array cannot be empty for a taskController subscription");
         }
-        ComplexSecuentialTaskSubscription task = new ComplexSecuentialTaskSubscription(topic);
-        if (complexTaskMap.putIfAbsent(complexTaskName, task) != null) {
-            throw new NotSubscribableException("Already registered a task with the name " + complexTaskName);
+        ComplexSecuentialTaskControllerSubscription taskController = new ComplexSecuentialTaskControllerSubscription(topic);
+        if (complexTaskMap.putIfAbsent(complexTaskName, taskController) != null) {
+            throw new NotSubscribableException("Already registered a taskController with the name " + complexTaskName);
         }
     }
 
     /**
      * This method requires an object instance, a method and the arguments of
-     * this method to append a new {@link TaskAction} to the
-     * {@link ComplexSecuentialTaskSubscription} identified by complexTaskName.
-     * The method to be subscribed must be annotated with {@link Task}.
+     * this method to append a new {@link TaskActionController} to the
+     * {@link ComplexSecuentialTaskControllerSubscription} identified by complexTaskName.
+     * The method to be subscribed must be annotated with {@link TaskController}.
      * 
      * @param complexTaskName
-     *            The name that identifies the complex task, it is provided on
+     *            The name that identifies the complex taskController, it is provided on
      *            {@link #createNewComplexTask(String, String)} when creating
-     *            the task.
+     *            the taskController.
      * @param object
      *            The object instance to be subscribed on a new
-     *            {@link TaskAction} as {@link Action#actionObject}.
+     *            {@link TaskActionController} as {@link ActionController#actionObject}.
      * @param methodName
      *            The name of the method to be subscribed on a new
-     *            {@link TaskAction} as {@link Action#actionMethod}.
+     *            {@link TaskActionController} as {@link ActionController#actionMethod}.
      * @param parameters
      *            The parameters to be used as arguments of the method on the
-     *            new {@link TaskAction}. This parameters are used along with
+     *            new {@link TaskActionController}. This parameters are used along with
      *            the methodName to resolve the right method to use.
      * 
      * @throws NotSubscribableException
@@ -372,20 +371,20 @@ public class BaboonConfig {
      *             <li>If there is a SecurityException when trying to resolve
      *             the method</li>
      *             <li>If there's an exception resolving the
-     *             {@link Action#guardProviderMethodsMap}</li>
-     *             <li>If the method is not annotated with {@link Task}</li>
-     *             <li>If the {@link TaskAction} object does not have a
+     *             {@link ActionController#guardProviderMethodsMap}</li>
+     *             <li>If the method is not annotated with {@link TaskController}</li>
+     *             <li>If the {@link TaskActionController} object does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
      *             <li>If the {@link Topic} object have less permissions than
-     *             the number of {@link TaskAction} objects in
-     *             {@link ComplexSecuentialTaskSubscription}</li>
-     *             <li>If the topic permission corresponding to this task is
+     *             the number of {@link TaskActionController} objects in
+     *             {@link ComplexSecuentialTaskControllerSubscription}</li>
+     *             <li>If the topic permission corresponding to this taskController is
      *             empty</li>
-     *             <li>If the topic permission corresponding to this task is
+     *             <li>If the topic permission corresponding to this taskController is
      *             null</li>
-     *             <li>If fails to append the {@link TaskAction} to
-     *             {@link ComplexSecuentialTaskSubscription}.</li>
+     *             <li>If fails to append the {@link TaskActionController} to
+     *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
      *
      */
     public void appendTaskToComplexTask(String complexTaskName, Object object, String methodName, Object... parameters)
@@ -396,16 +395,16 @@ public class BaboonConfig {
                 paramClasses[i] = parameters[i].getClass();
             }
             Method method = MethodDictionary.getMethod(object, methodName, paramClasses);
-            if (method.isAnnotationPresent(Task.class)) {
-                ComplexSecuentialTaskSubscription complexTask = complexTaskMap.get(complexTaskName);
+            if (method.isAnnotationPresent(TaskController.class)) {
+                ComplexSecuentialTaskControllerSubscription complexTask = complexTaskMap.get(complexTaskName);
                 if (complexTask == null) {
                     throw new NotSubscribableException(
-                            "The complex task with name " + complexTaskName + " does not exists");
+                            "The complex taskController with name " + complexTaskName + " does not exists");
                 } else {
-                    complexTask.addTask(new TaskAction(object, method, parameters));
+                    complexTask.addTask(new TaskActionController(object, method, parameters));
                 }
             } else {
-                throw new NotSubscribableException("The method should be annotated with Task annotation");
+                throw new NotSubscribableException("The method should be annotated with TaskController annotation");
             }
         } catch (NoSuchMethodException e) {
             throw new NotSubscribableException("This method does not exist on object provided", e);

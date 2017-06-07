@@ -5,11 +5,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import org.unc.lac.baboon.actioncontroller.ActionController;
 
 /**
  * This annotation should be used on methods. A method annotated with
  * {@link GuardProvider} is automatically resolved and registered after an
- * {@link Action} object is created. The methods annotated with
+ * {@link ActionController} object is created. The methods annotated with
  * {@link GuardProvider} are used by Baboon Framework to get the boolean flag of
  * the guard declared on its {@link #value()} attribute, so a method annotated
  * with {@link GuardProvider} must have a boolean return type. Also a method
