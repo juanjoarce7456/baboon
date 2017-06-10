@@ -1,5 +1,8 @@
 package org.unc.lac.baboon.petri;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.unc.lac.baboon.exceptions.BadPolicyException;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
 import org.unc.lac.javapetriconcurrencymonitor.monitor.PetriMonitor;
@@ -53,18 +56,26 @@ public class BaboonPetriCore {
      *            Indicates if the petri net to be created is a timed petri net
      *            or a place-transition petri net.
      * @param firingPolicy
-     *            A {@link TransitionsPolicy} object used by petri monitor to
-     *            decide which transition to fire next.
+     *            A {@link Class} object that extends {@link TransitionsPolicy} used by 
+     *            petri monitor to decide which transition to fire next. It might be null, 
+     *            in which case {@link FirstInLinePolicy} will be used.
+     * @throws BadPolicyException 
      */
-    public BaboonPetriCore(String pnmlFilePath, petriNetType type, TransitionsPolicy firingPolicy) {
+    public <A extends TransitionsPolicy> BaboonPetriCore(String pnmlFilePath, petriNetType type, Class<A> firingPolicy) throws BadPolicyException {
         if (pnmlFilePath == null) {
             throw new IllegalArgumentException("The pnml file path can not be null");
         }
-        TransitionsPolicy firingPolicyChecked = firingPolicy == null ? new FirstInLinePolicy() : firingPolicy;
         petriNetType typeChecked = type == null ? petriNetType.PLACE_TRANSITION : type;
         factory = new PetriNetFactory(pnmlFilePath);
         petri = factory.makePetriNet(typeChecked);
-        monitor = new PetriMonitor(petri, firingPolicyChecked);
+        TransitionsPolicy firingPolicyChecked;
+        try {
+            firingPolicyChecked = firingPolicy == null ? new FirstInLinePolicy(petri) : firingPolicy.getDeclaredConstructor(PetriNet.class).newInstance(petri);
+            monitor = new PetriMonitor(petri, firingPolicyChecked);
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
+            throw new BadPolicyException("Failed to create an instance with the policy class provided.");
+        }
     }
 
     /**

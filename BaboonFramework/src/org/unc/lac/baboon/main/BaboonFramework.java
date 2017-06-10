@@ -5,8 +5,10 @@ import java.util.Set;
 import org.reflections.Reflections;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
+import org.unc.lac.baboon.aspect.HappeningControllerJoinPointReporter;
 import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
+import org.unc.lac.baboon.exceptions.BadPolicyException;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
@@ -14,7 +16,6 @@ import org.unc.lac.baboon.execution.DummiesExecutor;
 import org.unc.lac.baboon.execution.DummyThread;
 import org.unc.lac.baboon.execution.HappeningControllerSynchronizer;
 import org.unc.lac.baboon.petri.BaboonPetriCore;
-import org.unc.lac.baboon.aspect.HappeningControllerJoinPointReporter;
 import org.unc.lac.baboon.config.BaboonConfig;
 import org.unc.lac.baboon.subscription.AbstractTaskControllerSubscription;
 import org.unc.lac.baboon.subscription.ComplexSecuentialTaskControllerSubscription;
@@ -88,6 +89,7 @@ public class BaboonFramework {
         if (petriCore == null) {
             throw new NullPointerException("The petri core is null");
         } else {
+            HappeningControllerJoinPointReporter.setObserver(new HappeningControllerSynchronizer(baboonConfig, petriCore));
             petriCore.initializePetriNet();
         }
         for (AbstractTaskControllerSubscription simpleTask : baboonConfig.getSimpleTasksCollection()) {
@@ -123,13 +125,14 @@ public class BaboonFramework {
      *            Indicates if the petri net to be created is a timed petri net
      *            or a place-transition petri net.
      * @param firingPolicy
-     *            A {@link TransitionsPolicy} object used by petri monitor to
-     *            decide which transition to fire next.
+     *            A {@link Class} object that extends {@link TransitionsPolicy} used by 
+     *            petri monitor to decide which transition to fire next. It might be null, 
+     *            in which case {@link FirstInLinePolicy} will be used.
+     * @throws BadPolicyException 
      * @see BaboonPetriCore
      */
-    public static void createPetriCore(String pnmlFilePath, petriNetType type, TransitionsPolicy firingPolicy) {
+    public static <A extends TransitionsPolicy> void createPetriCore(String pnmlFilePath, petriNetType type, Class<A> firingPolicy) throws BadPolicyException {
         petriCore = new BaboonPetriCore(pnmlFilePath, type, firingPolicy);
-        HappeningControllerJoinPointReporter.setObserver(new HappeningControllerSynchronizer(baboonConfig, petriCore));
     }
 
     /**
