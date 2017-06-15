@@ -1,6 +1,6 @@
 \section {Sistema de Clasificación y Lavado de Botellas}
-A lo largo de este capítulo se analiza un caso hipotético de uso.
-Dicho caso sirve como ejemplo para demostrar las funcionalidades que ofrece el
+A lo largo de este capítulo se analiza un ejemplo de aplicación.
+Dicho caso sirve para demostrar las funcionalidades que ofrece \nombreFramework
 framework. El mismo consiste en un sistema de clasificación y lavado de
 botellas.
 A continuación se describen sus características principales:
@@ -10,7 +10,7 @@ A continuación se describen sus características principales:
   \item Las botellas pueden ser depositadas en la máquina en cualquier instante
   de tiempo, de forma asincrónica para el sistema.
   \item La clasificación de las botellas se realiza en un módulo que
-  diferencia entre cerveza, gaseosa u otras.
+  diferencia entre \emph{cerveza}, \emph{gaseosa} u \emph{otras}.
   \item Puede haber un máximo de 20 botellas en la etapa de
   recepción y clasificación.
   \item La recepción de botellas tiene máxima prioridad siempre que pueda
@@ -51,7 +51,8 @@ A continuación se describen sus características principales:
     \label{fig:petri_lavadora_botellas}
 \end{figure}
 
-\subsection {Pasos para el desarrollo del sistema utilizando \nombreFramework}
+\subsection {Pasos para el desarrollo del sistema utilizando  \\
+\nombreFramework \  Framework}
 \label{sec:pasos_desarrollo_lavadora_botellas}
 Tras el modelado de la lógica del sistema en la Red de Petri, el
 proceso de desarrollo del sistema puede descomponerse en una serie de
@@ -100,8 +101,8 @@ utilizando el framework.
 \item \textbf{Clasificar Happening Controllers y Task Controllers:}\\
             Los controladores de acciones pueden procesar eventos físicos de entrada
             (Eventos Happening) o emitir eventos físicos de salida (Eventos Task). Es
-            importante determinar a cual grupo pertenece cada acción del sistema, para
-            poder clasificarla como Happening Controller o Task Controller (ver
+            importante determinar a cuál grupo pertenece cada acción del
+            sistema, para poder clasificarla como Happening Controller o Task Controller (ver
             sección~\ref{sec:controladores_de_acciones}).
             Esta clasificación se realiza en el software a través de las anotaciones Java
             @HappeningController y @TaskController. En el caso de ejemplo se distinguen:
@@ -128,7 +129,7 @@ utilizando el framework.
             estados externos que no están modelados en la red. Para lograr esto asociamos
             una variable booleana que representa el estado externo a una transición.
             Actuando la misma como un factor de sensibilización externo (ver
-            sección~\ref{sec:guardas_monitor}).
+            secciónes~\ref{sec:guardas_monitor} y \ref{guardas}).
             Para alterar el valor de una guarda, debe definirse un método del tipo Guard Provider
             asociado a dicha guarda, utilizando la anotación Java @GuardProvider en el
             código del software (ver sección~\ref{sec:guard_providers}).
@@ -139,11 +140,8 @@ utilizando el framework.
             de redes de Petri, mediante la utilización de políticas de disparo de
             transición. El usuario puede utilizar las políticas proporcionadas por el
             framework (transición aleatoria o primera transición en línea) o definir una
-            política a su medida, mediante la creación de una clase que hereda de
-            TransitionsPolicy, donde se puede definir la siguiente transición a
-            ejecutar de manera programática mediante la implementación del método
-            \emph{which()} (ver sección~\ref{sec:politica_transiciones}). De acuerdo a
-            las características descriptas para este caso, la transición
+            política a su medida como se explica en la sección~\ref{sec:politica_transiciones}.
+            De acuerdo a las características descriptas para este caso, la transición
             ``recibirBotella'' debe tener máxima prioridad.
 
 \item \textbf{Definir la cantidad de Hilos de ejecución:}\\
@@ -157,26 +155,24 @@ utilizando el framework.
             está a cargo de la creación e inicialización del hilo (el control de la
             ejecución lo realiza el monitor en todos los casos):
             \begin{itemize}
-              \item \textbf{Happening Controllers:}
+              \item \textbf{Happening Controllers \emph{(A cargo del usuario)}:}
                   \begin{enumerate}[label=\fbox{\arabic*}]
-                    \item Recibir botellas. \emph{(A cargo del usuario).}
+                    \item Recibir botellas. 
                   \end{enumerate}
-              \item \textbf{Task Controllers:}
+              \item \textbf{Task Controllers \emph{(A cargo del framework)}:}
                   \begin{enumerate}[resume , label=\fbox{\arabic*}]
-                  \item Clasificar botellas.\emph{(A cargo del framework).}
-                  \item Expulsar botellas incorrectas. \emph{(A cargo del framework).}
-                  \item Devolver botellas limpias. \emph{(A cargo del framework).}
+                  \item Clasificar botellas.
+                  \item Expulsar botellas incorrectas.
+                  \item Devolver botellas limpias.
                   \end{enumerate}
-              \item \textbf{Complex Secuential Task Controllers:}
-                  \begin{enumerate}[resume, label=\fbox{\arabic*}]
-                    \item Proceso de lavado de botellas de gaseosa. \emph{(A cargo del
-                    framework).}
+              \item \textbf{Complex Secuential Task Controllers \emph{(A cargo
+              del framework)}:} \begin{enumerate}[resume, label=\fbox{\arabic*}]
+                    \item Proceso de lavado de botellas de gaseosa.
                         \begin{itemize}
                           \item Lavar botellas de gaseosa.
                           \item Secar botellas de gaseosa.
                       \end{itemize}
-                    \item Proceso de lavado de botellas de cerveza. \emph{(A cargo del
-                    framework).}
+                    \item Proceso de lavado de botellas de cerveza.
                         \begin{itemize}
                           \item Lavar botellas de cerveza.
                           \item Enjuagar botellas de cerveza.
@@ -240,7 +236,7 @@ El manejo de las guardas se realiza mediante la definición de métodos anotados
 con \emph{@GuardProvider}. Por ejemplo:\\
 
 \begin{minted}{java}
-  @GuardProvider("isCerveza")
+  @GuardProvider("guardCerveza")
   public boolean isCerveza(){
     return ultimoTipoInsertado.equals(TipoBotella.CERVEZA);
   }
@@ -266,22 +262,25 @@ modificaciones indeseadas del estado de la red.
 \begin{minted}{java}
 
 public class InsertBottlesFirstPolicy extends TransitionsPolicy{
-  public InsertBottlesFirstPolicy(PetriNet _petri) {
-    super(_petri);
+
+  private final int priorityIndex;
+
+  public InsertBottlesFirstPolicy(PetriNet _petri) { 
+    super(_petri); 
+    priorityIndex = this.petri.getTransition("recibirBotella").getIndex(); 
   }
+  
   @Override
   public int which(boolean[] enabled) {
-    Integer[] marking  = petri.getCurrentMarking();
-    int index = petri.getTransition("recibirBotella").getIndex();
-    if(enabled[index]){ //Si recibirBotella está habilitada.
-      return index; //retornar el indice de recibirBotella.
+    if(enabled[priorityIndex]){ //Si recibirBotella está habilitada.
+      return priorityIndex; //retornar el indice de recibirBotella.
     }
     else {
-      //Si no, disparar la primer transición 
+      //Sino, disparar la primer transición 
       //habilitada que encuentre.
       for(int i = 0; i < enabled.length; i++){
         if(enabled[i]){
-        return i; 
+          return i; 
         }
       }
     }
@@ -333,7 +332,7 @@ mismos se definen a través de un archivo JSON, de la siguiente forma:\\
 
 Un tópico está relacionado con los eventos lógicos de
 disparo de transiciones y de modificación de valor de guardas. Dicha relación
-se determina a través del nombre de dichos componentes de la red de Petri, como
+se determina a través del nombre de dichos componentes de la RdP, como
 puede apreciarse en la figura~\ref{fig:topic_petri_relacion}.
 
 \begin{figure}[H]
@@ -343,9 +342,9 @@ puede apreciarse en la figura~\ref{fig:topic_petri_relacion}.
     \label{fig:topic_petri_relacion}
 \end{figure}
 
-Otro aspecto que el usuario debe tener en cuenta en cuanto a los hilos, es la
-creación e inicialización de aquellos que se encargan de ejecutar los
-HappeningController. Esto es responsabilidad del cógido de usuario. Por
+Otro aspecto que el usuario debe tener en cuenta, es la
+creación e inicialización de los hilos que se encargan de ejecutar los
+HappeningController. Esto es responsabilidad del código de usuario. Por
 ejemplo, cuando el EventListener que escucha eventos del mouse en la GUI
 detecta un evento, se crea un nuevo hilo que ejecuta el HappeningController
 encargado de manejar dicho evento (\emph{recibirBotella()}). A

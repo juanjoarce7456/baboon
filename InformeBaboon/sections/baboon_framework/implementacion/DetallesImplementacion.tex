@@ -259,3 +259,46 @@ módulos que componen el framework implementado:
 	HappeningController}
 	\label{fig:diagrama_secuencia_implementacion_ejecucion_happening_controller}
 \end{figure}
+
+
+\subsection{Implementación de Tópicos}
+Los tópicos, cuyo concepto se explica en la sección \ref{sec:diseno_topicos}, son definidos
+por el usuario en un archivo de formato JSON, de la forma que se presenta a
+continuación:
+\begin{minted}{json}
+[
+
+  {
+    "name":"custom_name_1",
+    "permission":["my_p", "my_p2", "my_p3"],
+    "setGuardCallback": [["g1","g3"],["g1","g2"],["g2","g3"]]
+    "fireCallback":["fc_1","fc_2"]
+  },
+  
+  {
+    "name":"test",
+    "permission":["my_permission", "my_permission2", "perm3", "p4"],
+    "setGuardCallback": [["g1","guard2","g3"],["guardaCuatro"],[],["g5","g_6"]] 
+  },
+  
+  {
+    "name":"test",
+    "permission":["my_transition"],
+  },
+  
+  {
+    "name":"topicN",
+    "permission":["transition0"],
+    "fireCallback":["t1","t2","tx"]
+  }
+]
+\end{minted}
+
+El path a este archivo es incluido en el software de usuario al momento de
+inicializar \nombreFramework framework. Un parser interno del framework se
+encarga de procesar este archivo JSON y asociar el tópico a los eventos
+lógicos.
+
+Una vez configurado y cargado en el sistema el archivo de tópicos, el usuario
+puede usar el valor de ``name'' del tópico como identificador para suscribir
+los controladores de acciones.
