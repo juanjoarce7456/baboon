@@ -1,5 +1,6 @@
 package org.unc.lac.baboon.test.utils.appsetup;
 
+import org.unc.lac.baboon.exceptions.BadPolicyException;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
@@ -26,7 +27,11 @@ public class TaskExecutionAppSetup implements BaboonApplication {
 
     @Override
     public void declare() {
-        BaboonFramework.createPetriCore(pnmlFile, petriNetType.PLACE_TRANSITION, null);
+        try {
+            BaboonFramework.createPetriCore(pnmlFile, petriNetType.PLACE_TRANSITION, null);
+        } catch (BadPolicyException e1) {
+            
+        }
         try {
             BaboonFramework.addTopicsFile(topicsFile);
         } catch (BadTopicsJsonFormat | NoTopicsJsonFileException e) {
