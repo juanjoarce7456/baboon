@@ -71,14 +71,12 @@ public class BaboonFramework {
      * instance.
      */
     public static void main(String[] args) {
-        Reflections reflections = new Reflections("");
+        Reflections reflections = new Reflections("org.unc.lac.baboon");
         Set<Class<? extends BaboonApplication>> apps = reflections.getSubTypesOf(BaboonApplication.class);
         for (Class<? extends BaboonApplication> app : apps) {
             try {
                 appSetupObjects.add(app.newInstance());
-            } catch (IllegalAccessException | InstantiationException e) {
-
-            }
+            } catch (IllegalAccessException | InstantiationException e) {}
         }
         for (BaboonApplication appSetup : appSetupObjects) {
             appSetup.declare();

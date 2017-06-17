@@ -1,8 +1,8 @@
 package org.unc.lac.baboon.utils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,9 +38,16 @@ public class TopicsJsonParser {
      */
     public HashMap<String, Topic> getTopicsFromJson(String jsonPath)
             throws BadTopicsJsonFormat, NoTopicsJsonFileException {
+        if (jsonPath == null) {
+            throw new IllegalArgumentException("The json file path can not be null");
+        }
+
         try {
-            File file = new File(jsonPath);
-            ArrayList<Topic> topics = objectMapper.readValue(file, new TypeReference<ArrayList<Topic>>() {
+            InputStream jsonFileStream = this.getClass().getResourceAsStream(jsonPath);
+            if (jsonFileStream == null) {
+                throw new FileNotFoundException("File " + jsonPath + " not found");
+            }
+            ArrayList<Topic> topics = objectMapper.readValue(jsonFileStream, new TypeReference<ArrayList<Topic>>() {
             });
             HashMap<String, Topic> topicsIndexedByName = new HashMap<String, Topic>();
             for (Topic topic : topics) {

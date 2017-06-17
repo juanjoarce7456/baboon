@@ -1,7 +1,6 @@
 package org.unc.lac.baboon.petri;
 
 import java.lang.reflect.InvocationTargetException;
-
 import org.unc.lac.baboon.exceptions.BadPolicyException;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
