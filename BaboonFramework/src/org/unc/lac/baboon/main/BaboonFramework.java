@@ -81,14 +81,14 @@ public class BaboonFramework {
         for (BaboonApplication appSetup : appSetupObjects) {
             appSetup.declare();
         }
-        for (BaboonApplication appSetup : appSetupObjects) {
-            appSetup.subscribe();
-        }
         if (petriCore == null) {
-            throw new NullPointerException("The petri core is null");
+            throw new NullPointerException("The petri core is null. Must be created on declare() method");
         } else {
             HappeningControllerJoinPointReporter.setObserver(new HappeningControllerSynchronizer(baboonConfig, petriCore));
             petriCore.initializePetriNet();
+        }
+        for (BaboonApplication appSetup : appSetupObjects) {
+            appSetup.subscribe();
         }
         for (AbstractTaskControllerSubscription simpleTask : baboonConfig.getSimpleTasksCollection()) {
             dummiesExecutor.executeDummy(new DummyThread(simpleTask, petriCore));

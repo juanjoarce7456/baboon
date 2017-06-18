@@ -21,8 +21,8 @@ import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 
 public class TasksAndHappeningControllersSubscriptionTest {
-    private final String topicsPath02 = "test/org/unc/lac/baboon/test/resources/topics02.json";
-    private final String topicsPath03 = "test/org/unc/lac/baboon/test/resources/topics03.json";
+    private final String topicsPath02 = "/org/unc/lac/baboon/test/resources/topics02.json";
+    private final String topicsPath03 = "/org/unc/lac/baboon/test/resources/topics03.json";
     private final String[] topicNamesDefined = { "topic1", "topic2", "topic3", "topic4" };
 
     /**
