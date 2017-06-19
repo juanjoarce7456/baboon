@@ -44,6 +44,8 @@ public class HappeningActionController extends ActionController {
      *             return type other than boolean</li>
      *             <li>When a {@link GuardProvider} annotated method requires
      *             arguments</li>
+     *             <li>When {@link #actionMethod} is static and {@link GuardProvider} 
+     *             annotated method is not static</li>
      * @throws IllegalArgumentException
      *             <li>When the actionObject provided is null</li>
      *             <li>When the actionMethod provided is null</li>

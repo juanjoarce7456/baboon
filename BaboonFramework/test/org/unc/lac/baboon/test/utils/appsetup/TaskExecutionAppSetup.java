@@ -42,7 +42,7 @@ public class TaskExecutionAppSetup implements BaboonApplication {
     @Override
     public void subscribe() {
         try {
-            BaboonFramework.subscribeToTopic("topic1", controller, "increaseNumber");
+            BaboonFramework.subscribeControllerToTopic("topic1", controller, "increaseNumber");
         } catch (NotSubscribableException e) {
 
         }

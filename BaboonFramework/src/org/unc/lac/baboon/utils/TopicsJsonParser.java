@@ -38,10 +38,6 @@ public class TopicsJsonParser {
      */
     public HashMap<String, Topic> getTopicsFromJson(String jsonPath)
             throws BadTopicsJsonFormat, NoTopicsJsonFileException {
-        if (jsonPath == null) {
-            throw new IllegalArgumentException("The json file path can not be null");
-        }
-
         try {
             InputStream jsonFileStream = this.getClass().getResourceAsStream(jsonPath);
             if (jsonFileStream == null) {
