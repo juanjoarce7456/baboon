@@ -440,31 +440,31 @@ public class AppSetup implements BaboonApplication {
       //utilizar como controlador de acción
       // En este caso, cualquier objeto que herede de
       //la clase abstracta Botella puede ser utilizado.
-      BaboonFramework.subscribeToTopic("recepcion_botella", maquina,
+      BaboonFramework.subscribeControllerToTopic("recepcion_botella", maquina,
           "recibirBotella", new BotellaCerveza());
 
       //Suscripción de TaskControllers Simples
-      BaboonFramework.subscribeToTopic("clasificacion_botella", 
+      BaboonFramework.subscribeControllerToTopic("clasificacion_botella", 
             maquina, "clasificarBotella");
-      BaboonFramework.subscribeToTopic("expulsion_otra", 
+      BaboonFramework.subscribeControllerToTopic("expulsion_otra", 
             maquina, "expulsarOtra");
-      BaboonFramework.subscribeToTopic("devolucion_botella", 
+      BaboonFramework.subscribeControllerToTopic("devolucion_botella", 
             maquina, "devolverBotellaLimpia");
 
       //Creación de ComplexSecuentialTaskControllers
-      BaboonFramework.createNewComplexTask("lavarCerveza", "lavado_cerveza");
-      BaboonFramework.createNewComplexTask("lavarGaseosa", "lavado_gaseosa");
+      BaboonFramework.createNewComplexTaskController("lavarCerveza", "lavado_cerveza");
+      BaboonFramework.createNewComplexTaskController("lavarGaseosa", "lavado_gaseosa");
 
       //Suscripción de TaskControllers a ComplexSecuentialTaskControllers
-      BaboonFramework.appendTaskToComplexTask("lavarCerveza", 
+      BaboonFramework.appendControllerToComplexTaskController("lavarCerveza", 
             maquina, "lavarCerveza");
-      BaboonFramework.appendTaskToComplexTask("lavarCerveza", 
+      BaboonFramework.appendControllerToComplexTaskController("lavarCerveza", 
             maquina, "enjuagarCerveza");
-      BaboonFramework.appendTaskToComplexTask("lavarCerveza", 
+      BaboonFramework.appendControllerToComplexTaskController("lavarCerveza", 
             maquina, "secarCerveza");
-      BaboonFramework.appendTaskToComplexTask("lavarGaseosa", 
+      BaboonFramework.appendControllerToComplexTaskController("lavarGaseosa", 
             maquina, "lavarGaseosa");
-      BaboonFramework.appendTaskToComplexTask("lavarGaseosa",
+      BaboonFramework.appendControllerToComplexTaskController("lavarGaseosa",
             maquina, "secarGaseosa");
 
     } catch (NotSubscribableException e) {
@@ -476,12 +476,155 @@ public class AppSetup implements BaboonApplication {
 }
 \end{minted}
 
-Finalmente, para comenzar la ejecución del sistema, debe seleccionarse
-\emph{BaboonFramework} como clase principal en las configuraciones:
+\subsection {Configuración del Entorno de Desarrollo de \nombreFramework
+Framework}
 
-\begin{figure}[H]
+La configuración del entorno de desarrollo para \nombreFramework
+Framework consta de los siguientes pasos:
+
+\begin{enumerate}
+    \item Descargar e instalar Java JDK version \textgreater= 8
+        \href{http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}
+        {\emph{(descarga)}}
+    \item Descargar e instalar Eclipse IDE 
+        \href{https://www.eclipse.org/downloads/}{\emph{(descarga)}}
+    \item Instalar M2Eclipse (Maven):
+        \begin{itemize}
+            \item En Eclipse, ir a Help -\textgreater Install New Software
+            \href{http://help.eclipse.org/neon/index.jsp?topic=/org.eclipse.platform.doc.user/tasks/tasks-127.htm}
+            {\emph{(ayuda)}}
+        \item Colocar la dirección del repositorio de m2e en el recuadro “Work
+              with”:
+            \url{http://download.eclipse.org/technology/m2e/releases/}
+        \end{itemize}
+    \item Instalar AspectJ:
+        \begin{itemize}
+            \item En Eclipse, ir a Help -\textgreater Install New Software
+            \item Colocar la dirección del repositorio de ajdt en el recuadro
+            “Work with”: \url{http://download.eclipse.org/tools/ajdt/43/update}
+        \end{itemize}
+   \item Instalar Git Client
+        \href{https://git-scm.com/downloads}{\emph{(descarga)}}
+   \item Clonar repositorio de monitor de Petri:
+        \begin{itemize}
+          \item git clone \url{\repoMonitor}
+        \end{itemize}
+   \item Clonar repositorio de \nombreFramework framework:
+        \begin{itemize}
+          \item git clone \url{\repoFramework}
+        \end{itemize}
+   \item Configurar nuevo proyecto en Eclipse
+        \begin{itemize}
+          \item Crear nuevo proyecto Java
+          \item En Package Explorer, hacer click derecho sobre el proyecto.
+          Configure -\textgreater  Convert To Maven Project. Configurar los
+          datos deseados del artefacto Maven para el proyecto actual y luego click en finish.
+          \item En Package Explorer hacer click derecho sobre el proyecto.
+          Configure -\textgreater  Convert To AspectJ Project
+        \end{itemize}
+   \item Linkear código fuente de monitor de Petri al proyecto:
+        \begin{itemize}
+          \item En Package Explorer, hacer click derecho sobre el proyecto.
+          \item Build Path -\textgreater Link Source
+          \item Click en Browse y seleccionar la carpeta source:               
+          \emph{/path/repositorio/monitor\_petri/src}
+          \item Completar el campo name con \emph{petri\_monitor\_src} y aceptar
+          (por defecto el campo name es \emph{src}, pero no está
+          permitido porque ya existe una carpeta de código fuente con ese nombre).
+        \end{itemize}
+   \item Linkear código fuente de framework al proyecto: 
+        \begin{itemize}
+          \item Repetir los pasos del punto anterior, seleccionando como carpeta
+          source: \emph{/path/repositorio/framework/src}
+        \end{itemize}
+   \item Resolver dependencias:
+        \begin{itemize}
+          \item Abrir el archivo pom del framework:
+                \emph{/path/repositorio/framework/pom.xml}
+          \item Buscar datos Group Id, Artifact Id y Version. (ver
+          figura~\ref{fig:run_pom_file}) 
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=80mm]{run_pom_file}
+                \caption{Definición de Artefacto BaboonFramework en archivo
+                pom.xml}
+            \label{fig:run_pom_file}
+                \end{figure}
+          \item Abrir el archivo pom.xml del nuevo proyecto. Luego click en la
+          pestaña “Dependencies”, en la parte inferior.
+          \item Click en Add… y  luego completar los campos Group Id, Artifact
+          Id y Version con los datos previos (Por ejemplo:
+          BaboonFramework, BaboonFramework, 0.0.1-SNAPSHOT). Luego click en OK.
+          \item Guardar el archivo pom.xml del proyecto.
+          \item Click Derecho en el nuevo proyecto. Maven -\textgreater Update Project -\textgreater
+          Ok
+        \end{itemize}
+\end{enumerate}
+
+
+\subsection {Ejecución y Build del sistema utilizando \nombreFramework
+Framework}
+
+Para comenzar la ejecución del sistema desde la IDE Eclipse, debe seleccionarse
+\emph{BaboonFramework} como punto de entrada al programa en las configuraciones:
+    \begin{itemize}
+      \item En Package Explorer, hacer click derecho sobre el proyecto.
+      \item Seleccionar Run As -\textgreater Java Application.
+      \item Seleccionar \emph{BaboonFramework}.
+      \begin{figure}[H]
+            \centering
+            \includegraphics[width=90mm]{run_main_config}
+            \caption{Clase Principal de un Sistema Desarrollado con Baboon Framework.}
+            \label{fig:baboon_main}
+      \end{figure}
+    \end{itemize}
+
+Para exportar un archivo JAR que ejecutable (requiere JRE \textgreater= 8) deben
+realizarse los siguientes pasos:
+
+\begin{enumerate}
+  \item Incluir el archivo PNML y el archivo JSON de tópicos dentro de un
+  paquete que forme parte del build path, como se observa en la
+  figura~\ref{fig:run_recursos_topics_pnml}.
+  \begin{figure}[H]
     \centering
-    \includegraphics[width=120mm]{baboon_main}
-    \caption{Clase Principal de un Sistema Desarrollado con Baboon Framework.}
-    \label{fig:baboon_main}
-\end{figure}
+    \includegraphics[width=70mm]{run_recursos_topics_pnml}
+    \caption{Inclusión de Archivo PNML y Archivo de Tópicos en el Build
+    Path}
+    \label{fig:run_recursos_topics_pnml}
+   \end{figure}
+   En este caso, el path a los archivos debe especificarse en el programa de la
+   siguiente forma:
+   \begin{itemize}
+     \item \textbf{\emph{``/topic/topics.json''}}
+     \item \textbf{\emph{``/pnml/lavadoBotellas.pnml''}}
+   \end{itemize}
+   
+   \item Dentro de las configuraciones del Build Path del proyecto, incluir
+   las dependencias de Maven y las bibliotectas de AspectJ como exported
+   entries, junto con el código fuente del framework, del monitor de RdP y del
+   proyecto desarrollado:
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=60mm]{run_build_path}
+    \caption{Configuración de Exported Entries en Build Path}
+    \label{fig:run_build_path}
+    \end{figure}
+    
+   \item Exportar un archivo JAR ejecutable.
+       \begin{itemize}
+         \item En Package Explorer, hacer click derecho sobre el proyecto.
+         \item Seleccionar Export\ldots -\textgreater Runnable JAR File
+         \item Elegir BaboonFramework como configuración de lanzamiento
+         (esta configuración se hace visible una vez que se ha ejecutado
+         el sistema utilizando \emph{Run As}, como se describe previamente).
+         \item Elegir la opcion \emph{Extract required libraries into generated
+         JAR} (Ver figura~\ref{fig:run_export_runnable_jar})
+         \begin{figure}[H]
+            \centering
+            \includegraphics[width=70mm]{run_export_runnable_jar}
+            \caption{Configuración de Archivo JAR Ejecutable}
+            \label{fig:run_export_runnable_jar}
+         \end{figure}
+       \end{itemize}
+\end{enumerate}
