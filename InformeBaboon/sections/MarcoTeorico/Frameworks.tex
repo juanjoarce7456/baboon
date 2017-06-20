@@ -4,63 +4,87 @@
 
 \subsection{Definición}
 
+Los frameworks son una técnica de reutilización orientada a objetos. Dos de sus
+definiciones más comunes son:
+\begin{itemize}
+  \item ``Un framework es un diseño reusable de todo o parte de un sistema que es
+  representado por un conjunto de clases abstractas y la forma en que esas
+  instancias interactúan''
+  \item ``Un framework es el esqueleto de una aplicación que puede ser
+  personalizado por un desarrollador de aplicaciones.''
+\end{itemize} 
 
-Los frameworks son una técnica de reutilización orientada a objetos.  Una de las
-definiciones más utilizadas es ``Un framework es un diseño reusable de todo o
-parte de un sistema que es representado por un conjunto de clases abstractas y
-la forma en que esas instancias interactúan''. Otra definición común es ``Un
-framework es el esqueleto de una aplicación que puede ser personalizado por un
-desarrollador de aplicaciones.''. La primer definición describe la estructura de
-un framework, mientras que la segunda su propósito. (Frameworks= Components +
-Patterns, R. E. Johnson).
+ La primer definición describe la estructura de un framework, mientras que la
+ segunda describe su propósito \cite{Johnson97}. 
 
-Se dice que un framework es una técnica de reutilización de código porque provee
-medios para facilitar la creación de una aplicación a partir de una biblioteca
-de componentes existentes que exponen las interfaces del framework. Además
-permiten la creación de componentes nuevos que pueden heredar la mayor parte de
-su implementación de superclases abstractas del framework.
-
+Un framework es una técnica de reutilización de código porque facilita la
+creación de una aplicación a partir de una biblioteca de componentes existentes.
+Además es posible la creación de nuevos componentes, que heredan la mayor parte
+de su implementación de clases abstractas definidas en el framework.
 
 Debe pensarse en frameworks y componentes de software como tecnologías
-diferentes, pero que cooperan entre sí. Los frameworks proveen un contexto
-reusable para los componentes y son más abstractos y flexibles que los
-componentes. A su vez, los frameworks son  más concretos y simples de reutilizar
-que un diseño puro. (Components, Frameworks, Patterns, R. E. Johnson).
+diferentes, pero que cooperan entre sí:
+\begin{itemize}
+  \item Un framework provee un contexto reusable para los componentes.
+  \item Un framework es más abstracto y flexible que los componentes.
+\end{itemize} 
+
+Por otro lado, los frameworks son más concretos y simples de reutilizar
+que un diseño puro \cite{JohnsonFeb97}.
 
 \subsection{Inversión de Control}
 \label{sec:inversion_control}
-Una de las características de los frameworks es la inversión de control.
-Generalmente, un desarrollador reutiliza componentes de una biblioteca 
-escribiendo un programa principal que llama a los componentes cuando es 
-necesario. El desarrollador decide cuándo llamar al componente y se encarga de
-la estructura y el flujo de control del programa. En un framework el programa
-principal es reutilizado, el desarrollador solamente conecta componentes
-existentes al framework o implementa nuevos componentes para conectar. El código
-del desarrollador es llamado por el framework. El framework determina la estructura
-y el flujo de control del programa.
+La inversión de control es una de las características de los frameworks.
+Es un principio de diseño en el cual porciones de código personalizado por el
+usuario reciben el flujo de control (orden de ejecución de las instrucciones)
+por parte de un framework genérico.
+
+Al implementar un sistema sin utilizar un framework, generalmente el
+desarrollador reutiliza componentes de una biblioteca escribiendo el código de
+un programa principal que realiza llamadas a los componentes. El desarrollador
+decide en el código cuándo llamar al componente y se encarga de la estructura y
+el flujo de control del programa.
+
+En un framework el programa principal es reutilizado, el
+desarrollador solamente conecta componentes existentes al framework o
+implementa nuevos componentes para conectar. Las porciones de código del
+desarrollador son llamadas por el framework. El framework determina la
+estructura y el flujo de control del programa.
+
+La inversión de control sirve para los siguientes propósitos de diseño:
+\begin{itemize}
+  \item Desacoplar la ejecución de una tarea de su implementación.
+  \item Mantener el foco en la tarea para la que fue diseñado el módulo.
+  \item Guiar el diseño respetando las interfaces entre módulos.
+  \item Evitar efectos colaterales al reemplazar un módulo.
+\end{itemize}
 
 \subsection {Ventajas de los frameworks}
 \begin{itemize}
 	\item Aplica técnicas de reutilización: La reutilización ideal de tecnología
 	provee componentes que pueden conectarse fácilmente para hacer un nuevo sistema.
-	El desarrollador de software no tiene que saber cómo está implementado el
-	componente y es fácil para el desarrollador aprender a usarlo. El sistema
-	resultante será eficiente, fácil de mantener y confiable.
+	El desarrollador de software no tiene que conocer la implementación del
+	componente. El sistema resultante es eficiente, fácil de mantener y
+	confiable.
 	
-	\item Los frameworks son personalizables: Los frameworks son más
-	personalizables que la mayoría de los componentes y tienen interfaces más
+	\item Son personalizables: Los frameworks son más
+	personalizables que la mayoría de los componentes. Tienen interfaces más
 	complejas.
 	
-	\item Sirven para múltiples aplicaciones, dentro del grupo para
-	las cuales fue desarrolado el framework, y facilitan el trabajo al
-	desarrollador. Un buen framework puede reducir el esfuerzo
-	para desarrollar una aplicación personalizada en un orden de magnitud.
+	\item Sirven para múltiples aplicaciones: Un framework está orientado a
+	facilitar la implementación de aplicaciones de un tipo determinado. En
+	consecuencia, puede ser utilizado para implementar diversas aplicaciones que
+	pertenezcan a dicho tipo.
+	
+	\item Facilitan el trabajo del desarrollador: Un framework puede reducir
+	el esfuerzo para desarrollar una aplicación personalizada en un orden de magnitud.
 	
 	\item La uniformidad reduce los costos de mantener el código: Los programadores
-	encargados de mantenerlo pueden moverse de una aplicación a otra que utiliza el
+	encargados de mantenerlo pueden cambiar de una aplicación a otra que utiliza el
 	mismo framework sin tener que aprender un nuevo diseño.
 	
-	\item Los frameworks fuerzan patrones en las aplicaciones que los utilizan.
+	\item Los frameworks obligan al usuario a respetar patrones de diseño en las
+	aplicaciones.
 
 \end{itemize}
 
@@ -70,11 +94,11 @@ y el flujo de control del programa.
     antes de poder utilizar el framework. Generalmente aprender un nuevo
     framework es difícil.
     
-    \item Uno de los problemas de utilizar un lenguaje en particular es que
-    restringe al framework a los sistemas que utilizan dicho lenguaje.
-    
-    \item La relación efectividad-costo es baja al construir una aplicación en
-    un lenguaje con un framework escrito en otro.
+    \item Restricción de elección del lenguaje de programación: Uno de los
+    problemas de utilizar un framework implementado en un lenguaje en particular
+    es que restringe a los sistemas a utilizar dicho lenguaje. La relación
+    efectividad-costo es baja al construir una aplicación en un lenguaje con un
+    framework escrito en otro.
     
     \item Debido a que los frameworks son descritos con lenguajes de
     programación, es difícil para los desarrolladores aprender los patrones
@@ -86,36 +110,32 @@ y el flujo de control del programa.
 \label{sec:tipos_framework}
 \begin{itemize}
 
-    \item Black-Box Frameworks: La forma más fácil de usar un framework es
-	conectando componentes ya existentes. Esto no modifica el framework ni crea
-	nuevas clases concretas.
-	Reutiliza las interfaces del framework y sus reglas para interconectar
-	componentes. Es lo más parecido a construir un circuito. El desarrollador sólo
-	tiene que saber que un objeto A se conecta con un objeto B a través de una
-	interfaz y no necesita conocer las especificación exacta de A o B. 
+    \item Black-Box Frameworks: La forma más sencilla de utilizar un framework
+    consiste en conectar componentes ya existentes. De esta forma no se modifica
+    el framework ni se crean nuevas clases concretas.
+	Se Reutilizan las interfaces del framework y sus reglas para interconectar
+	componentes. Es lo más parecido a construir un circuito. El desarrollador
+	necesita conocer la interfaz de conexión entre un objeto A y un objeto B, pero
+	no es necesario que conozca las especificación exacta de A o B.
 
-    \item White-Box Frameworks: No todos los frameworks pueden funcionar de esta
-	manera. La siguiente forma más fácil de usar un framework es definir nuevas
-	clases concretas y utilizarlas para implementar una aplicación. Las subclases están
-	estrechamente acopladas a sus superclases, de esta forma se requiere más
-	conocimiento acerca de la clase abstracta que en el primer modo. 
+    \item White-Box Frameworks: Consiste en definir clases concretas, que
+    extienden de clases abstractas definidas en el framework, y utilizarlas para
+    implementar una aplicación. Las subclases están estrechamente acopladas a
+    sus superclases, de esta forma se requiere más conocimiento acerca de la
+    implementación de las clases que conforman el framework.
 	
-	\item Extensión o Modificación del núcleo del framework: La forma de usar el
-	framework que requiere mayores conocimientos consiste en extender el mismo
-	cambiando las clases abstractas que forman su núcleo, usualmente para añadir
-	nuevas variables u operaciones. Cambiar las clases abstractas puede provocar
-	fallos en las clases concretas existentes, esta forma de utilizar un framework
-	no es aplicable si el propósito del mismo es crear un sistema abierto.
+	\item Extensión o Modificación del núcleo del framework: Consiste en extender
+	el framework cambiando las clases abstractas que forman su núcleo, usualmente
+	para añadir nuevas variables u operaciones. Requiere mayores
+    conocimientos acerca del diseño del framework. Cambiar las clases abstractas
+	puede provocar fallos en las clases concretas existentes. Esta forma de
+	utilizar un framework no es aplicable si el propósito es crear un
+	sistema abierto.
 \end{itemize}
 
 Existen intermedios entre Black-Box frameworks y White-Box frameworks. Es común
 que los frameworks puedan ser usados como Black-Box la mayor parte del tiempo y
 ser extendidos cuando la ocasión lo demande.
-
-La mejor forma de aprender a usar un nuevo framework es mediante ejemplos. La
-mayoría de los frameworks vienen con una serie de ejemplos que pueden ser
-estudiados. Los ejemplos son concretos y fáciles de comprender en comparación a
-aprender todo el framework en conjunto
 
 \subsection{Frameworks VS APIs}
 
