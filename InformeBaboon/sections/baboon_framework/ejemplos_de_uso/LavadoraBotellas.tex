@@ -1,14 +1,14 @@
 \section {Sistema de Clasificación y Lavado de Botellas}
 A lo largo de este capítulo se analiza un ejemplo de aplicación.
-Dicho caso sirve para demostrar las funcionalidades que ofrece \nombreFramework
-framework. El mismo consiste en un sistema de clasificación y lavado de
+Dicho caso sirve para demostrar las funcionalidades que ofrece \nombreFramework 
+\ framework. El mismo consiste en un sistema de clasificación y lavado de
 botellas.
 A continuación se describen sus características principales:
 
 \begin{itemize}
   \item El ingreso de botellas no es controlado por el sistema.
   \item Las botellas pueden ser depositadas en la máquina en cualquier instante
-  de tiempo, de forma asincrónica para el sistema.
+  de tiempo de forma asincrónica para el sistema.
   \item La clasificación de las botellas se realiza en un módulo que
   diferencia entre \emph{cerveza}, \emph{gaseosa} u \emph{otras}.
   \item Puede haber un máximo de 20 botellas en la etapa de
@@ -199,11 +199,10 @@ lavado y clasificación de botellas. En esta implementación en particular, el
 mundo físico externo al sistema es representado por una Interfaz Gráfica de
 Usuario. 
 
-En la figura~\ref{fig:diagrama_clases_lavadora_botellas} se observa que la
-implementación de los objetos y métodos del sistema se basa en el paradigma de
-programación orientada a objetos. El usuario es el encargado de definir las
-interfaces y herencias que considere necesarias para implementar las
-funcionalidades del sistema.
+En la figura~\ref{fig:diagrama_clases_lavadora_botellas} se observa el diagrama
+de clases del sistema. El usuario es el encargado de definir las interfaces y
+herencias que considere necesarias para implementar las funcionalidades del
+sistema.
 \begin{figure}[H]
     \centering
     \includegraphics[width=120mm]{diagrama_clases_lavadora_botellas}
@@ -484,27 +483,20 @@ Framework consta de los siguientes pasos:
 
 \begin{enumerate}
     \item Descargar e instalar Java JDK version \textgreater= 8
-        \href{http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}
-        {\emph{(descarga)}}
     \item Descargar e instalar Eclipse IDE 
-        \href{https://www.eclipse.org/downloads/}{\emph{(descarga)}}
     \item Instalar M2Eclipse (Maven):
         \begin{itemize}
             \item En Eclipse, ir a Help -\textgreater Install New Software
-            \href{http://help.eclipse.org/neon/index.jsp?topic=/org.eclipse.platform.doc.user/tasks/tasks-127.htm}
-            {\emph{(ayuda)}}
         \item Colocar la dirección del repositorio de m2e en el recuadro “Work
-              with”:
-            \url{http://download.eclipse.org/technology/m2e/releases/}
+              with”.
         \end{itemize}
     \item Instalar AspectJ:
         \begin{itemize}
             \item En Eclipse, ir a Help -\textgreater Install New Software
             \item Colocar la dirección del repositorio de ajdt en el recuadro
-            “Work with”: \url{http://download.eclipse.org/tools/ajdt/43/update}
+            “Work with”.
         \end{itemize}
    \item Instalar Git Client
-        \href{https://git-scm.com/downloads}{\emph{(descarga)}}
    \item Clonar repositorio de monitor de Petri:
         \begin{itemize}
           \item git clone \url{\repoMonitor}
