@@ -7,6 +7,8 @@ import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.aspect.HappeningControllerJoinPointReporter;
 import org.unc.lac.baboon.actioncontroller.HappeningActionController;
+import org.unc.lac.baboon.actioncontroller.ActionController;
+import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.exceptions.BadPolicyException;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
@@ -71,26 +73,24 @@ public class BaboonFramework {
      * instance.
      */
     public static void main(String[] args) {
-        Reflections reflections = new Reflections("");
+        Reflections reflections = new Reflections("org.unc.lac.baboon");
         Set<Class<? extends BaboonApplication>> apps = reflections.getSubTypesOf(BaboonApplication.class);
         for (Class<? extends BaboonApplication> app : apps) {
             try {
                 appSetupObjects.add(app.newInstance());
-            } catch (IllegalAccessException | InstantiationException e) {
-
-            }
+            } catch (IllegalAccessException | InstantiationException e) {}
         }
         for (BaboonApplication appSetup : appSetupObjects) {
             appSetup.declare();
         }
-        for (BaboonApplication appSetup : appSetupObjects) {
-            appSetup.subscribe();
-        }
         if (petriCore == null) {
-            throw new NullPointerException("The petri core is null");
+            throw new NullPointerException("The petri core is null. Must be created on declare() method");
         } else {
             HappeningControllerJoinPointReporter.setObserver(new HappeningControllerSynchronizer(baboonConfig, petriCore));
             petriCore.initializePetriNet();
+        }
+        for (BaboonApplication appSetup : appSetupObjects) {
+            appSetup.subscribe();
         }
         for (AbstractTaskControllerSubscription simpleTask : baboonConfig.getSimpleTasksCollection()) {
             dummiesExecutor.executeDummy(new DummyThread(simpleTask, petriCore));
@@ -175,8 +175,8 @@ public class BaboonFramework {
      *             <li>If the framework fails to resolve the method</li>
      *             <li>If there is a SecurityException when trying to resolve
      *             the method</li>
-     *             <li>If there's an exception resolving the
-     *             {@link ActionController#guardProviderMethodsMap}</li>
+     *             <li>If there's an exception on
+     *             {@link ActionController#resolveGuardProviderMethods()}</li>
      *             <li>If the method is not annotated with
      *             {@link HappeningController} or {@link TaskController}</li>
      *             <li>When trying to subscribe a {@link HappeningActionController}
@@ -202,9 +202,80 @@ public class BaboonFramework {
      * @see SimpleTaskControllerSubscription
      * @see ComplexSecuentialTaskControllerSubscription
      */
-    public static void subscribeToTopic(String topicName, Object object, String methodName, Object... parameters)
+    public static void subscribeControllerToTopic(String topicName, Object object, String methodName, Object... parameters)
             throws NotSubscribableException {
-        baboonConfig.subscribeToTopic(topicName, object, methodName, parameters);
+        baboonConfig.subscribeControllerToTopic(topicName, object, methodName, parameters);
+    }
+    
+    
+    /**
+     * Subscribes a static method and the arguments of this method
+     * to one topic. The method to be subscribed must be annotated with
+     * {@link HappeningController} or {@link TaskController}. A
+     * {@link HappeningControllerSubscription} or {@link SimpleTaskControllerSubscription} is
+     * created.
+     * 
+     * @param topicName
+     *            The name of the topic to be used for the subscription
+     * @param methodsClass
+     *            The class on which the method is defined
+     * @param methodName
+     *            The name of the static method to subscribe on a new
+     *            {@link TaskActionController} or {@link HappeningActionController} as
+     *            {@link ActionController#actionMethod}
+     * @param parameters
+     *            <li>The parameters to be used as arguments of the method on
+     *            the new {@link TaskActionController} or {@link HappeningActionController}.
+     *            This parameters are used along with the methodName to resolve
+     *            the right method to use.</li>
+     *            <li>When registering a {@link HappeningActionController}
+     *            parameters will be used only to determine the method, since
+     *            the execution of {@link HappeningController} annotated methods is
+     *            triggered by user software but synchronized by Baboon
+     *            framework. In this case, mock instances of the classes
+     *            required by the method could be used, allowing the framework
+     *            to resolve and subscribe the method.</li>
+     * 
+     * @throws NotSubscribableException
+     *             <li>If the topicName provided as argument is null</li>
+     *             <li>When a topic with name topicName does not exist</li>
+     *             <li>If there is more than one permission on
+     *             {@link Topic#permission}</li>
+     *             <li>If the methodsClass provided as argument is null</li>
+     *             <li>If the methodName provided as argument is null</li>
+     *             <li>If the framework fails to resolve the method</li>
+     *             <li>If the method resolved is not static</li>
+     *             <li>If there is a SecurityException when trying to resolve
+     *             the method</li>
+     *             <li>If there's an exception on
+     *             {@link ActionController#resolveGuardProviderMethods()}</li>
+     *             <li>If the method is not annotated with
+     *             {@link HappeningController} or {@link TaskController}</li>
+     *             <li>When trying to subscribe a {@link HappeningActionController}
+     *             that is already subscribed</li>
+     *             <li>When trying to subscribe a {@link TaskActionController} to a
+     *             {@link Topic} with empty {@link Topic#permission}</li>
+     *             <li>If the permission transition name is an empty String for
+     *             a {@link SimpleTaskControllerSubscription}</li>
+     *             <li>If the permission transition name is null for a
+     *             {@link SimpleTaskControllerSubscription}</li>
+     *             <li>If there are guard callbacks on the topic and
+     *             {@link Topic#setGuardCallback} and {@link Topic#permission}
+     *             sizes are different.</li>
+     *             <li>If the {@link ActionController#actionObject} does not have a
+     *             {@link GuardProvider} annotated method to handle a guard
+     *             declared in the topic</li>
+     *
+     * 
+     * @see Topic
+     * @see ActionController
+     * @see TaskActionController
+     * @see HappeningActionController
+     * @see SimpleTaskControllerSubscription
+     * @see ComplexSecuentialTaskControllerSubscription
+     */
+    public static void subscribeStaticControllerToTopic(String topicName, Class<?> methodsClass, String methodName, Object... parameters) throws NotSubscribableException{
+        baboonConfig.subscribeStaticControllerToTopic(topicName, methodsClass, methodName, parameters);
     }
 
     /**
@@ -271,8 +342,8 @@ public class BaboonFramework {
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
      */
-    public static void createNewComplexTask(String complexTaskName, String topicName) throws NotSubscribableException {
-        baboonConfig.createNewComplexTask(complexTaskName, topicName);
+    public static void createNewComplexTaskController(String complexTaskName, String topicName) throws NotSubscribableException {
+        baboonConfig.createNewComplexTaskController(complexTaskName, topicName);
     }
 
     /**
@@ -302,8 +373,8 @@ public class BaboonFramework {
      *             <li>If the framework fails to resolve the method</li>
      *             <li>If there is a SecurityException when trying to resolve
      *             the method</li>
-     *             <li>If there's an exception resolving the
-     *             {@link ActionController#guardProviderMethodsMap}</li>
+     *             <li>If there's an exception on
+     *             {@link ActionController#resolveGuardProviderMethods()}</li>
      *             <li>If the method is not annotated with {@link TaskController}</li>
      *             <li>If the {@link TaskActionController} object does not have a
      *             {@link GuardProvider} annotated method to handle a guard
@@ -319,9 +390,58 @@ public class BaboonFramework {
      *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
      *
      */
-    public static void appendTaskToComplexTask(String complexTaskName, Object object, String methodName,
+    public static void appendControllerToComplexTaskController(String complexTaskName, Object object, String methodName,
             Object... parameters) throws NotSubscribableException {
-        baboonConfig.appendTaskToComplexTask(complexTaskName, object, methodName, parameters);
+        baboonConfig.appendControllerToComplexTaskController(complexTaskName, object, methodName, parameters);
+    }
+    
+    
+    /**
+     * This method requires a static method and the arguments of
+     * this method to append a new {@link TaskActionController} to the
+     * {@link ComplexSecuentialTaskControllerSubscription} identified by complexTaskName.
+     * The method to be subscribed must be annotated with {@link TaskController}.
+     * 
+     * @param complexTaskName
+     *            The name that identifies the complex taskController, it is provided on
+     *            {@link #createNewComplexTask(String, String)} when creating
+     *            the taskController.
+     * @param methodsClass
+     *            The class on which the method is defined
+     * @param methodName
+     *            The name of the static method to be subscribed on a new
+     *            {@link TaskActionController} as {@link ActionController#actionMethod}.
+     * @param parameters
+     *            The parameters to be used as arguments of the method on the
+     *            new {@link TaskActionController}. This parameters are used along with
+     *            the methodName to resolve the right method to use.
+     * 
+     * @throws NotSubscribableException
+     *             <li>If the methodsClass provided as argument is null</li>
+     *             <li>If the methodName provided as argument is null</li>
+     *             <li>If the framework fails to resolve the method</li>
+     *             <li>If the the method is not static</li>
+     *             <li>If there is a SecurityException when trying to resolve
+     *             the method</li>
+     *             <li>If there's an exception on
+     *             {@link ActionController#resolveGuardProviderMethods()}</li>
+     *             <li>If the method is not annotated with {@link TaskController}</li>
+     *             <li>If the {@link TaskActionController} object does not have a
+     *             {@link GuardProvider} annotated method to handle a guard
+     *             declared in the topic</li>
+     *             <li>If the {@link Topic} object have less permissions than
+     *             the number of {@link TaskActionController} objects in
+     *             {@link ComplexSecuentialTaskControllerSubscription}</li>
+     *             <li>If the topic permission corresponding to this taskController is
+     *             empty</li>
+     *             <li>If the topic permission corresponding to this taskController is
+     *             null</li>
+     *             <li>If fails to append the {@link TaskActionController} to
+     *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
+     */
+    public static void appendStaticControllerToComplexTaskController(String complexTaskName, Class<?> methodsClass, String methodName, Object... parameters)
+            throws NotSubscribableException {
+        baboonConfig.appendStaticControllerToComplexTaskController(complexTaskName, methodsClass, methodName, parameters);
     }
 
 }

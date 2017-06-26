@@ -22,8 +22,8 @@ import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory
  */
 public class TaskExecutionAppSetup implements BaboonApplication {
     private static TaskExecutionController controller = new TaskExecutionController();
-    private final String pnmlFile = "test/org/unc/lac/baboon/test/resources/pnml01.pnml";
-    private final String topicsFile = "test/org/unc/lac/baboon/test/resources/topics04.json";
+    private final String pnmlFile = "/org/unc/lac/baboon/test/resources/pnml01.pnml";
+    private final String topicsFile = "/org/unc/lac/baboon/test/resources/topics04.json";
 
     @Override
     public void declare() {
@@ -42,7 +42,7 @@ public class TaskExecutionAppSetup implements BaboonApplication {
     @Override
     public void subscribe() {
         try {
-            BaboonFramework.subscribeToTopic("topic1", controller, "increaseNumber");
+            BaboonFramework.subscribeControllerToTopic("topic1", controller, "increaseNumber");
         } catch (NotSubscribableException e) {
 
         }

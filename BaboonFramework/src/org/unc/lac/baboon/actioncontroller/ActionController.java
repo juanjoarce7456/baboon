@@ -2,6 +2,7 @@ package org.unc.lac.baboon.actioncontroller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningController;
@@ -133,8 +134,11 @@ public abstract class ActionController {
      *             return type other than boolean</li>
      *             <li>When a {@link GuardProvider} annotated method requires
      *             arguments</li>
+     *             <li>When {@link #actionMethod} is static and {@link GuardProvider} 
+     *             annotated method is not static</li>
      */
     private void resolveGuardProviderMethods() throws MultipleGuardProvidersException, InvalidGuardProviderMethod {
+        boolean isStaticController = Modifier.isStatic(actionMethod.getModifiers());
         for (Method method : actionObject.getClass().getMethods()) {
             GuardProvider provider = method.getAnnotation(GuardProvider.class);
             if (provider != null) {
@@ -144,6 +148,9 @@ public abstract class ActionController {
                 } else if (method.getParameterCount() != 0) {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
                             + "annotated as GuardProvider cannot require parameters on its declaration");
+                } else if(isStaticController && !Modifier.isStatic(method.getModifiers())){
+                    throw new InvalidGuardProviderMethod("The method " + method.getName()
+                    + "annotated as GuardProvider must be static since it is a static controller");
                 }
                 if (provider.value() != null && !provider.value().isEmpty()) {
                     if (guardProviderMethodsMap.putIfAbsent(provider.value(), method) != null) {

@@ -60,7 +60,13 @@ public class HappeningControllerSynchronizer implements JoinPointObserver {
     @Override
     public void update(Object target, String methodName, JoinPointObserver.State state) {
         try {
-            Method method = MethodDictionary.getMethod(target, methodName);
+        	Method method;
+        	if(target == null){
+            	method =  MethodDictionary.getStaticMethod(null, methodName);
+            }
+            else{
+            	method = MethodDictionary.getMethod(target, methodName);
+            }
             HappeningControllerSubscription happeningController = (HappeningControllerSubscription) baboonConfig
                     .getHappeningController(new Pair<Object, Method>(target, method));
             if (happeningController == null) {

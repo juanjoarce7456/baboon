@@ -44,6 +44,17 @@ public class MethodDictionary {
             return m;
         }
     }
+    
+    public static Method getStaticMethod(Class<?> methodsClass, String methodName, Class<?>... parameterClasses) throws NoSuchMethodException, SecurityException{
+    	Pair<Object, String> key = new Pair<Object, String>(null, methodName);
+    	 if (methodDict.containsKey(key)) {
+             return methodDict.get(key);
+         } else {
+             Method m = resolveMethod(methodsClass, methodName, parameterClasses);
+             methodDict.put(key, m);
+             return m;
+         }
+    }
 
     private static Method resolveMethod(Class<?> objClass, String methodName, Class<?>... parameterClasses)
             throws NoSuchMethodException, SecurityException {
