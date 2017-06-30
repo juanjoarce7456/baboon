@@ -15,6 +15,10 @@
 \usepackage{amsfonts}
 \usepackage[section]{placeins}
 \usepackage{hyperref}
+\usepackage{blindtext}
+\usepackage{scrextend}
+\usepackage{enumitem}
+\addtokomafont{labelinglabel}{\sffamily}
 \hypersetup{
      colorlinks=true,
      citecolor=black,
@@ -38,6 +42,10 @@
     \newcommand{\nombreFramework}{Baboon}
     %Nombre del monitor templetizado
     \newcommand{\javapetriconcurrencymonitor}{Java Petri Concurrency Monitor }
+    
+    \newcommand{\repoMonitor}{https://github.com/airabinovich/java_petri_engine.git}
+    \newcommand{\repoFramework}{https://github.com/juanjoarce7456/petri_event_dispatcher.git}
+
     \title{\nombreTesis}
     \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
         \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
@@ -71,10 +79,19 @@
         \chapter{Investigación}
             \include{./sections/Desarrollo/Requerimientos}
         \chapter{Monitor de Concurrencia con Redes de Petri}
+        	\label{cap:petri_monitor}
             \include{./sections/Desarrollo/java_petri_concurrency_monitor/PetriConcurrencyMonitor}
-        \chapter{\nombreFramework \  Framework}
-            \include{./sections/Desarrollo/EstudioDeCasos}
-
+        \chapter{Diseño de \nombreFramework  Framework}
+        	\label{cap:diseno_framework}
+            \include{./sections/baboon_framework/diseno/Eventos}
+            \include{./sections/baboon_framework/diseno/ModosDeSincronizacion}
+            \include{./sections/baboon_framework/diseno/TasksHappenings}
+            \include{./sections/baboon_framework/diseno/GuardProviders}
+            \include{./sections/baboon_framework/diseno/RelacionEventosLogicosEventosDeAccionControladoresDeAccion}
+        \chapter{Implementación de \nombreFramework  Framework}
+        	\include{./sections/baboon_framework/implementacion/DetallesImplementacion}
+       	\chapter{Ejemplo de Uso de \nombreFramework  Framework}
+        	\include{./sections/baboon_framework/ejemplos_de_uso/LavadoraBotellas}
     \bibliography{./bibliografia}
 	\bibliographystyle{plain}
 \end{document}
