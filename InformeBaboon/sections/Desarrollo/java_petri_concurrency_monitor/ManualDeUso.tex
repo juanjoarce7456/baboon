@@ -302,9 +302,9 @@ Existe un segundo parámetro para el disparo de una transición:
 \mint{java}|false| e indica si el disparo a realizar es no-perenne.
 
 Si se intenta disparar una transición no sensibilizada de forma perenne, el hilo
-que intenta hacer el disparo se bloquea en la cola de condición asociada. Por
-otro lado, si el disparo es no-perenne, el hilo que intenta hacer el disparo no
-se bloquea y sale del monitor.
+que intenta hacer el disparo se bloquea en la cola de condición asociada
+(comportamiento por defecto). Por otro lado, si el disparo es no-perenne, el
+hilo que intenta hacer el disparo no se bloquea y sale del monitor.
 
 Los disparos no-perenne son útiles cuando el disparo equivale a una acción que
 se intenta efectuar únicamente si están dadas las condiciones y no de otra
@@ -375,7 +375,8 @@ implementando el método \mint{java}|public int which(boolean[] enabled)| donde:
     del array de transiciones de \mint{java}|PetriNet.getTransitions()|. Una
     posición con valor \mint{java}|true| indica que la transición cuyo índice
     corresponde con la posición del array, está sensibilizada.
-    \item El valor de retorno es el índice de la próxima transición a disparar.
+    \item El valor de retorno es el índice de la próxima transición a disparar
+    o un valor negativo si no hay transiciones sensibilizadas.
 \end{itemize}
 
 En el siguiente ejemplo se muestra cómo definir una política de transiciones
@@ -389,8 +390,8 @@ de Java y se realiza en el momento de inicialización del monitor:
   
   // se asume que existe un objeto PetriMonitor llamado "petri"
   
-  PetriMonitor monitor = new PetriMonitor(petri, new TransitionsPolicy(petri) {
-  
+  PetriMonitor monitor = new PetriMonitor(petri, TransitionsPolicy(petri) {
+
     @Override
     public int which(boolean[] enabled) {
       int ret = 0;
@@ -398,8 +399,8 @@ de Java y se realiza en el momento de inicialización del monitor:
       // siguiendo el criterio de la política a aplicar
       return ret;
     }
-    
-  };
+
+  });
   
   // más código
 \end{minted}

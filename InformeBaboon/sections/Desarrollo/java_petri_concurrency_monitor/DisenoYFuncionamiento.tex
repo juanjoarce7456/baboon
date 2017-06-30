@@ -7,16 +7,17 @@ los requerimientos de un monitor de concurrencia para la realización de este
 proyecto integrador.
 En primera instancia se analizó la reutilización y expansión de las
 funcionalidades del monitor construido en el desarrollo de \cite{codegen}, y
-reutilizado en \cite{chimp}. Durante este análisis se vió que, si bien este
+reutilizado en \cite{chimp}. Durante este análisis se vio que, si bien este
 software cumple con los requerimientos mínimos necesarios, para agregar las
 funcionalidades requeridas por este proyecto integrador era necesaria la
 refactorización de la mayor parte del mismo. Además, el estilo seguido durante
 su desarrollo no se condice con el estándar de Java, siendo esta otra razón
 para decidir hacer una re-implementación completa del monitor.
 Por esto es que, como parte del desarrollo de este proyecto integrador, se
-construyó Java Petri Concurrency Monitor (JPCM).
+diseñó y construyó Java Petri Concurrency Monitor (JPCM).
 
 \subsection{Arquitectura de Alto Nivel}
+\label{JPCM_arq_alto_nivel}
 
 Según las clasificaciones vistas en las secciones
 \ref{monitor_sincronizacion_explicita} y \ref{politica_monitor}, JPCM es un
@@ -50,6 +51,7 @@ mostrando sus principales bloques e interacciones.
 \end{figure}
 
 \subsection{Gestión de los Recursos con RdP}
+\label{JPCM_gestion_rec_rdp}
 En la sección \ref{monitores} se analiza cómo se gestionan los recursos de un
 monitor con variables de condición en un monitor de sincronización explícita.
 Allí se explicó cómo un hilo que desea tomar o devolver un recurso debe
@@ -79,6 +81,63 @@ A partir de esta semejanza queda en evidencia que las operaciones a realizar
 dentro de un monitor que ejecuta una RdP consisten en el disparo de una o más
 transiciones para cambiar el estado en que se encuentran los recursos y las
 operaciones modeladas por ella.
+
+\subsection{Estructura Interna de JPCM}
+Basándose en el diagrama de la figura \ref{fig:JPCM_Arquitectura}, se puede
+dividir a JPCM en dos secciones:
+\begin{itemize}
+    \item Modelo: Tiene como eje central a la clase \textit{PetriNet}. Dentro de
+    esta sección se genera el modelo ejecutable con todos sus componentes. Se ayuda
+    de clases auxiliares para hacer la generación del modelo
+    \item Ejecución: Tiene como eje central a la clase \textit{PetriMonitor}. Se
+    encarga de tomar el modelo y ejecutarlo. Incluye clases auxiliares para
+    implementar las políticas del monitor (de transiciones y de colas)
+\end{itemize}
+
+\subsubsection{La Sección Modelo}
+En el siguiente diagrama de clases se observan las clases que componen a esta
+sección, junto con sus composiciones e interacciones estructurales:
+
+\begin{figure}[H]
+  \hspace*{-3cm}
+  \includegraphics[width=190mm]{JPCM_PetriNet_Structure}
+  \caption{Diagrama de clases de la sección \textit{Modelo}}
+  \label{fig:JPCM_PetriNet_Structure}
+\end{figure}
+
+Se pueden ver las clases que modelan a los componentes de una RdP estructural
+(ver sección \ref{def_formal_petri}) (\textit{Arc}, \textit{Transition},
+\textit{Place}), la especializaciones concretas de \textit{PetriNet}
+(\textit{PlaceTransitionPetriNet} y \textit{TimedPetriNet}), las clases
+\textit{PetriNetFactory} y \textit{PnmlParser} vistas en la sección
+\ref{JPCM_arq_alto_nivel} y la especialización de \textit{PnmlParser} que
+comprende el dialecto PNML de TINA, \textit{TinaPnmlParser}.
+
+\subsubsection{La sección Ejecución}
+En el siguiente diagrama de clases se observan las clases que componen a la
+sección Ejecución, junto con sus composiciones y relaciones estructurales:
+
+\begin{figure}[H]
+  \hspace*{-2.5cm}
+  \includegraphics[width=180mm]{JPCM_PetriMonitor_Structure}
+  \caption{Diagrama de clases de la sección \textit{Ejecución}}
+  \label{fig:JPCM_PetriMonitor_Structure}
+\end{figure}
+
+Junto a la clase \textit{PetriMonitor} se puede ver por un lado la subsección
+que aplica la política de transiciones. Por ese lado está la clase abstracta
+\textit{TransitionsPolicy} y sus especializaciones \textit{RandomPolicy}
+(política aleatoria) y \textit{FirstInLinePolicy} (política de primer transición
+en la lista).
+
+Por otro lado, la clase \textit{PriorityBinaryLock} (ver sección
+\ref{JPCM_solucion_inv_prioridad}) implementa la política de colas por
+prioridad.
+
+Las colas de condición asociadas a las transiciones (ver sección
+\ref{JPCM_gestion_rec_rdp}) están descriptas en la interfaz
+\textit{VarCondQueue} e implementadas en la clase \textit{FairQueue}.
+
 
 \subsection{Interfaces de Programación}
 
@@ -372,7 +431,7 @@ pasos para lograr la inversión de prioridades en la cola de entrada del monitor
 \clearpage
 \begin{figure}[H]
     \ContinuedFloat
-    \subfigure[Terminó el intervalo de dispro de $t_{0}$ sin que $th_{0}$ logre
+    \subfigure[Terminó el intervalo de disparo de $t_{0}$ sin que $th_{0}$ logre
     tomar el lock de entrada del monitor]
     {\includegraphics[width=\textwidth]{InversionPrioridad/Inversion_Prioridad_07}}
     \caption{Inversión de prioridades en la cola de entrada del monitor}
@@ -402,6 +461,7 @@ incorrectamente su prioridad a los $N$ hilos que llegaron después que él al
 monitor a disparar a $t_{0}$.
 
 \subsection{Solución a las inversiones de prioridad}
+\label{JPCM_solucion_inv_prioridad}
 
 Analizando los casos de inversión de prioridades expuestos en la sección
 anterior, se ve que en ambas oportunidades el problema solucionar modificando
@@ -411,7 +471,7 @@ esperado temporalmente puede esperar con prioridad máxima para evitar la
 inversión de prioridades.
 
 La forma en que JPCM implementa las colas de prioridad es a través de la clase
-\textit{PriorityBinaryLock} {\color{red}[ver diagrama de clases]}.
+\textit{PriorityBinaryLock} (ver figura \ref{fig:JPCM_PetriMonitor_Structure}).
 \textit{PriorityBinaryLock} es un lock que implementa dos métodos básicos para
 su uso:
 \begin{itemize}
