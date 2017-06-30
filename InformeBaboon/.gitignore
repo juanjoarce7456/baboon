@@ -28,4 +28,8 @@ _minted**
 !lib/*
 !resources/*
 /document.synctex.gz
+/InformeBaboon.aux
+/InformeBaboon.log
+/documen.synctex.gz
 /output/
+/-shell-escape document.synctex.gz
