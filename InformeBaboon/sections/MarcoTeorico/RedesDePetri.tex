@@ -459,6 +459,7 @@ semántica de tiempo fuerte con tiempo de disparo de 2500ms en las tres fases de
 disparo.
 
 \subsubsection{Semántica de Tiempo Débil}
+\label{semantica_tiempo_debil}
 
 De forma más general que la Semántica de Tiempo Fuerte, la Semántica de
 Tiempo Débil asigna a una transición $t$ un intervalo $[\alpha, \beta]$
@@ -670,7 +671,7 @@ semántica de una RdP estocástica utilizando una RdP no autónoma.
 eventos mediante simulación}
 
 \subsection{Informes de Disparo}
-
+\label{informes_disparo}
 De la misma forma que una RdP no autónoma permite actuar en función de eventos
 provenientes del mundo exterior, los informes de disparo le brindan a la RdP la
 posibilidad de emitir eventos hacia el medio. A su vez, estos eventos pueden
@@ -741,6 +742,24 @@ Cabe destacar que, pese a obtener un diseño correcto del modelo, una política
 desfavorable al problema a tratar puede beneficiar ampliamente a parte de la
 ejecución del modelo y perjudicar a otras, generando inanición sobre estas.
 
+\subsection{Redes de Petri Orientadas a Procesos}
+\label{POPN}
+
+Las RdP orientadas a procesos son aquellas que, como su nombre lo indica,
+modelan procesos. En este tipo de redes se tienen las siguientes
+consideraciones:
+\begin{itemize}
+  \item Las plazas pueden representar recursos u operaciones
+  \item Las transiciones representan el inicio o fin de una operación
+  \item Un token en el marcado inicial representa:
+  \begin{itemize}
+      \item Una constante en el caso de una plaza de recurso
+      \item Una variable en el caso de una plaza de operación
+  \end{itemize}
+\end{itemize}
+
+Frecuentemente, se suele llamar \textit{POPN} a las RdP orientadas a procesos
+por sus siglas en inglés \textit{(Process Oriented Petri Net)}.
 
 \section{Comparación entre Redes de Petri y Autómatas}
 \label{comparacion_rdp_automatas}

@@ -13,7 +13,7 @@ Esto se debe principalmente a algunos grandes hitos en la programación:
 	\item La aparición del concepto de \textit{hilo} o \textit{thread}. Permiten la
 	ejecución de programas de manera más rápida y eficiente que los programas
 	basados en procesos.
-	\item La aparición de lenguajes de alto nivel con soporte nativo para
+	\item La aparición de lenguajes de alto nivel con soporte para
 	programación de hilos y de procesos.
 	\item La aparición de internet, entorno donde la concurrencia se hace necesaria
 	en todo aspecto.
@@ -40,19 +40,22 @@ de poder diferenciarlos:
 
 \begin{itemize}
 	\stepcounter{definitionsCounter}
-	\item [\underline{Definición \thedefinitionsCounter :} ] Dos procesos
-	o hilos son \textit{concurrentes} si la primera instrucción de uno de ellos se
-	ejecuta después de la primera del otro y antes de la última.
+	\item [\underline{Definición \thedefinitionsCounter :} ] Dos hilos
+	\footnote{En adelante, se hablará de concurrencia de hilos dado que los
+	sistemas de referencia son de memoria compartida. En el caso que corresponda
+	hablar de procesos se lo mencionará explícitamente.} son \textit{concurrentes}
+	si la primera instrucción de uno de ellos se ejecuta después de la primera del
+	otro y antes de la última.
 	\stepcounter{definitionsCounter}
-	\item [\underline{Definición \thedefinitionsCounter :} ] Dos procesos o hilos
-	se están ejecutando de manera \textit{paralela} si son concurrentes y la
-	ejecución de ambos se da al mismo tiempo.
+	\item [\underline{Definición \thedefinitionsCounter :} ] Dos hilos 	se están
+	ejecutando de manera \textit{paralela} si son concurrentes y la ejecución de
+	ambos se da al mismo tiempo.
 \end{itemize}
 
-Para que dos procesos sean concurrentes no es necesario que se ejecuten al mismo
+Para que dos hilos sean concurrentes no es necesario que se ejecuten al mismo
 tiempo, es suficiente que exista un intercalado entre la ejecución de sus
-instrucciones. En este proyecto integrador, es de interés fundamentalmente la
-ejecución concurrente.
+instrucciones \cite{PalmaConcurrente}. En este proyecto integrador, es de
+interés fundamentalmente la ejecución concurrente.
 
 Anteriormente en esta sección se mencionó que existen problemas aparejados a la
 programación de sistemas concurrentes. Sabiendo esto resulta necesario conocer
@@ -66,7 +69,7 @@ categorías:
 
 \begin{itemize}
 	\item \underline{Incremento en la velocidad de ejecución:} Cuando se ejecuta un
-	programa concurrente en un entorno multiprocesador, los distintos procesos que
+	programa concurrente en un entorno multiprocesador, los distintos hilos que
 	lo forman pueden ejecutarse de manera paralela, con lo que el tiempo total de
 	ejecución se reduce. Esto es especialmente ventajoso en programas de cálculo
 	numérico.
@@ -75,9 +78,8 @@ categorías:
 	de este tipo se adapta más naturalmente a la resolución de estos problemas.
 	\item \underline{Mejor aprovechamiento del tiempo de CPU:} Un sistema operativo
 	con un ambiente de multiprogramación que permita la concurrencia es capaz de
-	desalojar a un proceso que está esperando por un evento y no está haciendo uso
-	del procesamiento de la CPU para brindarle este tiempo a otro proceso que lo
-	requiera.
+	desalojar a un hilo que está esperando por un evento y no está haciendo uso
+	de la CPU para brindarle este tiempo a otro hilo que lo requiera.
 \end{itemize}
 
 \subsection{Problemas y Propiedades de la Concurrencia}
@@ -98,50 +100,51 @@ Estas son:
 \begin{itemize}
     \item \underline{Exclusión Mutua:} Existen recursos que no pueden ser
     accedidos concurrentemente para evitar problemas de coherencia. Por esto se
-    debe garantizar que a lo sumo un proceso está accediendo a un recurso de este
+    debe garantizar que a lo sumo un hilo está accediendo a un recurso de este
     tipo en un instante dado.
     \item \underline{Condición de Sincronización:} Se pueden dar situaciones
-    donde un proceso debe esperar la ocurrencia de un evento para poder
-    continuar su flujo. Ante estos casos se debe garantizar que el proceso
+    donde un hilo debe esperar la ocurrencia de un evento para poder
+    continuar su flujo. Ante estos casos se debe garantizar que el hilo
     espere por dicha ocurrencia, de otro modo el resultado puede ser indefinido
     o inesperado.
     \item \underline{Interbloqueo \textit{(Deadlock)}:} Sucede cuando dos o más
-    procesos están esperando a que suceda un evento que nunca ocurrirá para continuar sus
-    flujos de ejecución. El evento no ocurre porque las condiciones para que
-    suceda están bloqueadas por los propios procesos.\\
+    hilos están esperando a que suceda un evento que nunca ocurrirá para
+    continuar sus flujos de ejecución. El evento no ocurre porque las
+    condiciones para que suceda están bloqueadas por los propios hilos.\\
     Para que el interbloqueo suceda efectivamente se tienen que cumplir las
     siguientes condiciones:
     \begin{itemize} 
         \item Exclusión Mutua: si no se exige exlusión mutua, no puede haber
-        interdependencia entre los procesos.
-        \item Retención y Espera: cada proceso debe retener un recurso y esperar
+        interdependencia entre los hilos.
+        \item Retención y Espera: cada hilo debe retener un recurso y esperar
         a que se libere otro.
-        \item No Apropiación: no se puede forzar a un proceso a que desaloje un
+        \item No Apropiación: no se puede forzar a un hilo a que desaloje un
         recurso
         \item Circulo Vicioso de Espera: Se forma una cadena cerrada de
-        procesos, donde cada uno retiene al menos un recurso que necesita el
-        próximo proceso de la cadena.
+        hilos, donde cada uno retiene al menos un recurso que necesita el
+        próximo hilo de la cadena.
     \end{itemize}
     Las tres primeras condiciones son necesarias pero no suficientes para que
     efectivamente ocurra el interbloqueo. La cuarta condición nace como
     consecuencia de las tres primeras, siempre que se produzca una secuencia de
-    eventos que desemboque en un círculo de espera irresoluble.
-    \cite{SistOpStallings}
+    eventos que desemboque en un círculo de espera irresoluble
+    \cite{SistOpStallings}.
 \end{itemize}
 
 \subsubsection*{Propiedades de Vivacidad}
 
-Si se aseguran las propiedades de vivacidad, ``algo bueno'' pasará evantualmente
+Si se aseguran las propiedades de vivacidad, ``algo bueno'' pasará eventualmente
 en la ejecución del programa.
 
 \begin{itemize}
     \item \underline{Interbloqueo Activo \textit{(Livelock)}:} Se produce un
-    interbloqueo activo cuando un sistema ejecuta una serie de instrucciones sin hacer ningún
-    progreso. Esto se da cuando $N$ procesos necesitan $N$ recursos y se los
-    intercambian sin obtener nunca el conjunto completo.
+    interbloqueo activo cuando un sistema ejecuta una serie de instrucciones sin
+    hacer ningún progreso. Esto se da cuando $N$ hilos necesitan $N$ recursos
+    y se los intercambian sin obtener nunca el conjunto completo.
     \item \underline{Inanición \textit{(Starvation)}:} Se da cuando al menos una
-    parte del sistema nunca recibe los recursos necesarios para continuar, o demora demasiado
-    tiempo en recibirlos. No es necesario que todo el sistema se bloquee para
+    parte del sistema nunca recibe los recursos necesarios para continuar, o
+    demora lo suficiente en recibirlos como para que no sean útiles para obtener
+    el resultado esperado. No es necesario que todo el sistema se bloquee para
     estar en una situación de inanición.
 \end{itemize}
 
@@ -149,42 +152,43 @@ en la ejecución del programa.
 
 A fin de garantizar el cumplimiento de las propiedades introducidas en la
 sección \ref{ProblemasConcurrencia}, es necesario sincronizar la ejecución de
-los hilos/procesos. De lo contrario, se puede caer en problemas de coherencia y
-consistencia de datos, o corrupción de los sistemas.
+los hilos. De lo contrario, se puede caer en problemas de coherencia
+y/o consistencia de datos, o corrupción.
 
 \subsection{Cooperación vs Competencia}
 
-La sincronización de procesos se puede implementar basada en dos principios:
+La sincronización de hilos se puede implementar basada en dos principios
+\cite{SistOpStallings}:
 \begin{itemize}
-    \item \underline{Cooperación:} Los procesos se comunican entre ellos para
+    \item \underline{Cooperación:} Los hilos se comunican entre ellos para
     cooperar en la compartición de recursos. A su vez, existen dos tipos de
     cooperación:
     \begin{itemize}
-        \item \underline{Cooperación por Compartición:} Los procesos ineractúan
+        \item \underline{Cooperación por Compartición:} Los hilos interactúan
         para gestionar los recursos. No tienen conocimiento explícito de los demás.
-        \item \underline{Cooperación por Comunicación:} Los procesos ineractúan
+        \item \underline{Cooperación por Comunicación:} Los hilos interactúan
         para gestionar los recursos mediante el paso explícito de mensajes entre
         ellos.
     \end{itemize}
-    \item \underline{Competencia:} Los procesos compiten entre sí por los
+    \item \underline{Competencia:} Los hilos compiten entre sí por los
     recursos. La gestión de los recursos se efectúa por otra entidad, como lo
     puede ser el sistema operativo.
 \end{itemize}
 
 \subsubsection{Cooperación por Compartición de Recursos}
 
-Los procesos inteactúan entre ellos sin tener conocimiento explícito de su
-existencia.
+Los hilos inteactúan entre ellos sin tener conocimiento explícito de la
+existencia de los demás.
 
 Existen regiones de almacenamiento de datos compartidas (espacios de memoria,
 archivos, bases de datos, etc) que pueden ser leidas y escritas por múltiples
-procesos.
+hilos.
 
-Si bien un proceso no hace referencia a ningún otro, es conciente de que los
+Si bien un hilo no hace referencia a ningún otro, es conciente de que los
 datos compartidos pueden ser accedidos y modificados por los demás. Por lo que
-el conjunto debe cooperar para asegura que los datos compartidos se gestionen
+el conjunto debe cooperar para asegurar que los datos compartidos se gestionen
 correctamente. Es responsabilidad de los mecanismos de control asegurar la
-integridad de los datos compartidos. \cite{SistOpStallings}
+integridad de los datos compartidos \cite{SistOpStallings}.
 
 Como los datos se almacenan en recursos compartidos, existen los problemas de
 exclusión mutua, interbloqueo e inanición vistos en la sección
@@ -193,13 +197,10 @@ acceder a los datos: para \textit{lectura} y para \textit{escritura}. Únicament
 se debe asegurar la exclusión mutua para operaciones de escritura ya que sólo
 estas pueden romper la \textit{coherencia} y \textit{consistencia} de los datos.
 
-
-{\color{red}{REVISAR ESTO: (coherencia vs consistencia?)}}
-
 Un conjunto de datos son coherentes si independientemente de quién haya sido el
-último escritor, cualquier lector obtiene el mismo conjunto de valores.
-Por otro lado, la consistencia se refiere a la imposibilidad de que dos o más
-procesos escriban el mismo dato al mismo tiempo generando un valor corrupto.
+último escritor, cualquier lector obtiene el último conjunto de valores escrito.
+Por otro lado, un dato es consistente si un lector obtiene un valor que fue
+realmente escrito por un escritor y no un dato corrupto.
 
 Algunos mecanismos para gestionar el uso de los datos compartidos son:
 \begin{itemize}
@@ -207,35 +208,38 @@ Algunos mecanismos para gestionar el uso de los datos compartidos son:
     \item Monitores: desarrollado en la sección \ref{monitores}
 \end{itemize}
 
-\subsubsection{Cooperación por Comunicación entre Procesos}
+\subsubsection{Cooperación por Comunicación entre Hilos o Procesos}
 
-Cuando los procesos cooperan por comunicación, participan en alcanzar un
+Cuando los hilos o procesos cooperan por comunicación, participan en alcanzar un
 objetivo en común. La comunicación es una manera de sincronizar o coordinar las
 distintas actividades.
 
-La comunicación está formada por el envío y recepción explícita de mensajes de
-algún tipo. Las herramientas para este paso de mensajes está dada por el
-lenguaje de programación, alguna biblioteca o por el sistema operativo.
+La comunicación está formada por está formada por el emisor, el receptor, el
+canal y el mensaje. El envío y recepción de mensajes son explícitos.
+Las herramientas para este paso de mensajes están dadas por el lenguaje de
+programación, alguna biblioteca o por el sistema operativo.
 
-Al no haber compartición de datos entre los procesos, no es necesaria la
+Al no haber compartición de datos entre los hilos o procesos, no es necesaria la
 ejecución en exclusión mutua. Pese a esto, el interbloqueo y la inanición siguen
-siendo problemas que pueden afectar a los procesos.\cite{SistOpStallings}
+siendo problemas que pueden afectar a los hilos o proceos
+\cite{SistOpStallings}.
 
-\subsubsection{Competencia entre Procesos}
+\subsubsection{Competencia entre Hilos}
 
-Los procesos no tienen forma de comunicarse entre ellos para gestionar los
+Los hilos no tienen forma de comunicarse entre ellos para gestionar los
 recursos.
 
-Si dos procesos desean acceder a un mismo recurso, el sistema operativo se lo
+Si dos hilos desean acceder a un mismo recurso, el sistema operativo se lo
 asignará a uno de ellos y el otro tendrá que esperar. Se debe garantizar:
 \begin{itemize}
     \item La toma de los recursos en exlusión mutua.
     \item Correcta gestión de los recursos para evitar interbloqueos.
-    \item La reactivación de los procesos bloqueados en un tiempo prudente a fin de evitar su inanición.
+    \item La reactivación de los hilos bloqueados en un tiempo prudente a fin de
+    evitar su inanición.
 \end{itemize}
 El control de la competencia involucra al sistema operativo
 inevitablemente, porque es él quien asigna los recursos del sistema.
-Además, los procesos deben ser capaces por sí mismos de expresar de algún
+Además, los hilos deben ser capaces por sí mismos de expresar de algún
 modo los requisitos de exclusión mutua, como puede ser bloqueando los
 recursos antes de usarlos. Cualquier solución conlleva alguna ayuda del
 sistema operativo, como la provisión del servicio de
@@ -243,24 +247,25 @@ bloqueo.\cite{SistOpStallings}
 
 \begin{framed}
 \textbf{Nota:}A los fines de este proyecto integrador sólo es de interés la
-sincronización basada en memoria compartida. Dentro de este modelo se destacan dos mecanismos
-de sincronización por competencia: los \textit{semáforos} y los \textit{monitores}.
+concurrencia basada en memoria compartida. Dentro de este modelo se destacan dos
+mecanismos de sincronización por competencia: los \textit{semáforos} y los
+\textit{monitores}.
 \end{framed}
 
 \subsection{Semáforos}
 \label{semaforos}
 
-Los semáforos fueron el primer mecanismo de sincronización de procesos por
+Los semáforos fueron el primer mecanismo de sincronización de hilos por
 cooperación. Fueron desarollados por E. Dijkstra en 1965 como mecanismos
-eficientes y fiables para dar soporte a la cooperación de procesos en un sistema
+eficientes y fiables para dar soporte a la cooperación de hilos en un sistema
 operativo.
 
-El principio en el que se basan es cimple. Un conjunto de procesos pueden
-cooperar utilizando señales, de manera que se pueda obligar a un proceso a
+El principio en el que se basan es simple. Un conjunto de hilos pueden
+cooperar utilizando señales, de manera que se pueda obligar a un hilo a
 detener su ejecución en un punto específico hasta recibir una señal conocida.
 La señalización está a cargo de los semáforos.
 
-Para transmitir una señal sobre el semáforo $s$, el proceso $p$ debe ejecutar
+Para transmitir una señal sobre el semáforo $s$, el hilo $p$ debe ejecutar
 $signal(s)$, y para recibir una señal de $s$, debe ejecutar $wait(s)$. Si la
 señal no fue transmitida, $p$ se bloquea hasta recibir la señal.
 
@@ -269,13 +274,22 @@ Efectivamente, las operaciones sobre los semáforos son tres:
     \item \underline{$init(sem\ s,\ uint\ n)$:} inicializa al semáforo $s$ con
     un entero positivo $n$.
     \item \underline{$wait(sem\ s)$:} decrementa el valor del semáforo. Si se
-    hace negativo, el proceso que realiza la llamada se bloquea.
+    hace negativo, el hilo que realiza la llamada se bloquea. También se la
+    llama \textit{acquire}.
     \item \underline{$signal(sem\ s)$:} incrementa el valor del semáforo. Si
-    había un proceso bloqueado por una llamada a $wait(s)$, se desbloquea.
+    había un hilo bloqueado por una llamada a $wait(s)$, se desbloquea. También
+    se la llama \textit{release}.
 \end{itemize}
 
-Las llamadas a $signal(s)$ y $wait(s)$ deben ser atómicas para asegurar la
+Las llamadas a $signal(s)$ y $wait(s)$ son atómicas para asegurar la
 modificación del contador del semáforo en eclusión mutua.
+
+Los hilos que esperan una señal luego de bloquearse por una llamada a
+$wait(s)$ deben hacerlo en una cola de espera. Esta cola implementa una política
+que decide cuál hilo bloqueado se libera ante la llegada de una señal. El
+caso más típico es FIFO, pero se puede implementar otro. Sea cual fuera la
+política implementada, se debe asegurar que ningún hilo bloqueado sufrirá
+inanición por ella.
 
 Los semáforos descriptos hasta este punto son de tipo \textit{semáforo
 general}.
@@ -284,41 +298,33 @@ Existe una versión más reducida que sólo puede adquirir valores $0$ y $1$ lla
 simple que los generales y se demuestra que tienen la misma potencia de
 expresividad. \cite{SistOpStallings}
 
-Los procesos que esperan una señal luego de bloquearse por una llamada a
-$wait(s)$ deben hacerlo en una cola de espera. Esta cola implementa una política
-que decide cuál proceso bloqueado se libera ante la llegada de una señal. El
-caso más equitativo es FIFO, pero se puede implementar otro. Sea cual fuera la
-política implementada, se debe asegurar que ningún proceso bloqueado sufrirá
-inanición por ella.
-
 \subsection{Monitores}
 \label{monitores}
 
 Los semáforos son herramientas simples y potentes para la gestión de la
 concurrencia. Permiten gestionar la ejecución en exclusión mutua y coordinar
-procesos. El problema de los semáforos radica en que las operaciones signal(s)
-y wait(s) están distribuidas por el código de todos los procesos que lo usan,
+hilos. El problema de los semáforos radica en que las operaciones signal(s)
+y wait(s) están distribuidas por el código de todos los hilos que lo usan,
 con lo que resulta muy difícil entender y predecir el efecto de una operación
-sobre todos los procesos que dependen del mismo semáforo.
+sobre todos los hilos que dependen del mismo semáforo.
 
 Para solucionar este problema, C. Hoare definió el concepto de monitor en su
 artículo “Monitors: An Operating System Structuring Concept.” en 1974.
 
 Los monitores, al igual que los semáforos, son herramientas de gestión de la
-concurrencia entre procesos. Los procesos los usan para asegurar el acceso en
+concurrencia entre hilos. Los hilos los usan para asegurar el acceso en
 exclusión mutua a recursos y para sincronizar y comunicarse con otros
-procesos.\\
+hilos.\\
 El propósito de un monitor de concurrencia es centralizar la gestión de los
 recursos compartidos en una sección del código del programa. De esta manera, la
-responsabilidad de sincronizar a los procesos para evitar problemas de
-concurrencia es enteramente del monitor y no de cada proceso que quiera acceder
-a un recurso.
+responsabilidad de sincronizar a los hilos para evitar problemas de concurrencia
+es enteramente del monitor y no de cada hilo que quiera acceder a un recurso.
 
 Un monitor consiste en un grupo de datos y un conjunto de rutinas exportadas
 (llamadas \textit{rutinas de entrada}). Estas rutinas realizan operaciones sobre
 los datos. Los datos del monitor representan recursos compartidos para múltiples
-procesos (ya sean de software o de hardware) y pueden ser modificados
-únicamente dentro de las rutinas del monitor.
+hilos (ya sean de software o de hardware) y pueden ser modificados únicamente
+dentro de las rutinas del monitor.
 
 La forma que tiene un monitor de gestionar concurrencia es:
 \begin{itemize}
@@ -327,17 +333,18 @@ La forma que tiene un monitor de gestionar concurrencia es:
 \end{itemize}
 
 Para asegurar la ejecución en exclusión mutua, sólo se permite que un único
-proceso pueda ejecutar una rutina del monitor a la vez. Este proceso recibe el
-nombre de \textit{proceso activo}. El proceso activo bloquea la entrada al
+hilo pueda ejecutar una rutina del monitor a la vez. Este hilo recibe el
+nombre de \textit{hilo activo}. El hilo activo bloquea la entrada al
 monitor cuando ejecuta una rutina y la desbloquea cuando cede
-\textit{voluntariamente} el control del monitor. Si otro proceso llama a una
+\textit{voluntariamente} el control del monitor. Si otro hilo llama a una
 rutina de entrada mientras el monitor está bloqueado, se bloquea en una cola de
 entrada al monitor hasta que este pase a estado desbloqueado.
 
 \subsubsection{Sincronización Explícita}
+\label{monitor_sincronizacion_explicita}
 
 En muchas ocasiones resulta necesario no sólo garantizar la exclusión mutua
-dentro del monitor sino sincronizar procesos dentro de él para la correcta
+dentro del monitor sino sincronizar hilos dentro de él para la correcta
 gestión de los recursos compartidos (cola de cortesía). Para esto el monitor
 representa los recursos con variables de condición (o colas de eventos)
 
@@ -345,25 +352,25 @@ representa los recursos con variables de condición (o colas de eventos)
 \paragraph{Variables de condición:} Son variables especiales, sobre las que se
 pueden realizar dos acciones:
 \begin{itemize}
-    \item delay: Suspende al proceso que la llama, a la espera de una señal.
-    \item signal: Levanta el estado de suspensión de un proceso suspendido por
-    una llamada a \textit{delay()} sobre ella. Si no hay ningún proceso
+    \item delay: Suspende al hilo que la llama, a la espera de una señal.
+    \item signal: Levanta el estado de suspensión de un hilo suspendido por
+    una llamada a \textit{delay()} sobre ella. Si no hay ningún hilo
     suspendido no tiene efecto.
 \end{itemize}
-Si existe más de un proceso suspendido en una
-variable de condición cuando otro hace una llamada a \textit{signal()}, el
-proceso a despertar será elegido aplicando una política determinada. Esta
-política puede ser FIFO, por prioridades por proceso, etc.
+Si existe más de un hilo suspendido en una variable de condición cuando otro
+hace una llamada a \textit{signal()}, el hilo a despertar será elegido
+aplicando una política determinada. Esta política puede ser FIFO, por
+prioridades por hilo, etc.
 \end{framed}
 
-El proceso activo del monitor puede suspenderse a sí mismo temporalmente bajo
+El hilo activo del monitor puede suspenderse a sí mismo temporalmente bajo
 una condición x ejecutando \textit{delay(x)}. Al suspenderse deja de ser el
-proceso activo y se sitúa al final de la cola de la condición x, a la espera de
+hilo activo y se sitúa al final de la cola de la condición x, a la espera de
 volver a entrar al monitor cuando la condición cambie. Previo a esto debe
 desbloquear la entrada al monitor para no generar un interbloqueo con los demás
-procesos que intentan acceder. Por otro lado, otro proceso que sea el activo
+hilos que intentan acceder. Por otro lado, otro hilo que sea el activo
 puede hacer una llamada a \textit{signal(x)} si detecta un cambio en \textit{x},
-desbloqueando un proceso suspendido en su cola de condición asociada.
+desbloqueando un hilo suspendido en su cola de condición asociada.
 
 Es común asociar una variable de condición a una proposición lógica sobre el
 estado de un recurso gestionado por el monitor, por ejemplo “El buffer A no
@@ -378,11 +385,11 @@ señalización automática. Este tipo de monitor elimina las variables de
 condición modificando la directiva \textit{wait} para que reciba una proposición
 lógica.
 
-Un proceso que llame \textit{wait(prop)} se mantiene bloqueado mientras la
+Un hilo que llame \textit{wait(prop)} se mantiene bloqueado mientras la
 proposición \textit{prop} sea falsa. Cuando \textit{prop} cambie a ser
-verdadera, los procesos que estén bloqueados se desbloquean automáticamente.
+verdadera, los hilos que estén bloqueados se desbloquean automáticamente.
 Un inconveniente con este mecanismo es que su implementación suele llevar a la
-señalización repetida de muchos procesos, con los consecuentes cambios de contexto.
+señalización repetida de muchos hilos, con los consecuentes cambios de contexto.
 
 A los efectos de este proyecto integrador, es de mayor interés el monitor de
 sincronización explícita. Por esto, los siguientes apartados al respecto son
@@ -412,7 +419,7 @@ concurrencia:
   \label{fig:monitor01}
 \end{figure}
 
-Aunque un proceso puede entrar al monitor llamando a cualquiera de sus
+Aunque un hilo puede entrar al monitor llamando a cualquiera de sus
 procedimientos expuestos, y puesto que se debe asegurar la ejecución en
 exclusión mutua se puede considerar que existe un único punto de entrada al
 monitor. De ahí que existe una única cola de entrada.
@@ -423,7 +430,7 @@ ejecución. En su lugar, es ejecutado por los hilos de los procesos que llaman a
 alguna de sus rutinas.
 
 El estado del monitor, incluyendo si está o no bloqueado determina si un
-proceso que intenta ejecutar una rutina de entrada puede continuar o si se bloquea.
+hilo que intenta ejecutar una rutina de entrada puede continuar o si se bloquea.
 
 Se puede representar el funcionamiento de un monitor por dos máquinas de
 estado. La primera indica si el monitor está bloqueado o desbloqueado. La
@@ -431,8 +438,8 @@ segunda representa el estado de las colas del monitor.
 \begin{itemize}
     \item Estados del Primer Autómata:
     \begin{itemize}
-        \item Bloqueado: Un proceso está ejecutando una rutina del monitor
-        \item Desbloqueado: No hay proceso activo en el monitor
+        \item Bloqueado: Un hilo está ejecutando una rutina del monitor
+        \item Desbloqueado: No hay hilo activo en el monitor
     \end{itemize}
     \item Estados del Segundo Autómata: Las colas que influyen en el estado del
     monitor son las internas a este (las de condición, la de espera y la de
@@ -466,19 +473,19 @@ puede obtener un único autómata a partir de estos dos, pero es de la opinión 
 que esto resultaría en una explicación más confusa.
 \end{framed}
 
-\subsubsection{Políticas de Desbloqueo de Procesos}
+\subsubsection{Políticas de Desbloqueo de Hilos}
 \label{politica_monitor}
-El desbloqueo de un proceso suspendido en la cola de condición x debe ser hecho
-por el proceso que produjo el cambio sobre esta condición. La siguiente acción a
+El desbloqueo de un hilo suspendido en la cola de condición x debe ser hecho
+por el hilo que produjo el cambio sobre esta condición. La siguiente acción a
 realizar luego del desbloqueo dependerá del tipo de monitor en cuestión.
 Se puede generar una clasificación de monitores basándose en el comportamiento
-luego del desbloqueo de un proceso. A continuación se presentan los tipos de
+luego del desbloqueo de un hilo. A continuación se presentan los tipos de
 monitores introducidos en \cite{PalmaConcurrente}
 
 \begin{framed}
-\textbf{Nota:} Para todos los siguientes casos, se considera que el proceso
-\textit{A} desbloquea al proceso \textit{B} ejecutando \textit{signal(x)},
-condición sobre la que \textit{B} se encuentra bloqueado inicialmente.Por lo
+\textbf{Nota:} Para todos los siguientes casos, se considera que el hilo
+\textit{A} desbloquea al hilo \textit{B} ejecutando \textit{signal(x)},
+condición sobre la que \textit{B} se encuentra bloqueado inicialmente. Por lo
 tanto, al comenzar cada párrafo, A está bloqueado en la cola de cortesía y B en
 la de espera, a menos que se indique lo contrario.
 \end{framed}
@@ -513,12 +520,12 @@ Esta política soluciona el problema de inequidad de \textit{Desbloquear y
 Esperar}.\\
 Se desbloquea a \textit{B}, pero \textit{A} se suspende en la cola de cortesía.
 De esta manera, el desbloqueo de \textit{A} tendrá prioridad sobre cualquier
-proceso que intente entrar al monitor.
+hilo que intente entrar al monitor.
 
 \paragraph{Clasificación Generalizada de Políticas de Desbloqueo:}
 En \cite{MonitorClassification} el autor hace un análisis más exhaustivo de las
-posibilidades existentes para diseñar una política de desbloqueo de procesos.
-Dadas las tres colas de donde se puede elegir un proceso para desbloquear se
+posibilidades existentes para diseñar una política de desbloqueo de hilos.
+Dadas las tres colas de donde se puede elegir un hilo para desbloquear se
 plantea una prioridad para cada una, resultando en:
 \begin{itemize}
     \item EP: prioridad de la cola de entrada (entry queue priority)
@@ -556,26 +563,26 @@ Monitors"]
 \end{table}
 
 Las propuestas 7 a 13 son rechazadas porque si la prioridad de entrada es mayor
-que cualquiera de las otras dos, ante un flujo constante de procesos de
+que cualquiera de las otras dos, ante un flujo constante de hilos de
 entrada, habría al menos una cola que nunca sería atendida, lo que lleva a
-posible inanición de los procesos que esperan en ella.
+posible inanición de los hilos que esperan en ella.
 
 \subsubsection{Uso de un Monitor}
-En el diagrama \ref{fig:actividad_proceso_monitor} se describen las actividades
-de un proceso que accede a un monitor.
+En el diagrama \ref{fig:actividad_hilo_monitor} se describen las actividades
+de un hilo que accede a un monitor.
 
 \begin{figure}[H]
   \centering
   \makebox[\textwidth][c]{
     \includegraphics[width=180mm]{Actividad_Proceso_Monitor}
   }
-  \caption{Diagrama de actividades UML de un proceso ejecutándo una rutina de
+  \caption{Diagrama de actividades UML de un hilo ejecutándo una rutina de
   un monitor}
-  \label{fig:actividad_proceso_monitor}
+  \label{fig:actividad_hilo_monitor}
 \end{figure}
 
-El diagrama de la figura \ref{fig:actividad_proceso_monitor} sugiere que un
-proceso puede optar por uno de dos caminos al ejecutar una rutina del monitor:
+El diagrama de la figura \ref{fig:actividad_hilo_monitor} sugiere que un
+hilo puede optar por uno de dos caminos al ejecutar una rutina del monitor:
 tomar o devolver un recurso.
 
 Existe otra opción que es tomar y devolver un recurso en la misma rutina. Este
@@ -589,10 +596,10 @@ las funciones de sincronización están confinadas dentro del monitor. De este
 modo, es más sencillo verificar que la sincronización se ha realizado
 correctamente y detectar los fallos. Es más, una vez que un monitor está
 correctamente programado, el acceso al recurso protegido es correcto para todos
-los procesos. Con los semáforos, en cambio, el acceso al recurso es correcto
-sólo si \textbf{todos los procesos} que acceden al recurso están correctamente
+los hilos. Con los semáforos, en cambio, el acceso al recurso es correcto
+sólo si \textbf{todos los hilos} que acceden al recurso están correctamente
 programados.\cite{SistOpStallings} Por otro lado, las políticas de desbloqueo
-permiten especificar prioridades de ejecución para los procesos, priorizando ya
+permiten especificar prioridades de ejecución para los hilos, priorizando ya
 sea por orden de llegada o por algún otro criterio. Si a su vez, se construye
 el monitor de forma modular para cambiar la política de manera simple, se puede
 alterar la planificación de los hilos de acuerdo a cada caso, según sea
