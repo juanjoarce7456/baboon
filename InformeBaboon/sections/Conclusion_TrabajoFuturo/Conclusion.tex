@@ -1,0 +1,47 @@
+\section{Conclusión}
+
+Como se planteó inicialmente en los objetivos, se logró construir un framework
+para el desarrollo de sistemas reactivos capaz de manejar la concurrencia de
+forma centralizada ejecutando una red de Petri. El software desarrollado por un
+usuario se ejecuta concurrentemente según el modelo lógico provisto (RdP),
+gestionando la concurrencia de manera transparente.
+
+El desarrollo del monitor de concurrencia para redes de Petri (JPCM) cumple con
+el objetivo de ejecutar RdP utilizando la ecuación generalizada presentada por
+\cite{Ecuacion_generalizada_LAC}.
+
+Las interfaces expuestas por el framework permiten que el código del usuario
+explote todas las características de la orientación a objetos (no así el
+desarrollado en \cite{chimp}) y abstraen al usuario de la RdP gracias a la capa
+intermedia provista por los eventos de acción (ver sección
+\ref{sec:diseno_topicos}). Además, se implementó la inversión de control del
+framework mediante la utilización de prácticas de Reflection y de Aspect
+Oriented Programming.
+
+Por otro lado, se cumplieron las expectativas de complejidad de uso de Baboon
+Framework. El usuario debe aprender 10 conceptos para poder utilizarlo:
+\begin{enumerate}
+  \item HappeningController
+  \item TaskController
+  \item GuardProvider
+  \item ComplexSecuentialTask
+  \item Políticas de Prioridad de Transición
+  \item Tópicos
+  \item Interfaz BaboonApplication
+  \item Interfaz de suscripción de acciones simples.
+  \item Interfaz de creación de tareas complejas.
+  \item Interfaz para agregar una tarea a una tarea compleja.
+\end{enumerate}
+De esta manera, se cumple con el límite planteado inicialmente en los
+requerimientos.
+
+Los requerimientos de testing, disponibilidad de código y documentación también
+fueron resueltos. El código del framework se encuentra disponible
+públicamente en repositorios en la nube. Dentro de dichos repositorios se
+encuentra también la documentación en formato Javadoc y los casos de test
+automatizados para las funcionalidades implementadas.
+
+La utilización de Baboon Framework en conjunto con el proceso de diseño de
+sistemas reactivos expuesto en \cite{Bentivegna-Ludemann} permite el diseño y
+desarrollo de sistemas reactivos confiables, mantenibles y portables a
+múltiples plataformas (por estar desarrollados en lenguaje Java).

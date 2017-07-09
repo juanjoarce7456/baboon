@@ -1,0 +1,73 @@
+\section{Introducción}
+En este capítulo se describe el proceso de investigación realizado con el
+objetivo de determinar la herramienta de software a desarrollar en este
+Proyecto Integrador.
+
+\section{Objetivos de la Investigación}
+Con la intención de definir la orientación del proyecto, se realizó
+una primera definición aproximada del objetivo principal:\\
+\emph{``El sistema a desarrollar es una herramienta para facilitar a
+desarrolladores de software la utilización de una Red de Petri como motor lógico de su
+producto.''}
+
+En este sentido, se realizó un listado de herramientas de interés que pudieran
+cumplir con dicho objetivo:
+\begin{itemize}
+  \item Generación de código
+  \item APIs
+  \item Frameworks
+\end{itemize}
+
+A su vez, se definieron objetivos de investigación para determinar la
+factibilidad de desarrollo, idoneidad para cumplir el objetivo, mantenibilidad
+y escalabilidad de dichas herramientas:
+\begin{itemize}
+    \item Determinar la posibilidad de utilizar un monitor de Redes de Petri
+    como motor lógico de un sistema desarrollado con la herramienta.
+    \item Determinar el grado de acoplamiento  entre el código desarrollado
+    utilizando la herramienta y la Red de Petri.
+    \item Determinar la posibilidad y facilidad de aplicar patrones de
+    diseño en los sistemas desarrollados utilizando la herramienta.
+    \item Determinar el grado de escalabilidad de los sistemas desarrollados
+    utilizando la herramienta.
+    \item Determinar la mantenibilidad del código desarrollado
+    utilizando la herramienta.
+    \item En caso de ser posible, analizar experiencias previas de sistemas
+    similares utilizando dichas herramientas.
+\end{itemize}
+
+\section{Desarrollo de la Investigación}
+\label{sec:investigacion_desarrollo}
+La investigación se basó en el análisis de información acerca de los tres tipos
+de herramientas consideradas. Esta información se expone de forma resumida en
+el capítulo~\ref{generacion_frameworks_apis}. Además se estudiaron las
+experiencias previas desarrolladas en \cite{codegen}, \cite{chimp} y
+\cite{Bentivegna-Ludemann}:
+\begin{itemize}
+  \item En \cite{codegen} se propone una solución basada en la generación de
+  código. Tras analizar los ejemplos de uso de la herramienta se pudieron
+  detectar desventajas importantes. En primer lugar, el código generado 
+  utiliza las interfaces del framework directamente, provocando un alto grado de
+  acoplamiento entre el software del usuario y la Red de Petri. A su vez, los
+  sistemas desarrollados con esta herramienta tienen reducida escalabilidad y
+  mantenibilidad.
+  \item En \cite{chimp} se propone una solución basada en el desarrollo de un
+  framework como herramienta superadora a la generación de código. Los ejemplos
+  de uso muestran un claro avance respecto a \cite{codegen}. Los
+  sistemas desarrollados son mantenibles y la herramienta permite la
+  reutilización de patrones de diseño en las aplicaciónes.
+  Sin embargo, la implementación presenta problemas de acoplamiento a la Red de
+  Petri ya que carece de una capa de abstracción entre eventos físicos y eventos
+  lógicos (ver sección~\ref{sec:sincronizacion_RdP_por_eventos}).
+  \item En \cite{Bentivegna-Ludemann} se desarrolla un sistema dirigido por RdP
+  y se utilizan las interfaces del monitor de Petri como una API o
+  biblioteca de funciones. Si bien se logra obtener un sistema funcional, en la
+  conclusión del proyecto sus autores expresan que es necesario un framework
+  para desacoplar el código de la red.
+\end{itemize}
+
+\section{Conclusión de la Investigación}
+Tras lo expuesto en la sección~\ref{sec:investigacion_desarrollo} se determinó
+que la herramienta a desarrollar debe tener la forma de un Framework, que
+funcione como una capa de abstracción entre las acciones del código del software
+de usuario y las transiciones de la red de Petri.

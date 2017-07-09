@@ -18,6 +18,7 @@
 \usepackage{blindtext}
 \usepackage{scrextend}
 \usepackage{enumitem}
+\usepackage{subcaption}
 \addtokomafont{labelinglabel}{\sffamily}
 \hypersetup{
      colorlinks=true,
@@ -59,17 +60,23 @@
     \listoftables
     
     \setcounter{definitionsCounter}{0}
-    
-    \part{Marco Teórico}
+    \part{Introducción y Objetivos}
         \chapter{Introducción}
-            \include{./sections/MarcoTeorico/Introduccion}
+        \include{./sections/Introduccion_Objetivos/Introduccion}
+        \chapter{Objetivos}
+        \include{./sections/Introduccion_Objetivos/Objetivos}
+    \part{Marco Teórico}
+        \label{cap:marco_teorico}
+        \chapter{Introducción al Marco Teórico}
+        \include{./sections/MarcoTeorico/Introduccion}
         \chapter{Modelos}
             \include{./sections/MarcoTeorico/RedesDePetri}
         \chapter{Paradigmas de Programación}
             \include{./sections/MarcoTeorico/DataflowReactive}
             \include{./sections/MarcoTeorico/AspectOrientedProgramming}
             \include{./sections/MarcoTeorico/ObjectOrientedProgramming}
-        \chapter{Frameworks y Generación de Código}
+        \chapter{Generación de Código Frameworks y APIs}
+            \label{generacion_frameworks_apis}
             \include{./sections/MarcoTeorico/GeneracionDeCodigo}
             \include{./sections/MarcoTeorico/Frameworks}
         \chapter{Concurrencia}
@@ -77,6 +84,9 @@
 
     \part{Desarrollo}
         \chapter{Investigación}
+            \label{cap:investigacion}
+            \include{./sections/Desarrollo/Investigacion}
+        \chapter{Requerimientos}
             \include{./sections/Desarrollo/Requerimientos}
         \chapter{Monitor de Concurrencia con Redes de Petri}
         	\label{cap:petri_monitor}
@@ -84,17 +94,22 @@
             \include{./sections/Desarrollo/java_petri_concurrency_monitor/DisenoYFuncionamiento}
             \include{./sections/Desarrollo/java_petri_concurrency_monitor/ManualDeUso}
 
-        \chapter{Diseño de \nombreFramework  Framework}
+        \chapter{Diseño de \nombreFramework \ Framework}
         	\label{cap:diseno_framework}
+        	\include{./sections/baboon_framework/diseno/Introduccion}
             \include{./sections/baboon_framework/diseno/Eventos}
             \include{./sections/baboon_framework/diseno/ModosDeSincronizacion}
             \include{./sections/baboon_framework/diseno/TasksHappenings}
             \include{./sections/baboon_framework/diseno/GuardProviders}
             \include{./sections/baboon_framework/diseno/RelacionEventosLogicosEventosDeAccionControladoresDeAccion}
-        \chapter{Implementación de \nombreFramework  Framework}
-        	\include{./sections/baboon_framework/implementacion/DetallesImplementacion}
-       	\chapter{Ejemplo de Uso de \nombreFramework  Framework}
+        \chapter{Implementación de \nombreFramework \ Framework}
+            \include{./sections/baboon_framework/implementacion/DetallesImplementacion}
+       	\chapter{Ejemplo de Uso de \nombreFramework \ Framework}
         	\include{./sections/baboon_framework/ejemplos_de_uso/LavadoraBotellas}
+        \chapter{Conclusión}
+            \include{./sections/Conclusion_TrabajoFuturo/Conclusion}
+        \chapter{Trabajo Futuro}
+            \include{./sections/Conclusion_TrabajoFuturo/TrabajoFuturo}
     \bibliography{./bibliografia}
 	\bibliographystyle{alpha}
 \end{document}

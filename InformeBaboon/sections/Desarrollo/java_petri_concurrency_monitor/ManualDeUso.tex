@@ -9,21 +9,21 @@ Para más información sobre el estándar PNML, el sitio online de referencia de
 lenguaje es \cite{PnmlSite}.
 
 \begin{framed}
-\paragraph{Nota:}
-Como TINA no tiene soporte para arcos de reset, el usuario debe especificar
-este tipo de conexión modificando el archivo PNML con un editor de texto.
-Se recomienda utilizar otro tipo de arco en TINA y luego cambiar el valor del
-campo \textit{``type''} del arco correspondiente en el archivo PNML.
-
-Ej:
-\begin{figure}[H]
-\centering
-\begin{minted}{xml}
-<arc id="e-1" source="p-1" target="t-1">
-  <type value="reset"/>
-</arc>
-\end{minted}
-\end{figure}
+    \paragraph{Nota:}
+    Como TINA no tiene soporte para arcos de reset, el usuario debe especificar
+    este tipo de conexión modificando el archivo PNML con un editor de texto.
+    Se recomienda utilizar otro tipo de arco en TINA y luego cambiar el valor del
+    campo \textit{``type''} del arco correspondiente en el archivo PNML.
+    
+    Ej:
+    \begin{figure}[H]
+    \centering
+    \begin{minted}{xml}
+    <arc id="e-1" source="p-1" target="t-1">
+      <type value="reset"/>
+    </arc>
+    \end{minted}
+    \end{figure}
 \end{framed}
 
 \subsection{Etiquetas}
@@ -169,7 +169,7 @@ biblioteca RxJava. Más información en \cite{RxJava} y \cite{RxJavaJavadoc}
 \end{framed}
 
 \subsection{Guardas}
-
+\label{sec:guardas_monitor}
 Las guardas son variables booleanas asociadas a una o más transiciones (ver
 sección \ref{guardas}).
 
@@ -330,7 +330,7 @@ grave, que lleva a que se lance un error
 \end{framed}
 
 \subsection{Política de Transiciones}
-
+\label{sec:politica_transiciones}
 Cuando cambia una condición de sensibilización (marcado de la red o valor de
 una guarda), algunas transiciones pueden sensibilizarse. Si esto sucede, se
 deben disparar las transiciones automáticas sensibilizadas y se debe señalizar a

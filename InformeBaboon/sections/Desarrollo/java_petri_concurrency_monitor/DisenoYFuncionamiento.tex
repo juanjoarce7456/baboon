@@ -28,7 +28,7 @@ Las principales partes que componen a JPCM son:
 \begin{itemize}
   \item \underline{PetriNet:} contiene la información de la RdP a utilizar y la
   lógica de la ejecución
-  \item \unverline{PnmlParser + PetriNetFactory:} su responsabilidad es
+  \item \underline{PnmlParser + PetriNetFactory:} su responsabilidad es
   convertir la información del archivo que describe a la RdP en un formato
   ejecutable para JPCM.
   \item \underline{PetriMonitor:} es el monitor en sí mismo. Expone las
@@ -187,7 +187,7 @@ JPCM son:
   \textit{PnmlParser}
   \item Utilizar el objeto \textit{PetriNetFactory} para generar una instancia
   de \textit{PetriNet}
-  \tem Instanciar una política (clases \textit{FirstInLinePolicy} o
+  \item Instanciar una política (clases \textit{FirstInLinePolicy} o
   \textit{RandomPolicy} o alguna generada por el usuario)
   \item Instanciar la clase \textit{PetriMonitor} con el objeto
   \textit{PetriNet} y el objeto de la política
@@ -283,18 +283,18 @@ realizó el disparo debe:
   transición sea informada).
   \item Revisar si existen nuevas transiciones sensibilizadas producto del
   último disparo
-  \begin{itemize}
-    \item Si no existen, libera el lock de entrada y abandona el monitor
-    \item Si existen:
-    \begin{itemize}
-        \item Consulta a la política de transiciones cuál debe ser la próxima a ser disparada
-        \item De ser automática el disparo lo hace el mismo hilo, por lo que
-        itera para realizar un nuevo disparo sobre la transición automática.
-        \item De ser disparada debe señalizar al hilo que esté esperando en su
-        cola de condición y abandonar el monitor inmediatamente sin liberar el
-        lock de entrada.
-    \end{itemize}
-  \end{itemize}
+      \begin{itemize}
+        \item Si no existen, libera el lock de entrada y abandona el monitor
+        \item Si existen:
+            \begin{itemize}
+                \item Consulta a la política de transiciones cuál debe ser la próxima a ser disparada
+                \item De ser automática el disparo lo hace el mismo hilo, por lo que
+                itera para realizar un nuevo disparo sobre la transición automática.
+                \item De ser disparada debe señalizar al hilo que esté esperando en su
+                cola de condición y abandonar el monitor inmediatamente sin liberar el
+                lock de entrada.
+            \end{itemize}
+      \end{itemize}
 \end{itemize}
 
 En el siguiente diagrama de secuencias se observa en detalle el flujo de un
@@ -336,31 +336,31 @@ disparo, la llamada a \mint{java}|PetriNet.fire(Transition t)| devuelve un error
 En este caso, el procedimiento a seguir es el siguiente:
 \begin{itemize}
   \item Si no hay hilo bloqueado por t:
-  \begin{itemize}
-    \item Liberar el lock de entrada
-    \item Esperar temporalmente hasta el \textit{instante menor de disparo}
-    \item Tomar el lock de entrada con alta prioridad {\color{red}(ver
-    inversión de prioridades)}
-    \item Señalizar que ya se suspendió temporalmente para evitar futuras
-    inversiones de prioridad
-    \item Iterar sobre el disparo para reintentarlo
-  \end{itemize}
+      \begin{itemize}
+        \item Liberar el lock de entrada
+        \item Esperar temporalmente hasta el \textit{instante menor de disparo}
+        \item Tomar el lock de entrada con alta prioridad (ver
+        sección~\ref{sec:inversion_prioridad})
+        \item Señalizar que ya se suspendió temporalmente para evitar futuras
+        inversiones de prioridad
+        \item Iterar sobre el disparo para reintentarlo
+      \end{itemize}
   \item Si existe un hilo bloqueado por t:
-  \begin{itemize}
-    \item Si el disparo es no-perenne
-    \begin{itemize}
-      \item Liberar el lock de entrada
-      \item Abandonar el monitor
-    \end{itemize}
-    \item Si el disparo es perenne
-    \begin{itemize}
-      \item Liberar el lock de entrada
-      \item Bloquearse en la cola de condición de t. Si ya se suspendió
-      temporalmente por t antes, lo hace con alta prioridad {\color{red}(ver
-      inversión de prioridades)}
-      \item Cuando se desbloquea itera para reintentar el disparo
-    \end{itemize}
-  \end{itemize}
+      \begin{itemize}
+        \item Si el disparo es no-perenne
+                \begin{itemize}
+                  \item Liberar el lock de entrada
+                  \item Abandonar el monitor
+                \end{itemize}
+        \item Si el disparo es perenne
+                \begin{itemize}
+                  \item Liberar el lock de entrada
+                  \item Bloquearse en la cola de condición de t. Si ya se suspendió
+                  temporalmente por t antes, lo hace con alta prioridad (ver
+                  sección~\ref{sec:inversion_prioridad})
+                  \item Cuando se desbloquea itera para reintentar el disparo
+                \end{itemize}
+      \end{itemize}
 \end{itemize}
 En el siguiente diagrama de secuencias se detalla el flujo de este caso de resultado de disparo.
 
@@ -373,7 +373,7 @@ En el siguiente diagrama de secuencias se detalla el flujo de este caso de resul
 \end{figure}
 
 \subsection{Problema de la Inversión de Prioridades}
-
+\label{sec:inversion_prioridad}
 Durante el desarrollo de JPCM se detectaron dos casos donde se produce una
 inversión de prioridades entre los hilos gestionados. A continuación se
 analizan estos casos.

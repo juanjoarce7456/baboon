@@ -1,0 +1,57 @@
+\section{Introducción}
+En la actualidad, existe un crecimiento en la complejidad de los sistemas
+debido a un constante aumento en la interacción entre los procesos y su
+entorno. Dichos sistemas deben responder a eventos caracterizados por el
+asincronismo natural que existe entre su aparición y la ejecución del sistema
+al que arriban. Estos eventos desencadenan cambios en el estado global de los
+sistemas que acarrean problemas de concurrencia.
+El manejo del asincronismo y la concurrencia de estos sistemas sin las
+herramientas adecuadas es una tarea por demás compleja, propensa a la
+generación de errores de ejecución si no se realiza con especial precaución.
+En general, los sistemas más interactivos son: los sistemas embebidos, las
+interfaces gráficas, los servicios en la nube y los dispositivos IoT. Todos
+estos sistemas entran en la clasificación de aplicaciones dirigidas por eventos
+o event-driven applications.\cite{chimp} Los mismos se presentan en
+cantidades masivas y crecientes en la actualidad.
+Este proyecto integrador pretende diseñar e implementar un framework para el
+desarrollo de aplicaciones, utilizando redes de Petri como mecanismo de
+modelado y ejecución para procesar eventos y representar los estados globales y
+locales del sistema. Es decir, se pretende utilizar una Red de Petri como
+modelo de la lógica del sistema y de sus interacciones con el medio.
+
+En el marco del Laboratorio de Arquitecturas de Computadoras se han realizado
+numerosos proyectos siguiendo esta línea de trabajo. Se destacan:
+“Implementación de un sistema multicore heterogéneo embebido con procesador de
+Petri sobre FPGA” \cite{Gallia-Pereyra}, “Desarrollo de un IP core con
+procesamiento de Redes de Petri Temporales para sistemas multicore en FPGA”
+\cite{Nonino-Pisetta-Micolini}, “Reducción de recursos en un procesador de redes
+de Petri implementado en un IP Core” \cite{Birocco-Arlettaz-Micolini},
+“Modularización del Procesador de Petri y Optimización para Sistemas Embebidos”
+\cite{Daniele} y “Estudio e Implementación de un Caso Testigo para el
+Desarrollo de Sistemas Embebidos, Críticos y Reactivos” \cite{Bentivegna-Ludemann}.
+Por otro lado y dentro del mismo marco, dos trabajos sentaron las bases de este
+proyecto integrador. En primer lugar “Generación de Código de Sistemas Reales,
+Paralelos y Concurrentes a partir de Redes de Petri Orientadas a Procesos”
+\cite{codegen} propone un esquema básico de comunicación entre el software y la
+red de Petri mediante colas de entrada, de salida y etiquetas.También permite
+generar código estático a partir de una red de Petri y una configuración. En
+segundo lugar, “Desarrollo de un Framework para Aplicar el Paradigma de
+Programación Reactiva Utilizando Redes de Petri como Procesador de
+Eventos”\cite{chimp} donde se introduce la idea de un framework para el
+desarrollo de sistemas reactivos dirigido por RdP.
+El objetivo de este trabajo es diseñar e implementar un nuevo framework. Se
+tienen en cuenta ciertos aspectos de diseño desarrollados en \cite{chimp},
+pero a su vez se realiza un amplio trabajo de rediseño. Los principales puntos
+a destacar del nuevo diseño son: el desacoplamiento entre la red de petri y la
+aplicación de usuario, la modificación del modo de sincronización utilizado
+para las comunicaciones con la RdP, el énfasis en mantener la inversión de
+control, la no imposición de restricciones al usuario desarrollador sobre las
+herramientas propias del lenguaje, la expansión de funcionalidades del monitor
+de RdP para adoptar la ecuación de estado generalizada descrita en
+\cite{Ecuacion_generalizada_LAC} y la simplificación de las interfaces de
+programación ofrecidas al usuario desarrollador. Debido a los cambios en el
+diseño mencionados se realiza una re-implementación total del código del
+framework. A lo largo de este informe se presenta el proceso de diseño e
+implementación del framework en su totalidad, se brindan las bases teóricas
+necesarias para la comprensión del mismo y se ejemplifica con casos de uso en
+aquellos puntos donde los autores lo consideran necesario.

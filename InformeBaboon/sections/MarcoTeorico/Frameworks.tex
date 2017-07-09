@@ -139,43 +139,43 @@ Existen intermedios entre las formas de utilización mencionadas. Es común
 que los frameworks puedan ser usados como Black-Box la mayor parte del tiempo y
 ser extendidos cuando la ocasión lo demande.
 
-\subsection{Frameworks VS APIs}
+\section{Comparación entre Frameworks y APIs}
 
 En la tabla \ref {tab:comparacion_frameworks_apis} se observa una comparación
 entre frameworks y APIs, basándose en características relevantes para los
 autores de este proyeto integrador.
 \begin{table}
-	\renewcommand{\arraystretch}{1.5}
 	\centering
-	\begin{tabularx}{\textwidth}{ | p{2cm} | X | X | }
+	\begin{tabularx}{\textwidth}{ | p{2.5cm} | X | X | }
 	\hline
-	Categoría & Framework & API (Biblioteca) \\[10pt] \hline
-	Extensibilidad & Por parte de los desarrolladores del framework. Si es de
-	código abierto cualquiera puede extenderlo. & Por parte del fabricante de la
+	\textbf{Categoría} & \textbf{Framework} & \textbf{API (Biblioteca)} \\[10pt]
+	\hline \textbf{Extensibilidad} & Por parte de los desarrolladores del
+	framework.
+	Si es de código abierto cualquiera puede extenderlo. & Por parte del fabricante de la
 	librería.
 	O cualquiera si es de código abierto \\[10pt] \hline
-	Reusabilidad & Objetivo principal del diseño de un framework.
+	\textbf{Reusabilidad} & Objetivo principal del diseño de un framework.
 	Se aplica a nivel de arquitectura de software & Es reutilizable siempre que se
 	requiera la funcionalidad que brinda\\[10pt] \hline
-	Complejidad de Utilizar & Gran complejidad al principio, se simplifica a medida
-	que el usuario aprende el framework & Complejidad inicial menor que un
+	\textbf{Complejidad de Uso} & Gran complejidad al principio, se simplifica
+	a medida que el usuario aprende el framework & Complejidad inicial menor que un
 	framework\\[10pt] \hline 
-	Gestión del Flujo Principal & El framework toma el
+	\textbf{Gestión del Flujo Principal} & El framework toma el
 	flujo principal del software & A cargo del programador\\[10pt] \hline
-	Confiabilidad & El flujo principal está ampliamente testeado por todos los
-	usuarios del framework & No brinda ninguna garantía de flujo\\[10pt] \hline
-	Aplicación de Patrones de diseño & Usualmente un framework fuerza al usuario a
-	utilizar uno o varios patrones & No obliga al usuario a utilizar ningún patrón
+	\textbf{Confiabilidad} & El flujo principal está ampliamente testeado por todos
+	los usuarios del framework & No brinda ninguna garantía de flujo\\[10pt] \hline
+	\textbf{Aplicación de Patrones de diseño} & Usualmente un framework fuerza al
+	usuario a utilizar uno o varios patrones & No obliga al usuario a utilizar ningún patrón
 	de diseño\\[10pt] \hline 
-	Especificidad / Generalización & Son de uso específico,
+	\textbf{Especificidad / Generalización} & Son de uso específico,
 	están diseñados para resolver una familia de problemas. Por esto mantienen una
 	arquitectura & De uso general donde una funcionalidad pueda ser
 	utilizada\\[10pt] \hline 
-	Impacto en el software del usuario ante un cambio &
+	\textbf{Impacto en el software del usuario ante un cambio} &
 	Poco o nulo mientras se respete la arquitectura global & Puede dejar
 	incompatible cambiando o deprecando las funciones expuestas\\[10pt] \hline
-	Acoplamiento a un determinado lenguaje & Obliga al usuario a desarrollar en el
-	mismo lenguaje en el que está hecho el framework & No restringe a un lenguaje.
+	\textbf{Restricciones de lenguaje} & Obliga al usuario a
+	desarrollar en el mismo lenguaje en el que está hecho el framework & No restringe a un lenguaje.
 	Permite llamadas desde cualquier lenguaje mientras se respete la firma de las funciones expuestas\\[10pt] 
 	\hline
 	\end{tabularx}
