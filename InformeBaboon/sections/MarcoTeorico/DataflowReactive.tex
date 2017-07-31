@@ -20,16 +20,17 @@ la gestión de hilos. Esto es posible gracias a que cada nodo es un bloque de
 procesamiento independiente de los demás y no produce efectos colaterales
 \cite{DataflowTiagoSousa}
 
-Hay una amplia variedad de lenguajes dataflow, variando de hojas de cálculo,
-Labview, hasta Erlang. Muchos son gráficos. La programación se hace alterando
-diagramas de flujo. Una característica que tienen todos en común es que tienen
-un sistema de ejecución (runtime system).\cite{DataflowRichardHarter}
+Hay una amplia variedad de lenguajes dataflow. Se pueden mencionar
+software de hojas de cálculo, Labview y Erlang, entre otros. La programación se
+hace alterando diagramas de flujo. Una característica principal de este tipo de
+lenguajes es que contienen un sistema de ejecución (runtime
+system).\cite{DataflowRichardHarter}
 
 Los programas imperativos tradicionales están compuestos de rutinas que se
-llaman entre sí, por ejemplo, cuando una llamada hace que el llamador construya
-un paquete de datos (secuencia de llamada) y transfiere el control y el paquete
-de datos a la rutina llamada. Cuando la rutina llamada termina, contruye un
-paquete de datos para pasar de vuelta al llamador y le transfiere nuevamente el control.
+llaman entre sí. Por ejemplo, en una secuencia de llamada un llamador
+construye un paquete de datos y transfiere el control y el paquete de datos a
+una rutina llamada. Cuando la rutina llamada termina, contruye otro paquete de
+datos para pasar de vuelta al llamador y le transfiere nuevamente el control.
 
 En los programas dataflow las “rutinas” no se llaman entre sí, en su lugar son
 activadas por el sistema de ejecución cuando hay entrada para ellos. Cuando se
@@ -38,9 +39,10 @@ destino que requiere esas salidas. Cuando las “rutinas” terminan, transfiere
 control de vuelta al sistema de ejecución.
 
 Una diferencia entre la programación imperativa y dataflow es
-la semántica utilizada. Mientras la programación imperativa utiliza semántica
-LIFO, la dataflow usa semántica FIFO \cite{DataflowRichardHarter}. Eso es, un
-programa imperativo pone datos en una pila y obtiene datos desde la misma pila.
+la semántica utilizada para la transferencia de datos. Mientras la programación
+imperativa utiliza semántica LIFO, la dataflow usa semántica FIFO
+\cite{DataflowRichardHarter}. Eso es, un programa imperativo pone datos en una
+pila y obtiene datos desde la misma pila.
 En cambio en programas dataflow, cada elemento obtiene datos de una cola y pone
 datos en otras colas.
 Otra diferencia es que la conectividad de los programas procedurales está
@@ -63,8 +65,8 @@ Entre las ventajas de utilizar el paradigma dataflow se encuentran:
   \item Las redes dataflow son representaciones naturales e intuitivas para
   representar procesos.
   \item El paso de mensajes permite deshacerse de problemas asociados a memoria compartida y locks.
-  \item Los programas dataflow son más extensibles que programas tradicionales.
-  Los elementos pueden ser agrupados en elementos compuestos.
+  \item Los elementos pueden ser agrupados en elementos compuestos, mejorando
+  la escalabilidad de los sistemas.
 \end{itemize}
 
 Por otro lado, resulta poco ventajoso utilizar este paradigma por los siguientes
@@ -80,9 +82,9 @@ motivos:
   en código de manera inmediata y poco costosa.
   \item No utilizar memoria compartida tiene sus costos. Los mensajes deben ser
   copiados o deben ser inmutables.
-  \item Usar programación dataflow requiere que sea utilizada del principio. De
-  esta manera, convertir programas tradicionales en programas dataflow es
-  difícil porque la estructura es diferente.
+  \item No son compatibles con otros lenguajes de programación. De esta
+  manera, convertir programas tradicionales en programas dataflow es difícil
+  porque la estructura es diferente.
 \end{itemize}
 
 \section{Paradigma Reactivo}
@@ -109,22 +111,23 @@ a = 3
 \end{figure}
 
 En programación imperativa, terminada la ejecución de esta sección de código,
-$c$ vale $3$ y así se mantendrá indefinidamente o hasta que el programador le
-asigne un nuevo valor. En cambio en programación reactiva el valor de $c$ se
-mantiene siempre actualizado, es decir, la expresión declarada como $c$
-se vuelve a computar automáticamente ante un cambio en $a$ o en $b$, y en este
-ejemplo pasa a valer $5$. Se dice que $c$ es \textit{dependiente} de $a$ y $b$.
+la variable $c$ contiene el valor $3$ y se mantendrá de esta manera
+indefinidamente hasta que el programador le asigne un nuevo valor. En cambio en
+programación reactiva el valor de $c$ se mantiene siempre actualizado, es
+decir, la expresión declarada como $c$ se vuelve a computar automáticamente
+ante un cambio en $a$ o en $b$, y en este ejemplo pasa a valer $5$. Se dice que
+$c$ es \textit{dependiente} de $a$ y $b$.
 \cite{Bainomugisha:2013:SRP:2501654.2501666}
 
-Al igual que en el paradigma dataflow, en el paradigma reactivo son los datos
-los que fluyen por el programa en lugar del control. La diferencia radica en
-que, bajo el paradigma reactivo, las ``conexiones'' de datos pueden ser
-alteradas dinámicamente en tiempo de ejecución.
+Al igual que en el paradigma dataflow, en el paradigma reactivo tiene relevancia
+el flujo de datos, en lugar del flujo de control.
+La diferencia radica en que, bajo el paradigma reactivo, las ``conexiones'' de
+datos pueden ser alteradas dinámicamente en tiempo de ejecución.
 Además se introducen restricciones de tiempo real blando, para lo cual se
 definen dos conceptos:
 \begin{itemize}
   \item \textit{Behaviours (Comportamientos)} representan eventos de variación
-  contínua en el tiempo. El beahaviour por excelencia es el tiempo, de hecho los
+  contínua en el tiempo. El behaviour por excelencia es el tiempo, de hecho los
   lenguajes reactivos ofrecen primitivas para representar al tiempo.
   \item \textit{Events (Eventos)} representan eventos discretos. Suelen estar
   representados en forma de flujos de cambios de valores. A diferencia de los
@@ -153,11 +156,9 @@ El patrón observer se debe utilizar en alguna de las siguientes situaciones:
 \cite{Gamma:1995:DPE:186897}
 
 Analizando este patrón de diseño se encuentran similitudes con el paradigma
-reactivo.
-La programación reactiva es capaz de explicitar mayor granularidad, pudiendo
-describir flujos de datos a nivel de clases, miembros de éstas y hasta
-variables, mientras que el patrón observer lo puede hacer a nivel de clases
-únicamente.
+reactivo. Por ejemplo, el patrón observer describe flujos de datos a nivel de
+clases, mientras que el paradigma reactivo describe flujos a nivel de clases,
+miembros de clases y variables.
 
 En programación reactiva, cuando se forma una expresión dependiente de otras, se
 genera una suscripción implícita de manera automática y el modelo de ejecución
