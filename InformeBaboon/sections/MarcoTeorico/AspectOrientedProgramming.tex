@@ -19,9 +19,8 @@ pueden ser representados claramente en los paradigmas de programación orientado
 a objetos o programación procedural. \cite{AspectJInAction}
 La separación de intereses transversales se realiza añadiendo comportamientos
 adicionales al código existente, llamados advices o consejos, sin modificar el
-mismo. Para lograrlo, se especifican puntos de ejecución en donde deben
-aplicarse los advices previamente mencionados mediante la definición de
-pointcuts.
+mismo. Para lograrlo, se especifican puntos de ejecución (mediante la definición
+de pointcuts) donde se aplican los advices previamente mencionados.
 
 La programación orientada a aspectos complementa a la programación orientada a
 objetos al permitir al desarrollador modificar dinamicamente el modelo estático
@@ -65,8 +64,8 @@ medida que se va desarrollando. \cite{Introduction_To_Aspect}
   
   \item Tejido (Weaving): Proceso de aplicar aspectos a los objetos
   destinatarios para crear los nuevos objetos resultantes en los puntos de
-  unión especificados. Este proceso puede ocurrir en distintos momentos del
-  ciclo de vida del sistema:
+  unión especificados. De acuerdo al momento del ciclo de vida del sistema en
+  el cual se aplica el tejido, se realiza la siguiente clasificación:
   	\begin{itemize}
 		\item Aspectos en Tiempo de Compilación.
 		\item Aspectos en Tiempo de Carga.

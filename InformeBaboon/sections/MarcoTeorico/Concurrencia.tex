@@ -10,12 +10,12 @@ En las últimas dos décadas, la programación concurrente ganó gran interés y
 actualmente está presente en la mayoría de las aplicaciones.
 Esto se debe principalmente a algunos grandes hitos en la programación:
 \begin{itemize}
-	\item La aparición del concepto de \textit{hilo} o \textit{thread}. Permiten la
-	ejecución de programas de manera más rápida y eficiente que los programas
+	\item La generalización del concepto de \textit{hilo} o \textit{thread}.
+	Permiten la ejecución de programas de manera más rápida y eficiente que los programas
 	basados en procesos.
-	\item La aparición de lenguajes de alto nivel con soporte para
+	\item La disponibilidad de lenguajes de alto nivel con soporte para
 	programación de hilos y de procesos.
-	\item La aparición de internet, entorno donde la concurrencia se hace necesaria
+	\item Los entornos de internet, donde la concurrencia se hace necesaria
 	en todo aspecto.
 	\item El desarrollo y gran avance de hardware capaz de ejecutar múltiples hilos
 	y procesos de forma paralela. Esto permite aprovechar las ventajas de
@@ -64,13 +64,13 @@ las dificultades que genera.
 
 \subsection{Ventajas de la Programación Concurrente}
 
-Los beneficios de programar de manera concurrente pueden englobarse en tres
+Los beneficios de programar de manera concurrente se engloban en tres
 categorías:
 
 \begin{itemize}
 	\item \underline{Incremento en la velocidad de ejecución:} Cuando se ejecuta un
 	programa concurrente en un entorno multiprocesador, los distintos hilos que
-	lo forman pueden ejecutarse de manera paralela, con lo que el tiempo total de
+	lo forman se ejecutan de manera paralela, con lo que el tiempo total de
 	ejecución se reduce. Esto es especialmente ventajoso en programas de cálculo
 	numérico.
 	\item \underline{Solución de problemas inherentemente concurrentes:} Existen
@@ -98,15 +98,14 @@ ejecución del programa \cite{PalmaConcurrente}.
 Estas son:
 
 \begin{itemize}
-    \item \underline{Exclusión Mutua:} Existen recursos que no pueden ser
-    accedidos concurrentemente para evitar problemas de coherencia. Por esto se
-    debe garantizar que a lo sumo un hilo está accediendo a un recurso de este
-    tipo en un instante dado.
-    \item \underline{Condición de Sincronización:} Se pueden dar situaciones
-    donde un hilo debe esperar la ocurrencia de un evento para poder
-    continuar su flujo. Ante estos casos se debe garantizar que el hilo
-    espere por dicha ocurrencia, de otro modo el resultado puede ser indefinido
-    o inesperado.
+    \item \underline{Exclusión Mutua:} Existen recursos que no deben ser
+    accedidos concurrentemente para evitar problemas de coherencia y
+    consistencia. Por esto se debe garantizar que a lo sumo un hilo está
+    accediendo a un recurso de este tipo en un instante dado.
+    \item \underline{Condición de Sincronización:} Existen situaciones
+    donde un hilo debe esperar la ocurrencia de un evento para continuar su
+    flujo. Ante estos casos se debe garantizar que el hilo espere por dicha
+    ocurrencia, de otro modo el resultado puede ser indefinido o inesperado.
     \item \underline{Interbloqueo \textit{(Deadlock)}:} Sucede cuando dos o más
     hilos están esperando a que suceda un evento que nunca ocurrirá para
     continuar sus flujos de ejecución. El evento no ocurre porque las
@@ -121,8 +120,8 @@ Estas son:
         \item No Apropiación: no se puede forzar a un hilo a que desaloje un
         recurso
         \item Circulo Vicioso de Espera: Se forma una cadena cerrada de
-        hilos, donde cada uno retiene al menos un recurso que necesita el
-        próximo hilo de la cadena.
+        solicitudes, donde cada hilo retiene al menos un recurso que necesita el
+        próximo hilo.
     \end{itemize}
     Las tres primeras condiciones son necesarias pero no suficientes para que
     efectivamente ocurra el interbloqueo. La cuarta condición nace como
@@ -141,23 +140,23 @@ en la ejecución del programa.
     interbloqueo activo cuando un sistema ejecuta una serie de instrucciones sin
     hacer ningún progreso. Esto se da cuando $N$ hilos necesitan $N$ recursos
     y se los intercambian sin obtener nunca el conjunto completo.
-    \item \underline{Inanición \textit{(Starvation)}:} Se da cuando al menos una
-    parte del sistema nunca recibe los recursos necesarios para continuar, o
-    demora lo suficiente en recibirlos como para que no sean útiles para obtener
-    el resultado esperado. No es necesario que todo el sistema se bloquee para
-    estar en una situación de inanición.
+    \item \underline{Inanición \textit{(Starvation)}:} Ocurre cuando al menos
+    una parte del sistema nunca recibe los recursos necesarios para
+    continuar, o los recibe demasiado tarde para lograr el resultado
+    esperado. No es necesario que todo el sistema se bloquee para estar en una
+    situación de inanición.
 \end{itemize}
 
 \section{Mecanismos de Sincronización}
 
 A fin de garantizar el cumplimiento de las propiedades introducidas en la
 sección \ref{ProblemasConcurrencia}, es necesario sincronizar la ejecución de
-los hilos. De lo contrario, se puede caer en problemas de coherencia
-y/o consistencia de datos, o corrupción.
+los hilos. De lo contrario, emergen problemas de coherencia y/o consistencia de
+datos, o corrupción.
 
 \subsection{Cooperación vs Competencia}
 
-La sincronización de hilos se puede implementar basada en dos principios
+La sincronización de hilos se implementa basada en dos principios
 \cite{SistOpStallings}:
 \begin{itemize}
     \item \underline{Cooperación:} Los hilos se comunican entre ellos para
@@ -171,8 +170,8 @@ La sincronización de hilos se puede implementar basada en dos principios
         ellos.
     \end{itemize}
     \item \underline{Competencia:} Los hilos compiten entre sí por los
-    recursos. La gestión de los recursos se efectúa por otra entidad, como lo
-    puede ser el sistema operativo.
+    recursos. La gestión de los recursos se efectúa por otra entidad, como el
+    sistema operativo.
 \end{itemize}
 
 \subsubsection{Cooperación por Compartición de Recursos}
@@ -181,11 +180,10 @@ Los hilos inteactúan entre ellos sin tener conocimiento explícito de la
 existencia de los demás.
 
 Existen regiones de almacenamiento de datos compartidas (espacios de memoria,
-archivos, bases de datos, etc) que pueden ser leidas y escritas por múltiples
-hilos.
+archivos, bases de datos, etc), accedidas por múltiples hilos.
 
-Si bien un hilo no hace referencia a ningún otro, es conciente de que los
-datos compartidos pueden ser accedidos y modificados por los demás. Por lo que
+Si bien un hilo no hace referencia a ningún otro, es consciente de que los
+datos compartidos son accedidos y modificados por los demás. Por lo que
 el conjunto debe cooperar para asegurar que los datos compartidos se gestionen
 correctamente. Es responsabilidad de los mecanismos de control asegurar la
 integridad de los datos compartidos \cite{SistOpStallings}.
@@ -194,8 +192,9 @@ Como los datos se almacenan en recursos compartidos, existen los problemas de
 exclusión mutua, interbloqueo e inanición vistos en la sección
 \ref{ProblemasConcurrencia}. La principal diferencia es que existen dos modos de
 acceder a los datos: para \textit{lectura} y para \textit{escritura}. Únicamente
-se debe asegurar la exclusión mutua para operaciones de escritura ya que sólo
-estas pueden romper la \textit{coherencia} y \textit{consistencia} de los datos.
+se debe asegurar la exclusión mutua para operaciones de escritura ya que son las
+únicas capaces de romper la \textit{coherencia} y \textit{consistencia} de los
+datos.
 
 Un conjunto de datos son coherentes si independientemente de quién haya sido el
 último escritor, cualquier lector obtiene el último conjunto de valores escrito.
@@ -590,20 +589,21 @@ caso no está especificado en el diagrama por simplicidad y por tratarse de una
 superposición de los otros dos casos.
 
 \subsubsection{Conclusión}
-Como con los semáforos, es posible cometer errores en la sincronización de los
-monitores. La ventaja que tienen los monitores sobre los semáforos es que todas
-las funciones de sincronización están confinadas dentro del monitor. De este
+La ventaja de los monitores sobre los semáforos es que todas
+las funciones de sincronización quedan confinadas dentro del monitor. De este
 modo, es más sencillo verificar que la sincronización se ha realizado
-correctamente y detectar los fallos. Es más, una vez que un monitor está
+correctamente y detectar los fallos. Una vez que un monitor está
 correctamente programado, el acceso al recurso protegido es correcto para todos
-los hilos. Con los semáforos, en cambio, el acceso al recurso es correcto
-sólo si \textbf{todos los hilos} que acceden al recurso están correctamente
-programados.\cite{SistOpStallings} Por otro lado, las políticas de desbloqueo
-permiten especificar prioridades de ejecución para los hilos, priorizando ya
-sea por orden de llegada o por algún otro criterio. Si a su vez, se construye
-el monitor de forma modular para cambiar la política de manera simple, se puede
-alterar la planificación de los hilos de acuerdo a cada caso, según sea
-necesario. Si esto se intenta hacer utilizando semáforos, resultaría mucho más
-difícil.
-Por estas razones, un punto fuerte a favor de los monitores frente a los semáforos es la mantenibilidad del código.
-Por otro lado, al ser el único punto del programa donde se toman decisiones, un monitor se convierte en un cuello de botella para el sistema. Este impacto se puede mitigar con una arquitectura de monitores jerárquicos.
+los hilos. En el caso de los semáforos, en cambio, el acceso al recurso es
+correcto sólo si \textbf{todos los hilos} que acceden al recurso están
+correctamente programados.\cite{SistOpStallings} Por otro lado, las políticas
+de desbloqueo permiten especificar prioridades de ejecución para los hilos,
+ya sea por orden de llegada o por algún otro criterio. Un monitor diseñado de
+forma modular para modificar la política brinda la posibilidad de alterar la
+planificación de los hilos de acuerdo a cada caso particular. La misma
+planificación resulta por demás complicada si se realiza utilizando semáforos.
+Por estas razones, un punto fuerte a favor de los monitores frente a los
+semáforos es la mantenibilidad del código. Por otro lado, al ser el único punto
+del programa donde se toman decisiones, un monitor se convierte en un cuello de
+botella para el sistema. El impacto negativo a la performance del sistema se
+reduce con una arquitectura de monitores jerárquicos.
