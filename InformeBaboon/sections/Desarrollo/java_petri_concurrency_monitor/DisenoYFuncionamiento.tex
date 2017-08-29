@@ -10,9 +10,7 @@ funcionalidades del monitor construido en el desarrollo de \cite{codegen}, y
 reutilizado en \cite{chimp}. Durante este análisis se vio que, si bien este
 software cumple con los requerimientos mínimos necesarios, para agregar las
 funcionalidades requeridas por este proyecto integrador era necesaria la
-refactorización de la mayor parte del mismo. Además, el estilo seguido durante
-su desarrollo no se condice con el estándar de Java, siendo esta otra razón
-para decidir hacer una re-implementación completa del monitor.
+refactorización de la mayor parte del mismo.
 Por esto es que, como parte del desarrollo de este proyecto integrador, se
 diseñó y construyó Java Petri Concurrency Monitor (JPCM).
 
@@ -54,50 +52,54 @@ mostrando sus principales bloques e interacciones.
 \label{JPCM_gestion_rec_rdp}
 En la sección \ref{monitores} se analiza cómo se gestionan los recursos de un
 monitor con variables de condición en un monitor de sincronización explícita.
-Allí se explicó cómo un hilo que desea tomar o devolver un recurso debe
-señalizar a una variable de condición, y bloquearse en caso de no tener el
+En dicha sección se explicó cómo un hilo que desea tomar o devolver un recurso
+debe señalizar a una variable de condición, y bloquearse en caso de no tener el
 recurso disponible.
 
-Por otro lado, en la sección \ref{POPN} se explica cómo una RdP puede
-representar procesos. De esta manera, un hilo que quiera ejecutar el proceso
-\textit{A}, debe señalizar el comienzo y fin de la ejecución en la RdP
-disparando un subconjunto de transiciones de inicio y otro subconjunto de
-transiciones de finalización.
+Por otro lado, en la sección \ref{POPN} se explica cómo una RdP representa
+procesos. De esta manera, para ejecutar un proceso \textit{A}, un hilo debe
+señalizar el comienzo y fin de la ejecución en la RdP disparando un subconjunto
+de transiciones de inicio y otro subconjunto de transiciones de finalización.
  
-Si bien no existe una relación directa entre las operaciones de una variable de
-condición y los disparos de una transición, se logra obtener los mismos
-comportamientos sobre los hilos que las acceden con la ayuda de colas
-auxiliares. Esto permite establecer una semejanza entre las variables de
-condición de un monitor y las transiciones de una RdP.
+De esta forma se establece una relación entre las operaciones de una variable de
+condición y los disparos de una transición. Se logra obtener el mismo
+comportamiento sobre los hilos que las acceden con la ayuda de colas auxiliares. 
 
-Cuando se intenta disparar una transición no sensibilizada, el hilo que intentó
-hacer el disparo se bloquea en una cola de la misma forma que si hubiera hecho
-una llamada a \textit{wait()} sobre una variable de condición. De la misma
-manera, un hilo que dispara una transición $t_{0}$ y sensibiliza a otra $t_{1}$,
-desbloquea a algún hilo que esperaba por $t_{1}$ como si hubiera hecho una
-llamada a \textit{signal()} sobre una variable de condición.
+El intento de disparo sobre una transición no sensibilizada es equivalente a una
+llamada a \textit{signal()} sobre una variable de condición (ver sección
+\ref{variables_condicion}).
+De la misma manera, el disparo de una transición que resulta en la
+sensibilización de otra, es equivalente a una llamada a \textit{signal()} sobre
+una variable de condición.
 
-A partir de esta semejanza queda en evidencia que las operaciones a realizar
-dentro de un monitor que ejecuta una RdP consisten en el disparo de una o más
-transiciones para cambiar el estado en que se encuentran los recursos y las
-operaciones modeladas por ella.
+Por inducción podemos decir que una variable de condición verdadera equivale a
+disparar una transición y una variable de condición falsa equivale a no poder
+disparar una transición.
+
+A aprtir de esta semejanza queda en evidencia que las operaciones a realizar
+dentro de un monitor que ejecuta una RdP consisten consisten del disparo de
+transiciones para evolucionar el estado de los recursos y operaciones del
+sistema modelado.
 
 \subsection{Estructura Interna de JPCM}
 Basándose en el diagrama de la figura \ref{fig:JPCM_Arquitectura}, se puede
 dividir a JPCM en dos secciones:
 \begin{itemize}
-    \item Modelo: Tiene como eje central a la clase \textit{PetriNet}. Dentro de
-    esta sección se genera el modelo ejecutable con todos sus componentes. Se ayuda
-    de clases auxiliares para hacer la generación del modelo
-    \item Ejecución: Tiene como eje central a la clase \textit{PetriMonitor}. Se
-    encarga de tomar el modelo y ejecutarlo. Incluye clases auxiliares para
-    implementar las políticas del monitor (de transiciones y de colas)
+    \item Modelo: Tiene como eje central a la clase \textit{PetriNet}.
+    Dentro de esta sección está el modelo a ejecutar. Contiene las matrices de
+    la RdP (parte estática del modelo) y al vector de estado (parte dinámica).
+    Define y expone el método de cambio de estado (disparo de una transición).
+    \item Conducción: Tiene como eje central a la clase \textit{PetriMonitor}.
+    Se encarga de conducir a los hilos que ejecutan el modelo.
+    Incluye clases auxiliares para implementar las políticas del monitor (de
+    transiciones y de colas).
 \end{itemize}
 
-\subsubsection{La Sección Modelo}
-En el siguiente diagrama de clases se observan las clases que componen a esta
-sección, junto con sus composiciones e interacciones estructurales:
+\subsubsection{Sección Modelo}
+En el diagrama de la figura \ref{fig:JPCM_PetriNet_Structure} se observan las
+clases que componen a esta sección, sus relaciones y colaboraciones:
 
+{\color{red} SIMPLIFICAR ESTOS DIAGRAMAS!!}
 \begin{figure}[H]
   \hspace*{-3cm}
   \includegraphics[width=190mm]{JPCM_PetriNet_Structure}
@@ -105,18 +107,21 @@ sección, junto con sus composiciones e interacciones estructurales:
   \label{fig:JPCM_PetriNet_Structure}
 \end{figure}
 
-Se pueden ver las clases que modelan a los componentes de una RdP estructural
+Se observan las clases que modelan a los componentes de una RdP estructural
 (ver sección \ref{def_formal_petri}) (\textit{Arc}, \textit{Transition},
 \textit{Place}), la especializaciones concretas de \textit{PetriNet}
-(\textit{PlaceTransitionPetriNet} y \textit{TimedPetriNet}), las clases
-\textit{PetriNetFactory} y \textit{PnmlParser} vistas en la sección
-\ref{JPCM_arq_alto_nivel} y la especialización de \textit{PnmlParser} que
-comprende el dialecto PNML de TINA, \textit{TinaPnmlParser}.
+(\textit{PlaceTransitionPetriNet} para RdP plaza-transición y
+\textit{TimedPetriNet} para RdP temporales), las clases \textit{PetriNetFactory}
+y \textit{PnmlParser} analizadas en la sección \ref{JPCM_arq_alto_nivel} y la
+especialización de \textit{PnmlParser} que comprende el dialecto PNML de TINA,
+\textit{TinaPnmlParser}. Además se observan las relaciones entre estas clases
+que colaboran entre sí.
 
-\subsubsection{La sección Ejecución}
-En el siguiente diagrama de clases se observan las clases que componen a la
-sección Ejecución, junto con sus composiciones y relaciones estructurales:
+\subsubsection{Sección Conducción}
+En el diagrama de la figura \ref{fig:JPCM_PetriMonitor_Structure} se observan
+las clases que componen a esta sección, sus relaciones y colaboraciones:
 
+{\color{red} SIMPLIFICAR ESTOS DIAGRAMAS!!}
 \begin{figure}[H]
   \hspace*{-2.5cm}
   \includegraphics[width=180mm]{JPCM_PetriMonitor_Structure}
@@ -125,14 +130,20 @@ sección Ejecución, junto con sus composiciones y relaciones estructurales:
 \end{figure}
 
 Junto a la clase \textit{PetriMonitor} se puede ver por un lado la subsección
-que aplica la política de transiciones. Por ese lado está la clase abstracta
-\textit{TransitionsPolicy} y sus especializaciones \textit{RandomPolicy}
-(política aleatoria) y \textit{FirstInLinePolicy} (política de primer transición
-en la lista).
+que aplica la política de transiciones. Esta subsección contiene la clase
+abstracta \textit{TransitionsPolicy}, cuya responsabilidad es elegir cuál
+transición disparar dado un conjunto de transiciones sensibilizadas.
+Se proveen dos especializaciones: 
+\begin{itemize}
+  \item \textit{RandomPolicy}: Política aleatoria. Basa su decisión en un
+  generador de números aleatorios.
+  \item \textit{FirstInLinePolicy}: Política de primer transición en la lista.
+  Elige siempre a la primer transición sensibilizada que encuentre en la lista.
+\end{itemize}
 
-Por otro lado, la clase \textit{PriorityBinaryLock} (ver sección
-\ref{JPCM_solucion_inv_prioridad}) implementa la política de colas por
-prioridad.
+Por otro lado, la clase \textit{PriorityBinaryLock} implementa la política de
+colas por prioridad (ver sección \ref{JPCM_solucion_inv_prioridad}) y es
+utilizada tanto para la cola de entrada como para las colas de condición.
 
 Las colas de condición asociadas a las transiciones (ver sección
 \ref{JPCM_gestion_rec_rdp}) están descriptas en la interfaz
@@ -155,11 +166,11 @@ Las interfaces salida son dos:
   \item \underline{Retorno del disparo de una transición:} la finalización de
   ejecución del método \mint{java}|PetriMonitor.fireTransition()| asegura que el
   hilo que hizo la llamada, efectivamente disparó de la transición deseada
-  (excepto en disparos no-perennes donde no se da esta garantía, ver sección
+  (excepto en disparos no-perennes donde no se desea esta garantía, ver sección
   \ref{disparos_perennes})
   \item \underline{Informes de disparo:} ante el disparo de una
   transición informada, se emite un evento con información sobre la transición
-  disparada. Todos los observadores suscritos a estos eventos lo reciben.
+  disparada. Todos los observadores suscritos a estos eventos lo recibirán.
 \end{itemize}
 
 En tiempo de inicialización se proveen dos interfaces al usuario:
@@ -173,34 +184,29 @@ En tiempo de inicialización se proveen dos interfaces al usuario:
 \end{itemize}
 
 Estas interfaces proveen al usuario de los mecanismos necesarios para
-inicializar el monitor, y para luego utilizarlo para la sincronización de hilos
-concurrentes.
+inicializar el monitor, y para luego utilizarlo.
 
 \subsection{Inicialización de JPCM}
-Antes de poder utilizar JPCM para sincronizar la ejecución de hilos con una
-RdP, es necesario inicializarlo de forma correcta. Los pasos para inicializar
-JPCM son:
+Los pasos para inicializar JPCM son:
 \begin{itemize}
-  \item Instanciar la clase \textit{PnmlParser} pasándole la ruta al archivo de
+  \item Instanciar la clase \textit{PnmlParser} con la ruta al archivo de
   descripción de la RdP a utilizar
   \item Instanciar la clase \textit{PetriNetFactory} con el objeto
   \textit{PnmlParser}
   \item Utilizar el objeto \textit{PetriNetFactory} para generar una instancia
   de \textit{PetriNet}
   \item Instanciar una política (clases \textit{FirstInLinePolicy} o
-  \textit{RandomPolicy} o alguna generada por el usuario)
+  \textit{RandomPolicy} o la desarrollada por el usuario)
   \item Instanciar la clase \textit{PetriMonitor} con el objeto
   \textit{PetriNet} y el objeto de la política
-  \item Crear los hilos que van a ejecutar las tareas del sistema y asignarle
-  sus tareas
+  \item Crear los hilos que van a ejecutar las acciones del sistema
   \item Inicializar la RdP llamando a \mint{java}|PetriNet.initializePetriNet()|
   sobre la instancia de \textit{PetriNet}
   \item Lanzar los hilos creados anteriormente
   \item Evitar que el hilo principal termine antes que los hilos trabajadores
 \end{itemize}
  
-Luego de realizar todas estas tareas, el sistema comienza a ejecutarse por sí
-solo, orquestado por la RdP.
+Luego de realizar todas estas tareas, el sistema se ejecuta guiado por la RdP.
 
 \subsubsection{Generación de una RdP Ejecutable a Partir de un Archivo PNML}
 Como se dijo anteriormente, JPCM requiere de un archivo PNML con la descripción
@@ -218,14 +224,15 @@ partir del archivo PNML son los siguientes:
   componentes generada por \textit{PnmlParser}
   \item Con los objetos componentes de la RdP, \textit{PetriNetFactory} calcula
   y almacena las matrices de precedencia, pos-incidencia, incidencia, inhibición,
-  reset y lectura
+  reset y lectura, y el vector del marcado inicial
   \item Con los objetos componentes, las matrices de la RdP y el tipo de RdP a
   generar, crea una instancia de la subclase de \textit{PetriNet}
-  correspondiente
+  correspondiente (\textit{TimedPetriNet} para RdP temporales y
+  \textit{PlaceTransitionPetriNet} para RdP ordinarias)
 \end{itemize}
 
-El objeto resultante es una RdP ejecutable que se puede utilizar en conjunto
-con el monitor.
+El objeto resultante es una RdP ejecutable que se utiliza en conjunto con el
+monitor.
 
 \subsection{Disparo de una Transición en JPCM}
 El disparo de una transición en el monitor mediante la ejecución del método
@@ -235,21 +242,22 @@ sobre el hilo que realiza la llamada:
 \begin{itemize}
   \item \underline{Verifica que la transición t no sea automática:} En cuyo caso
   falla con un error explicando la situación
-  \item \underline{Verifica que la red esté inicializada:} Si no lo está falla
-  con un error explicando la situación
+  \item \underline{Verifica que la red esté inicializada:} En caso contrario
+  falla con un error explicando la situación
   \item \underline{Toma el lock sobre la entrada del monitor:} Si no lo puede
   tomar se bloquea en la cola de entrada hasta poder tomarlo
-  \item \underline{Dispara la transición en la RdP:} Devuelve un código de error
-  indicando el resultado
+  \item  \underline{Dispara la transición en la RdP:} Devuelve un código de
+  estado indicando el resultado (ver sección \ref{codigos_de_estado_disparo})
   \item \underline{Maneja el resultado del disparo:} se analiza si se debe
   liberar el lock de entrada, disparar una transición automática, liberar un
   hilo bloqueado o bloquearse por una condición
-  \item \underline{Libera el lock de entrada:} Si la acción anterior determinó
-  que se lo debe liberar
+  \item \underline{Libera el lock de entrada:} Sólo si es necesario. Algunas
+  situaciones requieren que no se permita la entrada de un nuevo hilo, como la
+  liberación de un hilo bloqueado en una cola de condición
 \end{itemize}
  
 La figura \ref{fig:JPCM_Fire_General} es un diagrama de secuencias donde se
-observa el flujo de un hilo que realiza un disparo de una transición:
+muestra el flujo de un hilo que realiza un disparo de una transición:
 
 \begin{figure}[H]
   \hspace*{-3cm}
@@ -258,20 +266,21 @@ observa el flujo de un hilo que realiza un disparo de una transición:
   \label{fig:JPCM_Fire_General}
 \end{figure}
 
-\subsection*{Manejo del código de error del disparo}
+\subsection*{Manejo del código de estado del disparo}
+\label{codigos_de_estado_disparo}
 
-Cuando se realiza el disparo efectivo de la transición en la red de petri, ésta
-devuelve un código de error basado en el resultado del disparo. Estos pueden
+Cuando se realiza el disparo efectivo de la transición en la Red de Petri, ésta
+devuelve un código de estado, que es el resultado del disparo. Estos pueden
 ser:
 \begin{itemize}
   \item \textit{SUCCESS:} el disparo fue exitoso
   \item \textit{NOT\_ENABLED:} la transición no está sensbilizada
   \item \textit{TIMED\_BEFORE\_TIMESTAMP:} Sólo para transiciones
-  temporales. El instante de disparo es anterior al \textit{instante menor de disparo} de la transición
-  (ver sección \ref{semantica_tiempo_debil})
+  temporales. El instante de disparo es anterior al \textit{instante menor de
+  disparo} $(\alpha)$ de la transición (ver sección \ref{semantica_tiempo_debil})
   \item \textit{TIMED\_AFTER\_TIMESTAMP:} Sólo para transiciones
-  temporales. El instante de disparo es posterior al \textit{instante mayor de disparo} de la transición
-  (ver sección \ref{semantica_tiempo_debil})
+  temporales. El instante de disparo es posterior al \textit{instante mayor de
+  disparo} $(\beta)$ de la transición (ver sección \ref{semantica_tiempo_debil})
 \end{itemize}
 
 \subsubsection*{Caso del disparo exitoso}
@@ -281,18 +290,20 @@ realizó el disparo debe:
 \begin{itemize}
   \item Emitir un evento para todos los suscriptores (en el caso que la
   transición sea informada).
-  \item Revisar si existen nuevas transiciones sensibilizadas producto del
+  \item Determinar si existen nuevas transiciones sensibilizadas producto del
   último disparo
       \begin{itemize}
         \item Si no existen, libera el lock de entrada y abandona el monitor
         \item Si existen:
             \begin{itemize}
-                \item Consulta a la política de transiciones cuál debe ser la próxima a ser disparada
-                \item De ser automática el disparo lo hace el mismo hilo, por lo que
-                itera para realizar un nuevo disparo sobre la transición automática.
-                \item De ser disparada debe señalizar al hilo que esté esperando en su
-                cola de condición y abandonar el monitor inmediatamente sin liberar el
-                lock de entrada.
+                \item Selecciona a la próxima transición $t_{n}$ a ser
+                disparada, de acuerdo con la política de transiciones.
+                \item Si $t_{n}$ es de tipo \textit{automática} el disparo lo
+                hace el mismo hilo, por lo que itera para realizar un nuevo
+                disparo sobre dicha transición.
+                \item Si $t_{n}$ es de tipo \textit{disparada} se debe
+                señalizar al hilo que esté esperando en su cola de condición y
+                abandonar el monitor inmediatamente sin liberar el lock de entrada.
             \end{itemize}
       \end{itemize}
 \end{itemize}
@@ -307,20 +318,16 @@ disparo exitoso de una transición:
   \label{fig:JPCM_Fire_SUCCESS}
 \end{figure}
 
-\subsubsection*{Caso del disparo no exitoso, y del temporal después del
-intervalo}
+\subsubsection*{Caso del disparo no exitoso}
 
 Cuando la transición no está sensibilizada, su disparo devuelve
 \textit{NOT\_ENABLED}. Ante este caso, un hilo que realizó un disparo perenne
 debe esperar en la cola de condición asociada a la transición. A su vez, si en
 una iteración anterior realizó una espera temporal por la transición, debe
 bloquearse con alta prioridad.
-Ante el caso del disparo de una transición temporal en un instante posterior al
-instante mayor de disparo, el resultado es \textit{TIMED\_AFTER\_TIMESPAN} y el
-procedimiento a realizar es idéntico al caso anterior.
  
-En el siguiente diagrama de secuencias se muestra detallado el caso del disparo
-no exitoso:
+En el diagrama de secuencias de la figura \ref{fig:JPCM_Fire_NOT_ENABLED} se muestra
+detallado el caso del disparo no exitoso.
 
 \begin{figure}[H]
   \hspace*{-2cm}
@@ -331,7 +338,7 @@ no exitoso:
 
 \subsubsection*{Caso del disparo temporal antes del intervalo}
 Si un hilo intenta disparar una transición temporal antes del instante menor de
-disparo, la llamada a \mint{java}|PetriNet.fire(Transition t)| devuelve un error
+disparo, la llamada a \mint{java}|PetriNet.fire(t)| devuelve un código de estado
 \textit{TIMED\_BEFORE\_TIMESPAN}.
 En este caso, el procedimiento a seguir es el siguiente:
 \begin{itemize}
@@ -362,7 +369,9 @@ En este caso, el procedimiento a seguir es el siguiente:
                 \end{itemize}
       \end{itemize}
 \end{itemize}
-En el siguiente diagrama de secuencias se detalla el flujo de este caso de resultado de disparo.
+En el diagrama de secuencias de la figura
+\ref{fig:JPCM_Fire_TIMED_BEFORE_TIMESPAN} se detalla el flujo de este caso de
+resultado de disparo.
 
 \begin{figure}[H]
   \centering
@@ -371,6 +380,15 @@ En el siguiente diagrama de secuencias se detalla el flujo de este caso de resul
   menor de disparo}
   \label{fig:JPCM_Fire_TIMED_BEFORE_TIMESPAN}
 \end{figure}
+
+\subsubsection*{Caso del disparo temporal después del intervalo}
+
+Ante el intento de disparo de una transición temporal en un instante posterior
+al instante mayor de disparo, el resultado es \textit{TIMED\_AFTER\_TIMESPAN}.
+Al no cumplirse la condición de sensibilización temporal, este intento de
+disparo es equivalente al caso del disparo no exitoso. Por esto, la rutina de
+manejo de ambos casos es la misma y correponde al diagrama de secuencias de la
+figura \ref{fig:JPCM_Fire_NOT_ENABLED}.
 
 \subsection{Problema de la Inversión de Prioridades}
 \label{sec:inversion_prioridad}
