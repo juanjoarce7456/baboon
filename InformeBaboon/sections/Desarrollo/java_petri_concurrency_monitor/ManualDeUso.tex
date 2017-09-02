@@ -390,15 +390,16 @@ de Java y se realiza en el momento de inicialización del monitor:
   
   // se asume que existe un objeto PetriMonitor llamado "petri"
   
-  PetriMonitor monitor = new PetriMonitor(petri, TransitionsPolicy(petri) {
+  PetriMonitor monitor = new PetriMonitor(petri,
+    new TransitionsPolicy(petri) {
 
-    @Override
-    public int which(boolean[] enabled) {
-      int ret = 0;
-      // se debe dar algún valor a "ret"
-      // siguiendo el criterio de la política a aplicar
-      return ret;
-    }
+      @Override
+      public int which(boolean[] enabled) {
+        int ret = 0;
+        // se debe dar algún valor a "ret"
+        // siguiendo el criterio de la política a aplicar
+        return ret;
+      }
 
   });
   
