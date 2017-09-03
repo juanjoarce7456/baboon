@@ -19,8 +19,8 @@ estación 1, donde un operario realiza una transformación a la pieza. Una vez e
 operario realizó la transformación, presiona un pulsador y la cinta avanza a la
 estación 2, donde el mismo operario empaqueta la pieza. El operario
 presiona otro pulsador al finalizar su tarea y luego la cinta avanza una vez
-más y la pieza cae en un contenedor. Una vez que la pieza llega al contenedor se
-habilita el ingreso de una nueva pieza al proceso.
+más y la pieza se deposita en un contenedor. Una vez que la pieza llega al
+contenedor se habilita el ingreso de una nueva pieza al proceso.
 \end{labeling}
 
 \begin{figure}[H]
@@ -32,8 +32,10 @@ habilita el ingreso de una nueva pieza al proceso.
 
 \subsection{Análisis de ejecución del caso de estudio, utilizando
 sincronización por aviso de ejecución} 
-De acuerdo al modo de ejecución por aviso, es el resto del framework el
-responsable de dar aviso de eventos al monitor, desencadenando la ejecución de las acciones:
+De acuerdo al modo de ejecución por aviso, el monitor recibe eventos desde el
+resto del framework, los procesa y luego desencadena la ejecución de las
+acciones. A continuación se describe la ejecución del caso de ejemplo siguiendo
+el modo de sincronización por aviso de ejecución:
 \begin{enumerate}
     \item Debe insertarse un evento en la cola de entrada de
     ``ejecutar\_accion\_1'' cuando la acción que escucha al sensor de pieza
@@ -63,15 +65,13 @@ responsable de dar aviso de eventos al monitor, desencadenando la ejecución de 
     “liberar\_cinta” y libera la cinta Transportadora para procesar otra pieza.
 \end{enumerate}
 
-A partir del análisis anterior se llegó a la conclusión de que este modo de
-sincronización presenta una gran desventaja.
+A partir del análisis de los pasos de ejecución anteriores, se detectó una
+desventaja en este modo de sincronización.
 Al utilizar la suscripción a transiciones informadas el módulo
-encargado de manejar los eventos provenientes de la red de petri asume
+encargado de manejar los eventos provenientes de la Red de Petri asume
 una parte del control de la lógica de ejecución del sistema.
-De acuerdo a los objetivos de este trabajo, esta responsabilidad debe pertenecer
-por completo al monitor de redes de Petri. Sin embargo, en este caso es el
-manejador de eventos quien toma decisiones sobre el bloqueo o liberación de los
-hilos a partir del informe recibido desde la red. En el caso
+De esta manera, el monitor de Redes de Petri delega parte de su
+responsabilidad, y se descentraliza el control del sistema. En el caso
 particular del framework realizado en~\cite{chimp}, el uso de la sincronización
 por avisos de ejecución lleva a que el bloqueo y liberación de hilos se realice
 fuera de la estructura del monitor, desaprovechando una de las principales
@@ -81,10 +81,10 @@ ventajas de la arquitectura del sistema.
 \subsection{Análisis de ejecución del caso de estudio, utilizando
 sincronización por petición de ejecución}
 \label{sec:sincronizacion_peticion_ejecucion}
- El modo de sincronización por petición de ejecución es una alternativa
- propuesta al modo por aviso de ejecución.
- Consiste en que los hilos que ejecutan acciones realicen una petición de ejecución al
- monitor, sin tener en cuenta el estado actual de la red de Petri.
+ El modo de sincronización por petición de ejecución es un mecanismo de
+ sincronización alternativo al modo por aviso de ejecución.
+ En este modo, los hilos que ejecutan acciones realizan una petición de
+ ejecución al monitor, sin tener en cuenta el estado actual de la red de Petri.
  El monitor es el encargado de bloquear aquellos hilos cuyas acciones no
  pueden ser ejecutadas en el momento de la petición del permiso ejecución. Una
  vez que las condiciones son las adecuadas para realizar la acción, el monitor
@@ -105,7 +105,7 @@ sincronización por petición de ejecución}
     dicha transición.
     \item El hilo ejecuta la acción “accion\_1”.
     \item Existe un problema, ya que al disparar “ejecutar\_accion\_1”, el
-    monitor tiene permitido disp arar “ejecutar\_accion\_2”, pero la operación
+    monitor tiene permitido disparar “ejecutar\_accion\_2”, pero la operación
     “accion\_1” aun no ha finalizado, generando un problema de sincronización.
 \end{enumerate}
 
@@ -338,9 +338,8 @@ externo realiza un disparo no perenne sobre la transición.
 	\item Se libera el recurso ``cintaTransp''.
 \end{enumerate}
 
-Esta solución tiene como principal ventaja mantener la cantidad de componentes
-de la red de Petri.
-Su principal desventaja consiste en que añade una nueva etiqueta a la
+La ventaja de esta solución es que no incrementa el numero de componentes de la
+red. Su principal desventaja consiste en que añade una nueva etiqueta a la
 RdP, dificultando su validación matemática. Esta solución supone añadir
 una interfaz al monitor de Petri para bloquear hilos en una cola de condición de
 una transición tipo P y que los hilos bloqueados en esta cola de condición sólo
@@ -357,20 +356,20 @@ Existen dos maneras de coordinar la ejecución de las acciones a partir de una
 red de Petri.\\ 
 \begin{enumerate}
   \item \textbf{Sincronización por aviso de ejecución: } Consiste en suscribir
-  una acción a una transición, que informa cuando es disparada. Ante un informe
-  de esta transición, la acción suscripta comienza su ejecución.
+  una acción a una transición, que envía una notificación en el momento en que
+  es disparada. Ante un informe de esta transición, la acción suscripta
+  comienza su ejecución.
   Al finalizar una acción, se dispara la transición a la cual está suscripta la
   siguiente acción a ejecutar.
   La principal desventaja de este método consiste en la descentralización del
   manejo de los hilos por parte del monitor, lo cual va en contra de los objetivos del
   proyecto.
-  \item \textbf{Sincronización por petición de ejecución: } Consiste en que los
-  hilos que ejecutan acciones realicen una petición de ejecución al
-  monitor (mediante el disparo de transiciones), sin tener en cuenta el estado
-  actual de la red de Petri. De este modo el monitor bloquea los hilos que no
-  pueden ejecutarse y libera los hilos que cumplan con las condiciones de
-  ejecución. El manejo de la concurrencia es llevado a cabo íntegramente por el
-  monitor.
+  \item \textbf{Sincronización por petición de ejecución: } Los hilos que
+  ejecutan acciones realizan una peticion de ejecución al monitor (mediante el
+  disparo de transiciones), sin tener en cuenta el estado actual de la red de
+  Petri. De este modo el monitor bloquea los hilos que no pueden ejecutarse y
+  libera los hilos que cumplan con las condiciones de ejecución. El manejo de
+  la concurrencia es llevado a cabo íntegramente por el monitor.
   Para sincronizar acciones dependientes entre sí (una debe comenzar luego de
   la finalización de la otra) se requiere un modo de dar aviso al monitor de
   la finalización de una acción. Se analizan tres opciones:
@@ -383,8 +382,7 @@ red de Petri.\\
   Se optó por adoptar el evento de finalización de acción por grupo
   transición-plaza. Esta forma presenta la ventaja de no añadir
   conceptos nuevos a la RdP, facilitando el entendimiento de la misma. Además
-  no presenta desventajas como la pérdida de eventos de finalización, presente
-  en el evento de finalización de acción por guardas.
+  no presenta pérdida de eventos de finalización de acción.
   La principal desventaja del grupo transición-plaza consiste en el incremento
   del tamaño de la RdP. En procesos secuenciales, puede contrarrestarse mediante
   el uso del controlador de acciones descripto en la

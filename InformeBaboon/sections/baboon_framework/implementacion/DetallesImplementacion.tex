@@ -9,15 +9,16 @@ La implementación se realizó de acuerdo a los aspectos de diseño
 expuestos en el capítulo~\ref{cap:diseno_framework}.
 
 \section{Detalles de Implementación de \nombreFramework \ Framework}
-\nombreFramework \ Framework es de un tipo intermedio entre caja negra
-y caja blanca. Para utilizar la mayor parte de las funcionalidades ofrecidas, el
-usuario sólo debe conocer las interfaces que expone el framework para conectar
-los componentes. Sin embargo, para determinados casos de uso (por ejemplo para
-añadir políticas de disparo de transiciones) se requiere de la extensión de
-clases del framework.
-(ver sección~\ref{sec:tipos_framework}).
-El usuario tiene la responsabilidad de definir los siguientes componentes,
-previamente expuestos en el capítulo~\ref{cap:diseno_framework}:
+
+Las interfaces expuestas por \nombreFramework\ Framework permiten al usuario
+acceder a la mayoría de las funcionalidades ofrecidas sin necesidad de conocer
+su estructura interna, como un framework de caja negra (ver sección~\ref{sec:tipos_framework}).
+Sin embargo, en determinados casos de uso (por ejemplo para añadir políticas
+de disparo de transiciones) se requiere de la extensión de clases del framework.
+\\
+Para la utilización de \nombreFramework\ Framework el usuario tiene la
+responsabilidad de definir los siguientes componentes, previamente expuestos en
+el capítulo~\ref{cap:diseno_framework}:
 \begin{itemize} 
   \item Controladores de acciones.
   \item Tópicos.
@@ -49,7 +50,7 @@ La implementación de un controlador de acción queda definida por dos elementos
 
 \section{Componentes del Framework}
 \label{sec:componentes_baboon}
-En la Figura~\ref{fig:diagrama_componentes} se pueden observar los
+En la Figura~\ref{fig:diagrama_componentes} se muestran los
 módulos que componen el framework implementado:
 \begin{itemize}
   \item \textbf{BaboonConfig: } Este componente se encarga de manejar la
@@ -273,8 +274,8 @@ módulos que componen el framework implementado:
 
 \section{Implementación de Tópicos}
 Los tópicos, cuyo concepto se explica en la sección \ref{sec:diseno_topicos}, son definidos
-por el usuario en un archivo de formato JSON, de la forma que se presenta a
-continuación:
+por el usuario en un archivo JSON con el siguiente formato: \\
+
 \begin{minted}{json}
 [
 

@@ -1,12 +1,11 @@
 \section{Introducción}
-A lo largo de este capítulo se analiza un ejemplo de aplicación.
-Dicho caso sirve para demostrar las funcionalidades que ofrece \nombreFramework
-\ Framework. El mismo consiste en un sistema de clasificación y lavado de
-botellas.
+A lo largo de este capítulo se analiza un ejemplo de aplicación con el propósito
+de demostrar las funcionalidades que ofrece \nombreFramework \ Framework. El
+mismo consiste en un sistema de clasificación y lavado de botellas.
 
 \section {Sistema de Clasificación y Lavado de Botellas}
-A continuación se describen las características principales de un sistema de
-lavado de botellas:
+A continuación se describen las características principales del sistema en
+estudio:
 
 \begin{itemize}
   \item El ingreso de botellas no es controlado por el sistema.
@@ -14,12 +13,10 @@ lavado de botellas:
   de tiempo de forma asincrónica para el sistema.
   \item La clasificación de las botellas se realiza en un módulo que
   diferencia entre \emph{cerveza}, \emph{gaseosa} u \emph{otras}.
-  \item Puede haber un máximo de 20 botellas en la etapa de
+  \item Existe un límite máximo de 20 botellas en la etapa de
   recepción y clasificación.
   \item La recepción de botellas tiene máxima prioridad siempre que pueda
   realizarse.
-  \item Puede iniciarse la recepción de una botella antes de finalizar
-  la recepción de la botella anterior.
   \item Mientras la máquina se encuentra en proceso de clasificación de
   botellas, no puede iniciar la recepción de una nueva botella.
   \item Cuando la máquina no puede recibir una botella, la misma queda en espera
@@ -57,9 +54,9 @@ lavado de botellas:
 \subsection {Pasos para el desarrollo del sistema utilizando  \\
 \nombreFramework \  Framework}
 \label{sec:pasos_desarrollo_lavadora_botellas}
-Tras el modelado de la lógica del sistema en la Red de Petri, el
-proceso de desarrollo del sistema puede descomponerse en una serie de
-pasos a resolver.
+Tras el modelado de la lógica del sistema en la Red de Petri (ver
+Figura~\ref{fig:petri_lavadora_botellas}), el proceso de desarrollo del sistema
+se descompone en una serie de pasos.
 De esta manera se comprende fácilmente el proceso para crear un sistema
 utilizando el framework.
 
@@ -67,8 +64,8 @@ utilizando el framework.
 \item \textbf{Determinar los objetos para conformar el sistema:}\\
         Como en cualquier desarrollo orientado a objetos, uno de los pasos principales
         del diseño es la identificación de los objetos que intervienen en el sistema,
-        para luego obtener las clases.
-        En este caso se identifican los siguientes:
+        para luego obtener las clases. \\
+        En el caso de ejemplo se identifican los siguientes:
             \begin{itemize}
               \item Botellas insertadas.
               \item Máquina lavadora compuesta por:
@@ -83,12 +80,12 @@ utilizando el framework.
             \end{itemize}
 
 \item \textbf{Determinar las acciones de los objetos del sistema:}\\
-            Otro paso principal en el desarrollo orientado a objetos es determinar las
-            acciones que pueden realizar los objetos del sistema. Estas acciones serán
-            embebidas en los métodos controladores de acciones de las clases
-            desarrolladas.
-            En este caso, las acciones son realizadas por la máquina lavadora, y se
-            identifican las siguientes:
+            La determinación de las acciones que realizan los objetos del
+            sistema también está relacionada con el desarrollo orientado a
+            objetos. Estas acciones serán embebidas en los métodos
+            controladores de acciones de las clases desarrolladas. \\
+            En este caso de ejemplo, las acciones son realizadas por la máquina
+            lavadora, y se identifican las siguientes:
             \begin{itemize}
               \item Recibir botellas.
               \item Clasificar botellas.
@@ -105,10 +102,11 @@ utilizando el framework.
             Los controladores de acciones pueden procesar eventos físicos de entrada
             (Eventos Happening) o emitir eventos físicos de salida (Eventos Task). Es
             importante determinar a cuál grupo pertenece cada acción del
-            sistema, para poder clasificarla como Happening Controller o Task Controller (ver
+            sistema, para clasificarla como Happening Controller o Task Controller (ver
             sección~\ref{sec:controladores_de_acciones}).
             Esta clasificación se realiza en el software a través de las anotaciones Java
-            @HappeningController y @TaskController. En el caso de ejemplo se distinguen:
+            @HappeningController y @TaskController. \\
+            En el caso de ejemplo se distinguen:
             \begin{itemize}
               \item Happening Controllers:
                   \begin{itemize}
@@ -129,34 +127,39 @@ utilizando el framework.
 
 \item \textbf{Manejo de guardas:}\\
             En determinadas ocasiones, es necesario representar
-            estados externos que no están modelados en la red. Para lograr esto asociamos
-            una variable booleana que representa el estado externo a una transición.
-            Actuando la misma como un factor de sensibilización externo (ver
-            secciónes~\ref{sec:guardas_monitor} y \ref{guardas}).
+            estados externos que no están modelados en la red. Para lograrlo, se
+            asocia una variable booleana (que representa el estado externo) a
+            una transición de la RdP.
+            Esta variable actúa como un factor externo de sensibilización de la transición (ver
+            secciones~\ref{sec:guardas_monitor} y \ref{guardas}).
             Para alterar el valor de una guarda, debe definirse un método del tipo Guard Provider
             asociado a dicha guarda, utilizando la anotación Java @GuardProvider en el
             código del software (ver sección~\ref{sec:guard_providers}).
     
 \item \textbf{Definir la prioridad de las acciones:}\\
-            A veces es necesario definir prioridades específicas para la ejecución de los
-            controladores de acciones. Estas prioridades se manejan a través del monitor
-            de redes de Petri, mediante la utilización de políticas de disparo de
-            transición. El usuario puede utilizar las políticas proporcionadas por el
-            framework (transición aleatoria o primera transición en línea) o definir una
-            política a su medida como se explica en la sección~\ref{sec:politica_transiciones}.
+            En determinados casos de uso deben definirse prioridades específicas
+            para la ejecución de los controladores de acciones. Estas
+            prioridades se manejan a través del monitor de redes de Petri,
+            mediante la utilización de políticas de disparo de transición. El
+            usuario tiene la opción de utilizar las políticas proporcionadas por
+            el framework (transición aleatoria o primera transición en línea) o
+            definir una política a su medida como se explica en la
+            sección~\ref{sec:politica_transiciones}. \\
             De acuerdo a las características descriptas para este caso, la transición
             ``recibirBotella'' debe tener máxima prioridad.
 
 \item \textbf{Definir la cantidad de Hilos de ejecución:}\\
-            Si bien no existe una respuesta absoluta, en términos generales se busca
-            optimizar la performance minimizando la cantidad de hilos de ejecución
-            posibles sin afectar al paralelismo del programa. Para lo cual se determinan
-            aquellos Task Controllers secuenciales, que sólo requieren un único hilo para
-            su ejecución, y se los agrupa en Complex Secuential Task Controllers (ver
-            sección~\ref{sec:complex_secuential_task_controller}).
-            Se distinguen los siguientes hilos de ejecución, donde se especifica quién
-            está a cargo de la creación e inicialización del hilo (el control de la
-            ejecución lo realiza el monitor en todos los casos):
+            En términos generales se desea optimizar la performance mediante la
+            minimización de la cantidad de hilos de ejecución, sin
+            afectar al paralelismo del programa. En este sentido, el usuario
+            debe identificar los grupos de TaskControllers secuenciales y
+            agruparlos en ComplexSecuentialTaskControllers, que solo requieren
+            un único hilo para su ejecución (ver
+            sección~\ref{sec:complex_secuential_task_controller}). \\
+            En el ejemplo de estudio se distinguen los siguientes hilos de
+            ejecución, donde se especifica quién está a cargo de la creación e
+            inicialización del hilo (el control de la ejecución lo realiza el
+            monitor en todos los casos):
             \begin{itemize}
               \item \textbf{Happening Controllers \emph{(A cargo del usuario)}:}
                   \begin{enumerate}[label=\fbox{\arabic*}]
@@ -186,8 +189,8 @@ utilizando el framework.
 
 \item \textbf{Determinar la relación entre la Red de Petri, los métodos y las clases:}\\
             La ejecución de los controladores de acciones está relacionada con el
-            disparo de las transiciónes en la Red de Petri. Por eso, es necesario 
-            relacionar dichas transiciones con los objetos y métodos correspondientes.
+            disparo de las transiciónes en la Red de Petri. Por este motivo, es
+            necesario relacionar dichas transiciones con los objetos y métodos correspondientes.
             Dicha tarea se realiza a través de un archivo JSON, configurable por el
             usuario, donde se definen los tópicos (ver
             sección~\ref{sec:relacion_evento_controlador}). Tras crear el archivo, el
@@ -204,7 +207,7 @@ Usuario.
 
 En la figura~\ref{fig:diagrama_clases_lavadora_botellas} se observa el diagrama
 de clases del sistema. El usuario es el encargado de definir las interfaces y
-herencias que considere necesarias para implementar las funcionalidades del
+herencias necesarias para implementar las funcionalidades del
 sistema.
 \begin{figure}[H]
     \centering
@@ -335,7 +338,7 @@ mismos se definen a través de un archivo JSON, de la siguiente forma:\\
 Un tópico está relacionado con los eventos lógicos de
 disparo de transiciones y de modificación de valor de guardas. Dicha relación
 se determina a través del nombre de dichos componentes de la RdP, como
-puede apreciarse en la figura~\ref{fig:topic_petri_relacion}.
+se muestra en la figura~\ref{fig:topic_petri_relacion}.
 
 \begin{figure}[H]
     \centering
@@ -382,8 +385,7 @@ realizan las siguientes actividades:
   \item Suscribir los controladores de acción a los tópicos.
 \end{itemize} 
 
-A continuación se observa la implementación de dicha clase con
-las actividades descriptas previamente:
+A continuación se observa la implementación de la clase AppSetup:
 
 \begin{minted}{java}
 public class AppSetup implements BaboonApplication {

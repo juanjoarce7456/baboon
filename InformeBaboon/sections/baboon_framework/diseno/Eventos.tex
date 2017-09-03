@@ -11,47 +11,47 @@ La utilización directa del monitor es engorrosa y genera un
 alto grado de acoplamiento entre el software de usuario y la red de Petri
 puesto que los eventos de la red quedan asociados directamente a los eventos del
 mundo real que modela.
-La principal desventaja de tener un sistema acoplado a la red de Petri está dada por la
+La principal desventaja de un sistema acoplado a la red de Petri está dada por la
 reducción de la escalabilidad del sistema. Esto se debe a que una modificación
 de la lógica, que conlleva una sustitución de la red, implica también un cambio
-en el código del software. Esto dificulta el proceso de desarrollo y su
-mantenibilidad. Otra gran desventaja es que impide la reutilización de redes de
+en el código del software. En consecuencia, dificulta el proceso de desarrollo y
+su mantenibilidad. Otra desventaja es que impide la reutilización de redes de
 Petri genéricas, útiles para resolver diferentes problemas de
 características similares.
 
 Un requerimiento importante de este proyecto consiste en la facilidad de uso.
-Como se explicó en el párrafo anterior, la utilización directa del monitor
-es complicada y puede favorecer a la generación de errores, ya que deben
-crearse todos los hilos de ejecución y deben programarse los disparos de
+Como se explicó en el párrafo anterior, la utilización del monitor en forma
+directa presenta una complejidad elevada y favorece a la generación de errores,
+ya que deben crearse todos los hilos de ejecución y deben programarse los disparos de
 transición de forma manual en el código. Este problema se manifiesta, por
 ejemplo, en soluciones como CodeGen \cite{codegen}.
-Ante un cambio en la red de petri deben modificarse algunos o todos los
-disparos de transición distribuidos a lo largo del código, pudiendo llevar a
-una incorrecta sincronización de los hilos si no se realiza con especial
-precaución.
+Ante un cambio en la Red de Petri deben modificarse algunos o todos los
+disparos de transición distribuidos a lo largo del código. En caso de un error
+en esta tarea, se genera una sincronización incorrecta de los hilos.
 
 A su vez, para desacoplar las acciones que debe realizar el sistema de los
 eventos, es necesario incorporar una entidad encargada de manejar y ejecutar
 dichas acciones.
 
-Como resultado de este análisis, se llegó a la conclusión de que se puede
-aprovechar mejor el potencial del monitor si se encuentra embebido en un
-framework que se encargue de desacoplar el código de usuario de la lógica de
-disparos. 
+Como resultado de este análisis, se llegó a la conclusión de que es necesario
+embeber el monitor de Petri en un framework que se encargue de desacoplar el
+código de usuario de la lógica de disparos.
 Una conclusión de similares características se desprende de
-\cite{Bentivegna-Ludemann}, donde los autores expresan: ``La debilidad encontrada en el proceso de elaboración del
-software, es que resultó problemático vincular los hilos con las transiciones de
-la RdP. Esto se debe a que entre las acciones y las transiciones no existe
-una capa de abstracción para mapear las mismas.
-Por lo cual, queda en evidencia que es necesaria la existencia de un framework para automatizar y facilitar la
-vinculación entre eventos, acciones y transiciones.''
+\cite{Bentivegna-Ludemann}, donde los autores expresan: ``La debilidad
+encontrada en el proceso de elaboración del software, es que resultó
+problemático vincular los hilos con las transiciones de la RdP. Esto se debe a
+que entre las acciones y las transiciones no existe una capa de abstracción
+para mapear las mismas.
+Por lo cual, queda en evidencia que es necesaria la existencia de un framework
+para automatizar y facilitar la vinculación entre eventos, acciones y
+transiciones.''
 
 
 \section{Sincronización por Red de Petri a través de Eventos}
 \label{sec:sincronizacion_RdP_por_eventos}
-Se pueden visualizar los sistemas a desarrollar, utilizando el monitor
-descripto en la sección~\ref{sec:java_petri_concurrency_monitor}, como un programa de
-software que intercambia eventos con la red de Petri y con su entorno físico.
+Los sistemas a desarrollar utilizando el monitor descripto en la
+sección~\ref{sec:java_petri_concurrency_monitor}, son programas de software que
+intercambian eventos con la red de Petri y con su entorno físico.
 
 \begin{figure}[h]
 	\centering
@@ -60,13 +60,14 @@ software que intercambia eventos con la red de Petri y con su entorno físico.
 	\label{fig:eventos_petri-programa-mundo}
 \end{figure}
 
-El programa puede acceder a hardware del mundo físico, ya sea para realizar una
-acción (por ejemplo utilizando actuadores) o  para obtener eventos del mundo
-exterior y comunicarlos a la red de Petri (por ejemplo con sensores).
+El programa tiene la posibilidad de acceder a hardware del mundo físico, ya sea
+para realizar una acción (por ejemplo utilizando actuadores) o  para obtener
+eventos del mundo exterior y comunicarlos a la red de Petri (por ejemplo con
+sensores).
 
 La red toma los eventos del mundo exterior y, dependiendo de las condiciones del
 problema y del estado global, calcula los eventos hacia el programa.
-La red es básicamente un procesador de eventos. \cite{TesisMicolini}\cite{chimp}
+La red es un procesador de eventos. \cite{TesisMicolini}\cite{chimp}
 
 Este concepto se amplía en la sección Eventos Físicos y Eventos
 Lógicos de \cite{chimp}. En esta sección se distingue la existencia de los dos
@@ -79,9 +80,9 @@ tipos de eventos mencionados, y se los define como:
     dominio del problema. Están conectados con el software.
   \end{itemize}
 
-Tras la incorporación del concepto de eventos lógicos y físicos, los autores
-proponen en \cite{chimp} un diagrama de arquitectura de alto nivel como el de
-la Figura~\ref{fig:eventos_fisicos-logicos}.
+Tras la incorporación del concepto de eventos lógicos y físicos, en \cite{chimp}
+se propone un diagrama de arquitectura de alto nivel como el de la
+Figura~\ref{fig:eventos_fisicos-logicos}.
 
 \begin{figure}[h]
 	\centering
@@ -90,7 +91,7 @@ la Figura~\ref{fig:eventos_fisicos-logicos}.
 	\label{fig:eventos_fisicos-logicos}
 \end{figure}
 
-Los eventos físicos representados previamente en
+Los eventos físicos representados en la
 Figura~\ref{fig:eventos_fisicos-logicos} abarcan dos tipos de eventos. Uno de
 ellos está efectivamente relacionado con el hardware o software externos al
 sistema (mundo físico). El otro tipo de eventos está relacionado con el manejo
@@ -109,8 +110,8 @@ de eventos existente:
     monitor de redes de Petri.
     \item Eventos Físicos: suceden en el mundo físico y representan sucesos del
     dominio del problema. Este tipo de eventos se comunican a través de las
-    interfaces que ofrezca el elemento del mundo exterior y el lenguaje del
-    software.
+    interfaces que expone el elemento del mundo exterior y las interfaces que
+    ofrece el lenguaje de programación utilizado para desarrollar el software.
     Por ejemplo pueden comunicarse a través de Event Listeners, mecanismos
     de IPC, Sockets, Serial, Bluetooth, etc.
     \item Eventos de Acción: Evento intermedio
@@ -121,15 +122,14 @@ de eventos existente:
     inversión de control descripta en la sección~\ref{sec:inversion_control}.
 \end{itemize}
 
-Teniendo en cuenta esta nueva clasificación de los eventos presentes en el
-sistema, se propone una nueva arquitectura de alto nivel.
+A partir de la nueva clasificación de los eventos del sistema emerge una nueva
+arquitectura de alto nivel.
 
 \subsection{Arquitectura de alto nivel de \nombreFramework}
 \label{sec:arquitectura_alto_nivel}
-Un sistema informático puede ser visto como una secuencia de acciones que son
-ejecutadas ante el cumplimiento de determinadas condiciones. Desde el punto de
-vista del programa que analiza dichas condiciones, se las clasifica
-en síncronas y asíncronas.
+Un sistema informático consiste en una secuencia de acciones que se ejecutan
+ante el cumplimiento de determinadas condiciones. Desde el punto de vista del
+programa que analiza dichas condiciones, se las clasifica en síncronas y asíncronas.
   \begin{itemize}
 	\item Síncronas: Están sicronizadas con la ejecución del programa. Se
 	desencadenan en un momento específico, conocido de antemano.
@@ -188,7 +188,7 @@ Framework puede dividirse en tres partes a nivel de arquitectura:
     \item Encapsular las acciones junto a los eventos lógicos necesarios para su
     sincronización.
   \end{itemize}
-\item Un monitor de redes de Petri (ver sección 2). El mismo debe:
+\item Un monitor de redes de Petri (ver sección 2) cuyas responsabilidades son:
 	\begin{itemize}
 	  \item Brindar las interfaces para la incorporación del modelo de Red de Petri
 	  del sistema, el cual contiene la definición de los eventos
