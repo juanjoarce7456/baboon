@@ -1,25 +1,39 @@
 \section{Introduccion}
 \label{sec:petri_concurrency_monitor_intro}
-Como se dijo en la sección~\ref{sec:objetivos_secundarios}, uno de los
-objetivos de este proyecto integrador es modelar sistemas reactivos para garantizar su
-correcto diseño.
-Para esto se propone modelar el sistema con RdP (ver sección \ref{redes_de_petri}).
-Otro objetivo planteado es separar la lógica de un sistema del código que
-implementa sus funcionalidades y su política de gestión de hilos.
-Teniendo ambos objetivos es cuenta es que se propone que sea el propio modelo
-quien guíe la ejecución lógica del sistema.
-
-Por su naturaleza, los sistemas reactivos son concurrentes y envían y reciben
-eventos del mundo exterior.
-Por esto se debe hacer una buena gestión de la concurrencia para asegurar su correcto
-funcionamiento, utilizando alguna de las técnicas vistas en
-la sección \ref{ProgramacionConcurrente} y para modelarlos se debe incluir en
-el modelo el envío y recepción de eventos.
-
 Como el modelo de concurrencia obtenido por las RdP es centralizado, resulta
-casi natural ejecutar una RdP como lógica secuencial de un sistema reactivo
-dentro de un monitor de concurrencia. Luego, para relacionar los eventos con el
-monitor se utilizan RdP no autónomas.
+directo ejecutar una RdP como lógica secuencial de un sistema reactivo dentro
+de un monitor de concurrencia. Luego, para relacionar los eventos con el
+monitor se utilizan RdP no autónomas. Por lo cual en este apartado desarrollamos
+un monitor de concurrencia con Redes de Petri.
+
+\section{Requerimientos del monitor}
+Del estudio de \cite{Ecuacion_generalizada_LAC}, \cite{codegen}, \cite{chimp} y
+\cite{Bentivegna-Ludemann} emergen los requerimientos del monitor:
+    \begin{enumerate}
+      \item El monitor debe ofrecer interfaces para la carga de una Red de
+      Petri en formato PNML (dialecto Tina).
+      \item El monitor debe implementar la ecuación de estado generalizada
+      descrita en \cite{Ecuacion_generalizada_LAC}.
+      \item El monitor debe ofrecer interfaces para la carga de políticas de
+      prioridad de disparo de transiciones.
+      \item El monitor debe soportar Redes de Petri temporales y de
+      plaza-transición.
+      \item El monitor debe ofrecer interfaces para el disparo de
+      transiciones.
+      \item El monitor debe ofrecer interfaces para la modificación del
+      valor de guardas.
+      \item El monitor debe soportar disparos perennes y no perennes.
+      \item El monitor debe soportar etiquetas de transición Disparada -
+      Informada \cite{codegen}.
+      \item El monitor debe soportar etiquetas de guarda en las
+      transiciones.
+      \item El monitor debe soportar arcos normales, de reset, lectores e
+      inhibidores.
+      \item El monitor debe ofrecer interfaces para la suscripción a
+      informes de transiciones informadas.
+      \item El monitor debe ser desarrollado en Java, solicitado por el
+      Director del proyecto.
+    \end{enumerate}
 
 \section{\javapetriconcurrencymonitor}
 \label{sec:java_petri_concurrency_monitor}

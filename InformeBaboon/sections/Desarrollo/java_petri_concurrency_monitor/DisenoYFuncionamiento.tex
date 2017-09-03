@@ -1,30 +1,20 @@
 \section{Diseño y Funcionamiento}
 
-Como se dijo en la introducción de este capítulo, resulta natural ejecutar
-una RdP dentro de un monitor de concurrencia. Así queda en evidencia la
-necesidad de contar con un software capaz de ejecutar una RdP y que cumpla con
-los requerimientos de un monitor de concurrencia para la realización de este
-proyecto integrador.
 En primera instancia se analizó la reutilización y expansión de las
 funcionalidades del monitor construido en el desarrollo de \cite{codegen}, y
-reutilizado en \cite{chimp}. Durante este análisis se vio que, si bien este
-software cumple con los requerimientos mínimos necesarios, para agregar las
-funcionalidades requeridas por este proyecto integrador era necesaria la
-refactorización de la mayor parte del mismo. Además, el estilo seguido durante
-su desarrollo no se condice con el estándar de Java, siendo esta otra razón
-para decidir hacer una re-implementación completa del monitor.
-Por esto es que, como parte del desarrollo de este proyecto integrador, se
-diseñó y construyó Java Petri Concurrency Monitor (JPCM).
+reutilizado en \cite{chimp}. Este software no satisface los requerimientos, por
+lo cual es necesario diseñarlo y construirlo completamente en este proyecto
+integrador.
 
 \subsection{Arquitectura de Alto Nivel}
 \label{JPCM_arq_alto_nivel}
 
 Según las clasificaciones vistas en las secciones
-\ref{monitor_sincronizacion_explicita} y \ref{politica_monitor}, JPCM es un
-monitor de sincronización explícita y aplica una política de desbloqueo de hilos
-de retorno forzado.
- 
-Las principales partes que componen a JPCM son:
+\ref{monitor_sincronizacion_explicita} y \ref{politica_monitor}, Java Petri
+Cconcurrency Monitor (JPCM) es un monitor de sincronización explícita y aplica
+una política de desbloqueo de hilos de retorno forzado. Teniendo en cuenta los
+requerimientos expresados en el apartado anterior se determinan los principales
+componentes de JPCM:
 \begin{itemize}
   \item \underline{PetriNet:} contiene la información de la RdP a utilizar y la
   lógica de la ejecución
@@ -32,7 +22,7 @@ Las principales partes que componen a JPCM son:
   convertir la información del archivo que describe a la RdP en un formato
   ejecutable para JPCM.
   \item \underline{PetriMonitor:} es el monitor en sí mismo. Expone las
-  interfaces de programación y tiene la responsabilidad de gestionar los hilos
+  interfaces de programación y tiene la responsabilidad de gestionar los hilos,
   para evitar la ejecución concurrente de la RdP.
   \item \underline{TransitionsPolicy:} representa la política de gestión de los
   recursos del monitor. No es la misma política analizada en la sección
