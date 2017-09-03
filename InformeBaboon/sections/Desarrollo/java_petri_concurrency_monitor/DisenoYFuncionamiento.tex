@@ -423,21 +423,21 @@ aparecen en todas ellas son:
 
 Las subfiguras grafican los siguientes eventos:
 \begin{enumerate}[label=\alph*)]
-    \item El hilo $th_{0}$ llama a
-    \mint{java}|petriMonitor.fireTransition("t0")|. 
-    \item La transición $t_{0}$ se sensibiliza en el instante $t_{i}$. Como no
-    hay hilo activo en el monitor y la cola de entrada está vacía, $th_{0}$ toma
-    el lock de entrada e intenta disparar $t_{0}$. Mientras tanto se encolan
-    algunos hilos en la cola de entrada
+    \item La transición $t_{0}$ se sensibiliza en el instante $t_{i}$. Luego, el
+    hilo $th_{0}$ llama a \mint{java}|petriMonitor.fireTransition("t0")|. 
+    \item Como no hay hilo activo en el monitor y la cola de entrada está vacía,
+    $th_{0}$ toma el lock de entrada e intenta disparar $t_{0}$. Mientras tanto
+    se encolan algunos hilos en la cola de entrada
     \item La llamada a \mint{java}|petri.fire("t0")| retornó un código
     \mint{java}|TIMED_BEFORE_TIMESPAN|, por lo que $th_{0}$ se bloquea
-    temporalmente hasta el instante $t_{i}+a$ y libera la entrada al monitor
-    \item Otro hilo ingresa al monitor a disparar a $t_{1}$
+    temporalmente hasta el instante $t_{i}+a$.
+    \item Antes de bloquearse, $th_{0}$ libera la entrada al monitor. Otro hilo
+    ingresa al monitor a disparar a $t_{1}$
     \item Se alcanza el instante $t_{i}+a$ por lo que $th_{0}$ se desbloquea y
     reintenta el disparo. Como la cola de entrada no está vacía, se encola al
     final
     \item Otro hilo ingresa al monitor a disparar a $t_{2}$
-    \item Se alcanzó el instante $t_{i}+b$ (fin del intervalo de disparo de
+    \item Se superó el instante $t_{i}+b$ (fin del intervalo de disparo de
     $t_{0}$) sin que $th_{0}$ haya podido hacer el disparo, provocando su
     inanición
 \end{enumerate}
@@ -526,8 +526,8 @@ sensibilización temporal de una transición temporizada tendrá máxima priorid
 al momento de reintentar un disparo fallido.
 
 Para implementar colas de prioridad, \mint{java}|PetriMonitor| utiliza una
-instancia de la clase \textit{PriorityBinaryLock} para la cola de entrada, y
-\mint{java}|FairQueue| utiliza una para las colas de condición. (ver figura
+instancia de la clase \mint{java}|PriorityBinaryLock| para la cola de entrada,
+y \mint{java}|FairQueue| utiliza una para las colas de condición. (ver figura
 \ref{fig:JPCM_PetriMonitor_Structure}).
 Esta clase define un lock que implementa dos métodos básicos para su uso:
 \begin{itemize}
@@ -538,8 +538,8 @@ Esta clase define un lock que implementa dos métodos básicos para su uso:
   cola despierta al primero.
 \end{itemize}
 
-Internamente, \textit{PriorityBinaryLock} utiliza una cola de prioridades para
-gestionar los hilos bloqueados que almacena. De esta forma, siendo $A$ y $B$
+Internamente, \mint{java}|PriorityBinaryLock| utiliza una cola de prioridades
+para gestionar los hilos bloqueados que almacena. De esta forma, siendo $A$ y $B$
 dos hilos bloqueados en la cola de prioridades, $A$ estará más próximo a ser
 desbloqueado si:
 \begin{itemize}
@@ -561,16 +561,16 @@ lleva a la solución del caso de inversión de prioridades de la sección
 
 Las subfiguras grafican los siguientes eventos:
 \begin{enumerate}[label=\alph*)]
-    \item El hilo $th_{0}$ llama a
-    \mint{java}|petriMonitor.fireTransition("t0")|
-    \item La transición $t_{0}$ se sensibiliza en el instante $t_{i}$. Como no
-    hay hilo activo en el monitor y la cola de entrada está vacía, $th_{0}$ toma
-    el lock de entrada e intenta disparar $t_{0}$. Mientras tanto se encolan
-    algunos hilos en la cola de entrada
+    \item La transición $t_{0}$ se sensibiliza en el instante $t_{i}$. El hilo
+    $th_{0}$ llama a \mint{java}|petriMonitor.fireTransition("t0")|
+    \item Como no hay hilo activo en el monitor y la cola de entrada está vacía,
+    $th_{0}$ toma el lock de entrada e intenta disparar $t_{0}$. Mientras tanto
+    se encolan algunos hilos en la cola de entrada
     \item La llamada a \mint{java}|petri.fire("t0")| retornó un código
     \mint{java}|TIMED_BEFORE_TIMESPAN|, por lo que $th_{0}$ se bloquea
-    temporalmente hasta el instante $t_{i}+a$ y libera la entrada al monitor
-    \item Otro hilo ingresa al monitor a disparar a $t_{1}$
+    temporalmente hasta el instante $t_{i}+a$
+    \item Antes de bloquearse, $th_{0}$ libera la entrada al monitor. Otro hilo
+    ingresa al monitor a disparar a $t_{1}$
     \item Se alcanza el instante $t_{i}+a$ por lo que $th_{0}$ se desbloquea y
     reintenta el disparo. Como existe un hilo activo se bloquea con alta
     prioridad.
@@ -579,7 +579,8 @@ Las subfiguras grafican los siguientes eventos:
     \item $th_{0}$ ingresa al monitor dentro del intervalo de sensibilización de
     $t_{0}$ para reintentar el disparo
     \item $th_0$ logró disparar a $t_{0}$ dentro del intervalo de
-    sensibilización y abandona el monitor, liberando la entrada para un nuevo hilo
+    sensibilización y abandona el monitor, liberando la entrada para un nuevo
+    hilo
 \end{enumerate}
 
 \begin{figure}[H]
