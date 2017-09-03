@@ -9,31 +9,30 @@ un monitor de concurrencia con Redes de Petri.
 \section{Requerimientos del monitor}
 Del estudio de \cite{Ecuacion_generalizada_LAC}, \cite{codegen}, \cite{chimp} y
 \cite{Bentivegna-Ludemann} emergen los requerimientos del monitor:
-    \begin{enumerate}
-      \item El monitor debe ofrecer interfaces para la carga de una Red de
-      Petri en formato PNML (dialecto Tina).
-      \item El monitor debe implementar la ecuación de estado generalizada
-      descrita en \cite{Ecuacion_generalizada_LAC}.
-      \item El monitor debe ofrecer interfaces para la carga de políticas de
-      prioridad de disparo de transiciones.
-      \item El monitor debe soportar Redes de Petri temporales y de
-      plaza-transición.
-      \item El monitor debe ofrecer interfaces para el disparo de
-      transiciones.
-      \item El monitor debe ofrecer interfaces para la modificación del
-      valor de guardas.
-      \item El monitor debe soportar disparos perennes y no perennes.
-      \item El monitor debe soportar etiquetas de transición Disparada -
-      Informada \cite{codegen}.
-      \item El monitor debe soportar etiquetas de guarda en las
-      transiciones.
-      \item El monitor debe soportar arcos normales, de reset, lectores e
-      inhibidores.
-      \item El monitor debe ofrecer interfaces para la suscripción a
-      informes de transiciones informadas.
-      \item El monitor debe ser desarrollado en Java, solicitado por el
-      Director del proyecto.
-    \end{enumerate}
+\begin{enumerate}
+  \item Debe ofrecer interfaces para la carga de una Red de Petri en formato
+  estándar PNML (dialecto Tina).
+  \item Debe soportar Redes de Petri ordinarias y temporales.
+  \item Debe ofrecer interfaces para el disparo de transiciones.
+  \item Debe implementar la ecuación de estado generalizada descrita en
+  \cite{Ecuacion_generalizada_LAC} para la ejecución de RdP.
+  \item Debe soportar las etiquetas de transición definidas en \cite{codegen}
+  (transiciones automáticas/disparadas y transiciones informadas/no
+  informadas).\\
+  Esto implica los siguientes requerimientos:
+  \begin{enumerate}
+    \item Debe ofrecer interfaces para la suscripción a informes de transiciones
+    informadas.
+    \item Debe prohibir el disparo manual de transiciones automáticas.
+    \item Debe disparar automáticamente transiciones automáticas sensibilizadas.
+  \end{enumerate}
+  \item Debe ofrecer interfaces para la carga de políticas de prioridad de
+  disparo de transiciones.
+  \item Debe brindar alguna forma de asociar guardas con transiciones.
+  \item Debe ofrecer interfaces para la modificación del valor de guardas.
+  \item Debería soportar disparos perennes y no perennes.
+  \item Debería soportar arcos normales, de reset, lectores e inhibidores.
+\end{enumerate}
 
 \section{\javapetriconcurrencymonitor}
 \label{sec:java_petri_concurrency_monitor}
@@ -43,28 +42,3 @@ de Petri, hecho en lenguaje de programación Java.
 Provee al usuario de una interfaz de programación de aplicaciones (API) para
 ejecutar una RdP, pretegiéndola de los problemas de concurrencia con la
 exclusion mutua del monitor.
-
-Brinda soporte para:
-\begin{itemize}
-  \item Redes de Petri:
-  \begin{itemize}
-    \item Plaza-Transición
-    \item Temporales
-  \end{itemize}
-  
-  \item Tipos de arcos;
-  \begin{itemize}
-    \item Normal
-    \item Lector o de Prueba
-    \item Inhibidor
-    \item Reset
-  \end{itemize}
-  
-  \item Carga de RdP en lenguaje PNML (dialecto de TINA)
-  \item Guardas
-  \item Transitiones automáticas
-  \item Subscripción a eventos en transiciones informadas
-  \item Políticas intercambiables y extensibles de prioridad de disparo
-  \item Disparos perennes y no-perennes
-
-\end{itemize}
