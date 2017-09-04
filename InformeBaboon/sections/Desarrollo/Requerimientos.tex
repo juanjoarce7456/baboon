@@ -27,38 +27,12 @@ debe cumplir el framework a desarrollar.
 \end{table}
     
 \section{Definición de Requerimientos}
+\label{sec:definicion_reqs}
 A continuación se definen los requerimientos del framework a desarrollar:
 \begin{enumerate}
     \item El framework debe contar con un monitor de Redes de Petri.
     \item El framework debe delegar el control del flujo de ejecución en el
     monitor de Redes de Petri.
-        \begin{itemize}
-            \item El framework debe ofrecer interfaces para mapear eventos lógicos
-            de una RdP a eventos de acción especificados por los usuarios.
-            \item El framework debe ofrecer interfaces para especificar si un
-            controlador de acción responde a un evento físico de entrada o a un
-            evento físico de salida.
-            \item Un evento de acción debe definir todos los eventos lógicos
-            necesarios para la sincronización de la ejecución de un controlador de
-            acción:
-                \begin{itemize}
-                  \item Permiso de ejecución del controlador de acción (disparo de
-                  transición).
-                  \item Cambio de estado del sistema (seteo de guardas).
-                  \item Aviso de finalización de ejecución del controlador de acción
-                  (disparo de transición).
-                \end{itemize}
-            \item El framework debe ofrecer interfaces para la suscripción de
-            controladores de acción a eventos de acción.
-            \item El framework debe ser responsable de crear y controlar la
-            ejecución de los hilos de ejecución para controladores de acción que
-            generen eventos físicos de salida.
-            \item El framework debe ser responsable de controlar la ejecución de los
-            hilos creados por el usuario para ejecutar controladores de acción que
-            manejen eventos físicos de entrada.
-            \item El monitor de RdP debe manejar los eventos lógicos del sistema,
-            mediante las interfaces de disparo y seteo de guardas.
-        \end{itemize}
     \item Para un usuario con conocimiento intermedio en Java y Redes de Petri, el
     framework podría aprender a usarse en una semana o menos.
         \begin{itemize}

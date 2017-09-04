@@ -123,7 +123,16 @@ de eventos existente:
 \end{itemize}
 
 A partir de la nueva clasificación de los eventos del sistema emerge una nueva
-arquitectura de alto nivel.
+arquitectura de alto nivel. A su vez emergen nuevos requerimientos, relacionados
+con el requerimiento número 2 de la sección~\ref{sec:definicion_reqs}. A continuación
+se listan los nuevos requerimientos:
+
+\begin{itemize}
+  \item El monitor de RdP debe manejar los eventos lógicos del sistema,
+  mediante las interfaces de disparo y seteo de guardas.
+  \item El framework debe ofrecer interfaces para mapear eventos lógicos de una
+  RdP a eventos de acción especificados por los usuarios.
+\end{itemize}
 
 \subsection{Arquitectura de alto nivel de \nombreFramework}
 \label{sec:arquitectura_alto_nivel}

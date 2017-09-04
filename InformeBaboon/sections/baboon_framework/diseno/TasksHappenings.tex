@@ -1,16 +1,14 @@
 \section{Clasificación de Eventos Físicos: \\ Eventos Task y Eventos Happening}
 \label{sec:clasificacion_eventos_fisicos} 
 
-En la Figura~\ref{fig:actividades_evento_task} se muestra que la única
-condición necesaria para la ejecución de una acción que emite un evento físico
-de salida es la decisión de desbloquear el hilo que la ejecuta. Dicha decisión
-se toma dentro del monitor.
-Esto se debe a que el hilo realiza el disparo de petición de ejecución tan
-pronto como sea posible al inicio de la ejecución del programa, sin tener en
-cuenta el estado actual de la red (ver sección sincronizacion por peticion de
-ejecucion). En consecuencia, el hilo queda bloqueado en el monitor hasta que el
-mismo decide desbloquearlo, dependiendo del estado de la red y la política de
-prioridades.
+El monitor de RdP es el único responsable del bloqueo o habilitación de un hilo
+que ejecuta una acción emisora de eventos físicos de salida. El hilo realiza el
+disparo de petición de ejecución al inicio de la ejecución del programa, sin
+tener en cuenta el estado actual de la red (ver
+sección~\ref{sec:sincronizacion_peticion_ejecucion}). En consecuencia, el hilo
+queda bloqueado en el monitor hasta que el mismo decide desbloquearlo,
+dependiendo del estado de la red y la política de prioridades (ver
+Figura~\ref{fig:actividades_evento_task}).
 
 \begin{figure}[H]
 	\centering
@@ -59,16 +57,26 @@ el desarrollo del framework.
 
 \section{Controladores de Acciones: \\ Task Controllers y Happening Controllers}
 \label{sec:controladores_de_acciones}
+
 Las acciones que debe realizar el sistema, junto con las interfaces necesarias
 para la comunicación de los eventos físicos correspondientes, se encuentran
 embebidos dentro de controladores de acción. En la
 Figura~\ref{fig:arquitectura_petri-manejador-acciones-mundo} se muestran dichos
-controladores.
+controladores.\\
+
 A partir de la clasificación de eventos físicos propuesta en la
 sección~\ref{sec:clasificacion_eventos_fisicos}, surge la necesidad de
 clasificar los controladores de acción respecto a su condición de receptores de
-Eventos Happening, o de emisores de Eventos Task. Dicha clasificación da origen
-a los controladores de tipo Happening Controller y Task Controller respectivamente.
+Eventos Happening, o de emisores de Eventos Task. En consecuencia, emerge un
+nuevo requerimiento del framework, relacionado con el requerimiento número 2
+definido en la sección~\ref{sec:definicion_reqs}:
+\begin{itemize}
+    \item El framework debe ofrecer interfaces para especificar si un
+    controlador de acción responde a un evento físico de entrada o a un
+    evento físico de salida.
+\end{itemize}
+En respuesta a este requerimiento se definen los controladores de tipo
+Happening Controller y Task Controller.
 
 \subsection{Ejecución de un Task Controller}
 \label{sec:ejecucion_task_controller}
@@ -90,10 +98,17 @@ debe a las siguientes condiciones:
     monitor al momento de la emisión de este evento
 \end{itemize}
 
-Como corolario del analisis anterior se determina que la ejecución de un Task
-Controller debe encapsularse en un hilo al momento de inicialización del
-programa.
-El hilo se encarga de:
+Del analisis anterior emerge un nuevo requerimiento, relacionado
+con el requerimiento 2 de la sección~\ref{sec:definicion_reqs}:
+\begin{itemize}
+    \item El framework debe ser responsable de crear y controlar la
+    ejecución de los hilos de ejecución para controladores de acción que
+    generan eventos físicos de salida.
+\end{itemize}
+
+ Como corolario, se determina que la ejecución de un Task Controller debe
+ encapsularse en un hilo al momento de inicialización del programa. El hilo se
+ encarga de:
 \begin{enumerate}
   \item Realizar las peticiones de los permisos de sincronización al
   monitor de forma directa, sin tener en cuenta el estado de la red.
@@ -133,8 +148,17 @@ En principio, realizar una llamada desde el código de usuario podría generar u
 grave problema en cuanto a las responsabilidades de sincronización. Las
 acciones del Happening Controller quedarían fuera del mecanismo de
 sincronización del monitor de Petri, atentando contra el objetivo de delegar
-el asincronismo del sistema en la RdP.
-Este problema es resuelto mediante la utilización de herramientas de la
+el asincronismo del sistema en la RdP. \\
+
+Del análisis anterior emerge un nuevo requerimiento, relacionado con el
+requerimiento 2 de la sección~\ref{sec:definicion_reqs}:
+    \begin{itemize}
+        \item El framework debe ser responsable de controlar la ejecución de los
+        hilos creados por el usuario, correspondientes a controladores de acción
+        que manejan eventos físicos de entrada.
+    \end{itemize}
+
+Este requerimiento se cumple mediante la utilización de herramientas de la
 programacón orientada a aspectos (ver sección~\ref{sec:aop}). Se optó por
 encapsular las instrucciones de sincronización necesarias dentro de advices.
 Dichos advices son aplicados en joinpoints, definidos por los puntos de
