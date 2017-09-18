@@ -92,8 +92,8 @@ En el diagrama de la figura \ref{fig:JPCM_PetriNet_Structure} se observan las
 clases que componen a esta sección, sus relaciones y colaboraciones:
 
 \begin{figure}[H]
-  \hspace*{-3cm}
-  \includegraphics[width=180mm]{JPCM_PetriNet_Structure_Simple}
+  \centering
+  \includegraphics[height=\textheight]{JPCM_PetriNet_Structure_Simple}
   \caption{Diagrama de clases de la sección \textit{Modelo}}
   \label{fig:JPCM_PetriNet_Structure}
 \end{figure}
@@ -681,7 +681,8 @@ soporte para guardas con habilitación por valor \mint{java}|true| o por valor
 \mint{java}|false|.
 
 Las guardas son cargadas en tiempo de inicialización durante la construcción
-del objeto \textit{PetriNet} y son inicializadas con valor \mint{java}|false|.
+del objeto \mint{java}|PetriNet| y son inicializadas con valor
+\mint{java}|false|.
 
 En cualquier momento un hilo puede modificar el valor de una guarda accediendo
 al método \mint{java}|PetriMonitor.setGuard()| con el nombre de la guarda a

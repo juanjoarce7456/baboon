@@ -33,13 +33,13 @@ se agrega a una transición como un atributo \textit{label}.
 Una etiqueta especifica tres propiedades de una transición:
 
 \begin{itemize}
-    \item \underline{Automática:} Una transición automática no se puede disparar
-    manualmente. En su lugar, se dispara automáticamente cuando la lógica de
-    sensibilizado y la política lo indican.
+    \item \underline{Automática:} Una transición automática no requiere de un
+    evento para dispararse. En su lugar, se dispara automáticamente cuando la
+    lógica de sensibilizado y la política lo indican.
     \item \underline{Informada:} Una transición informada acepta peticiones de
     suscripción a informes, y envía informes a sus suscriptores ante un disparo
     (ver sección \ref{mensaje_eventos}).
-    \item \underline{Guarda:} Es el nombre de la guarda asocuada a la
+    \item \underline{Guarda:} Es el nombre de la guarda asociada a la
     transición. Se especifica también el estado de habilitación (ver sección
     \ref{guardas}).
 \end{itemize}
@@ -57,10 +57,10 @@ Donde:
 \begin{itemize}
     \item \textbf{valor\_automatica} es un string no sensible a mayúsculas que
     puede adoptar valor \textit{A} para una transición automática, o
-    \textit{F} o \textit{D} para una disparada.
+    \textit{F} ó \textit{D} para una disparada.
     \item \textbf{valor\_informada} es un string no sensible a mayúsculas que
-    puede adoptar valor \textit{I} para una transición informada, y
-    \textit{N} para no informada.
+    adopta el valor \textit{I} para una transición informada, y \textit{N} para
+    una no informada.
     \item \textbf{nombre\_guarda} es el nombre de la guarda asociada a la
     transición etiquetada. Se asocia por habilitación por \textit{false}
     si antes del nombre se agrega el símbolo $!$ ó $\mathtt{\sim}$.\\
@@ -82,9 +82,9 @@ Un ejemplo de etiqueta es:
 La transición etiquetada es \textit{disparada}, \textit{informada}, y tiene una
 guarda asociada llamada \textit{foobar}, que la habilita por valor \textbf{false}.
 
-Todos los valores de las etiquetas son opcionales, pero para poder especificar
-cualquiera, todos los valores a su izquierda deben estar explicitados. Los
-valores por defecto son:
+Todos los valores de etiqueta son opcionales. Para especificar uno de ellos,
+todos los valores a la izquierda deben estar explícitos. Los valores por defecto
+son:
 \begin{itemize}
     \item valor\_automatica: \textit{D}
     \item valor\_informada: \textit{N}
@@ -95,9 +95,8 @@ valores por defecto son:
 \label{mensaje_eventos}
 
 Cuando se dispara una transición informada, si existe al menos un observador
-suscripto a sus eventos, se envía un mensaje de evento.\\
-El mensaje de evento se envía en formato JSON y contiene información sobre la
-transición disparada. La información es la siguiente:
+suscripto a sus eventos, se envía un mensaje. Este mensaje respeta el formato
+JSON y contiene la siguiente información sobre la transición disparada:
 
 \begin{itemize}
     \item \underline{Nombre de la transición:} Provisto por el usuario o
@@ -133,18 +132,18 @@ A su vez, la suscripción se realiza con el objeto \mint{java}|Transition| o
 alternativamente con el nombre de la transición.
 
 A modo de ejemplo se asume que existe una clase \mint{java}|ConcreteObserver|
-que se ajusta a las restricciones antes mencionadas, y se genera una suscripción por
-objeto \mint{java}|Transition| y otra por nombre de transición.
+que se ajusta a las restricciones antes mencionadas. Se generan dos
+suscripciones del mismo objeto observer a dos transiciones distintas.
 
 \begin{figure}[H]
 \centering
 \begin{minted}{java}
   // código
   
-  // transición a la que se quiere suscribir
+  // primera transición a la que se quiere suscribir
   Transition t0 = petri.getTransitions()[0]; 
   
-  // otra transición a la que se quiere suscribir
+  // segunda transición a la que se quiere suscribir
   String t1Name = "start_process_01";
   
   Observer<String> observer = new ConcreteObserver();
@@ -185,7 +184,7 @@ En la figura \ref{fig:guarda_como_decision} se muestra cómo la guarda
 \end{figure}
 
 \begin{framed}
-\textbf{Nota:} Todas las guardas comienzan con valor \mint{java}|false| al
+\textbf{Nota:} Todas las guardas se inicializan con valor \mint{java}|false| al
 principio de la ejecución del programa.
 \end{framed}
 
@@ -223,11 +222,14 @@ siguiente fragmento de código inicializa  el entorno:
 \begin{minted}{java}
 public void setUp() {
   PetriNetFactory factory = new PetriNetFactory("/path/a/mi/red/de/petri.pnml");
-  PetriNet petri = (PlaceTransitionPetriNet) factory.makePetriNet(petriNetType.PT);
+  PetriNet petri = factory.makePetriNet(petriNetType.PLACE_TRANSITION);
   TransitionsPolicy policy = new FirstInLinePolicy();
   PetriMonitor monitor = new PetriMonitor(petri, policy);
   
-  // declarar e los hilos de trabajo aquí
+  // declarar los hilos de trabajo aquí
+  
+  // de querer agregar un observer, se lo debe instanciar
+  // y suscribir en este punto
   
   // se debe inicializar la RdP antes de poder utilizarla
   petri.initializePetriNet();
@@ -255,9 +257,8 @@ public void setUp() {
 \subsection{Disparo de una Transición}
 
 El disparo de una transición se realiza en exclusión mutua dentro del monitor.
-Se realiza mediante el llamado a ejecución del método
-\mint{java}|fireTransition()| sobre una instancia de la clase
-\mint{java}|PetriMonitor|.
+Se ejecuta mediante el método \mint{java}|fireTransition()| sobre una instancia
+de la clase \mint{java}|PetriMonitor|.
 
 Existen dos formas de especificar la transición a disparar, ya sea utilizando
 el objeto \mint{java}|Transition| o el nombre de la transición.
@@ -307,28 +308,32 @@ bloquea en la cola de condición asociada (comportamiento por defecto). Por otro
 lado, si el disparo es no-perenne, el hilo que intenta hacer el disparo no se
 bloquea y abandona el monitor.
 
-El concepto de disparo no-perenne es útil para modelar condiciones no
-bloqueantes para la realización de una acción. Un ejemplo consiste en la acción
-de encender una luz, cuya condición es que la luz esté apagada. De no cumplirse
-la condición la acción no se realiza, pero el resultado final es el esperado.
-De esta forma, el hilo no se bloquea esperando a que la luz se apague para luego
-encenderla nuevamente.
+El concepto de disparo no-perenne es útil para modelar acciones no bloqueantes.
+Un ejemplo de acción no bloqueante es el encendido de una luz:
+\begin{itemize}
+    \item Si la luz está apagada, se acciona el interruptor y la luz se enciende
+    \item Si la luz está encendida no se toma ninguna acción
+\end{itemize}
+En ambos casos el resultado final es el esperado aunque en el segundo no se haya
+efectuado ninguna acción.
+De la misma forma, un hilo que realiza un disparo no-perenne sobre una
+transición no sensibilizada no se bloquea esperando a que ésta se sensibilice.
 
 En el caso del disparo no-perenne de una transición temporal, el hilo
-llamador puede bloquearse únicamente si el intento de disparo ocurre antes del
-principio del intervalo dinámico de la transición (ver sección
+que realiza el disparo puede bloquearse únicamente si el intento de disparo
+ocurre antes del principio del intervalo dinámico de la transición (ver sección
 \ref{semantica_tiempo_debil}). Este tipo de bloqueo es temporizado y no requiere
 de la activación por medio de otro hilo.
 
 \begin{framed}
-\textbf{Nota:} Como el disparo de una transición puede bloquear el hilo que lo
-ejecuta, no se recomienda utilizar el hilo principal para realizar disparos
-puesto que su bloqueo genera el bloqueo del programa completo.
+\textbf{Nota:} Dado que el disparo perenne de una transición no sensibilizada
+bloquea al hilo que lo ejecuta, no debe usarse el hilo principal para realizar
+disparos.
 \end{framed}
 
 \begin{framed}
-\textbf{Nota:} El disparo explícito de una transición automática es un error
-grave, que que provoca un error \mint{java}|IllegalTransitionFiringError|.
+\textbf{Nota:} El disparo explícito de una transición automática provoca un
+error \mint{java}|IllegalTransitionFiringError|.
 \end{framed}
 
 \subsection{Política de Transiciones}
@@ -354,11 +359,13 @@ sensibilizadas.
     entre todas las sensibilizadas.
 \end{itemize}
 
-Se puede asignar una política de transiciones al monitor de dos formas:
+Existen dos formas de asignar una política de transiciones al monitor. Estas
+son:
 
 \begin{itemize}
-    \item Durante la inicialización, pasando un objeto instancia de
-    \mint{java}|TransitionsPolicy| al constructor de \mint{java}|PetriMonitor|.
+    \item Durante la construcción del objeto \mint{java}|PetriMonitor|,
+    utilizando una instancia de \mint{java}|TransitionsPolicy| en el
+    constructor.
     \item En tiempo de ejecución, mediante la llamada al método\\ {
     \begin{minted}{java}
   PetriMonitor.setTransitionsPolicy(
@@ -369,9 +376,10 @@ Se puede asignar una política de transiciones al monitor de dos formas:
 
 \paragraph{Creación de una Política de Transiciones:}
 Cualquier instancia de una clase que extienda la clase abstracta
-\mint{java}|TransitionsPolicy| puede ser usada como política de transiciones.
-La forma de especificar la próxima transición a elegir sobre un conjunto es
-implementando el método \mint{java}|public int which(boolean[] enabled)| donde:
+\mint{java}|TransitionsPolicy| es una política de transiciones aceptada por el
+monitor. La forma de especificar la próxima transición a elegir sobre un
+conjunto es implementando el método \mint{java}|public int which(boolean[]
+enabled)| donde:
 \begin{itemize}
     \item El array \mint{java}|enabled| está ordenado por índice de las
     transiciones, que se corresponde con el orden de
@@ -445,7 +453,13 @@ public class OrderedPrioritiesPolicy extends TransitionsPolicy {
 \end{figure}
 
 \begin{framed}
-\textbf{Nota:} la implementación de una política de transiciones de forma
-incorrecta puede llevar a situaciones de conflicto que terminen en la inanición
+\textbf{Nota:} La implementación de una política de transiciones de forma
+incorrecta lleva a situaciones de conflicto donde se produce la inanición
 de uno o más hilos de ejecución.
+\end{framed}
+
+\begin{framed}
+\textbf{Nota:} Si existe al menos un valor \mint{java}|true| en el vector
+\mint{java}|enabled|, el método \mint{java}|which| no debe retornar un valor
+negativo porque genera inanición sobre uno o más hilos de ejecución.
 \end{framed}
