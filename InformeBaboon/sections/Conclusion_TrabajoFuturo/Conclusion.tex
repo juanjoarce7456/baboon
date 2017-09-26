@@ -1,47 +1,62 @@
 \section{Conclusión}
 
-Como se planteó inicialmente en los objetivos, se logró construir un framework
-para el desarrollo de sistemas reactivos capaz de manejar la concurrencia de
-forma centralizada ejecutando una red de Petri. El software desarrollado por un
-usuario se ejecuta concurrentemente según el modelo lógico provisto (RdP),
-gestionando la concurrencia de manera transparente.
+En este trabajo se logró construir \textit{\nombreFramework}, un framework para
+el desarrollo de sistemas reactivos capaz de manejar la gestión de recursos, la
+concurrencia y la sincronización de hilos de forma centralizada. El flujo de
+ejecución es conducido a través de un modelo de Red de Petri que implementa la
+lógica del sistema.
+La gestión de prioridad de ejecución de los hilos se implementa a través de
+políticas de prioridad a cargo del usuario, de forma separada al modelo.
 
-El desarrollo del monitor de concurrencia para redes de Petri (JPCM) cumple con
-el objetivo de ejecutar RdP utilizando la ecuación generalizada presentada por
-\cite{Ecuacion_generalizada_LAC}.
+El framework transforma el modelo de RdP en un código interpretado simplificando
+el diseño del software del usuario. En consecuencia la implementación de la
+concurrencia y gestión de recursos se realiza únicamente a través de la RdP.
 
-Las interfaces expuestas por el framework permiten que el código del usuario
-explote todas las características de la orientación a objetos (no así el
-desarrollado en \cite{chimp}) y abstraen al usuario de la RdP gracias a la capa
-intermedia provista por los eventos de acción (ver sección
-\ref{sec:diseno_topicos}). Además, se implementó la inversión de control del
-framework mediante la utilización de prácticas de Reflection y de Aspect
-Oriented Programming.
+Dada la necesidad de ejecutar Redes de Petri se construyó \textit{Java Petri
+Concurrency Monitor} (JPCM), un monitor de concurrencia que implementa la
+ecuación generalizada desarrollada en \cite{Ecuacion_generalizada_LAC}.
 
-Por otro lado, se cumplieron las expectativas de complejidad de uso de Baboon
-Framework. El usuario debe aprender 10 conceptos para poder utilizarlo:
-\begin{enumerate}
-  \item HappeningController
-  \item TaskController
-  \item GuardProvider
-  \item ComplexSecuentialTask
-  \item Políticas de Prioridad de Transición
-  \item Tópicos
-  \item Interfaz BaboonApplication
-  \item Interfaz de suscripción de acciones simples.
-  \item Interfaz de creación de tareas complejas.
-  \item Interfaz para agregar una tarea a una tarea compleja.
-\end{enumerate}
-De esta manera, se cumple con el límite planteado inicialmente en los
-requerimientos.
+JPCM cuenta con un mecanismo de suscripción a disparos de transiciones que
+permite la existencia de observers asíncronos a la ejecución de la RdP.
+Además implementa las colas de espera y suspensión de hilos necesarias para 
+la gestión de concurrencia y sincronización mencionadas previamente.
 
-Los requerimientos de testing, disponibilidad de código y documentación también
-fueron resueltos. El código del framework se encuentra disponible
-públicamente en repositorios en la nube. Dentro de dichos repositorios se
-encuentra también la documentación en formato Javadoc y los casos de test
-automatizados para las funcionalidades implementadas.
+La comunicación entre los componentes de \textit{\nombreFramework Framework} y
+los componentes del software del usuario se realiza mediante el intercambio de
+eventos. De forma similar, el software del usuario es responsable de emitir y
+recibir eventos del mundo físico.
+
+El sistema de usuario queda comprendido por:
+\begin{itemize}
+    \item El modelo de RdP
+    \item El conjunto de acciones: Son porciones de código con una
+    responsabilidad concreta y simple. Intercambian eventos con el mundo físico.
+    \item El conjunto de eventos de acción: Contienen las reglas de traducción
+    entre los eventos del mundo físico y eventos comprensibles para el modelo de
+    RdP.
+    \item El conjunto de suscripciones de acciones a eventos de acción
+\end{itemize}
+
+Los eventos de acción funcionan como una capa de abstracción para el programador
+de acciones, evitando la necesidad de conocer detalles del modelo de RdP.
+
+\textit{\nombreFramework Framework} está diseñado para no imponer restricciones
+sobre las herramientas que ofrece el lenguaje de programación. Permitiendo así
+al usuario utilizar todas las características de la programación orientada a
+objetos en el diseño de su sistema.
+
+Se implementó la inversión de control del framework mediante la utilización de
+prácticas de \textit{Reflection} y \textit{Aspect Oriented Programming}. Como
+resultado, el flujo de control del programa es responsabilidad únicamente del
+framework y el código de usuario se centra en las funcionalidades concretas del
+sistema a implementar.
+
+El código del framework se encuentra disponible de forma pública en repositorios
+en la red (ver sección \ref{config_baboon_env}). En dichos repositorios se
+encuentra también la documentación en formato \textit{Javadoc} y los casos de
+test automatizados para las funcionalidades implementadas.
 
 La utilización de Baboon Framework en conjunto con el proceso de diseño de
 sistemas reactivos expuesto en \cite{Bentivegna-Ludemann} permite el diseño y
 desarrollo de sistemas reactivos confiables, mantenibles y portables a
-múltiples plataformas (por estar desarrollados en lenguaje Java).
+múltiples plataformas.
