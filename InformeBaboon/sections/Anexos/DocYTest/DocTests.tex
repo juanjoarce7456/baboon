@@ -1,0 +1,39 @@
+\section{Generación de la documentación en formato HTML}
+\label{genJavadoc}
+Junto con el código fuente desarrollado se encuentra en formato Javadoc la
+documentación del mismo. El código mencionado se obtiene de los repositorios
+ubicados en:
+\begin{itemize}
+  \item JPCM: \url{\repoMonitor}
+  \item \nombreFramework Framework: \url{\repoFramework}
+\end{itemize}
+
+ Al ser Javadoc un formato estándar existen intérpretes
+que lo llevan a una forma legible para desarrolladores de software.
+La IDE Eclipse incluye una herramienta que realiza esta tarea mediante la cual
+se construye la documentación de \nombreFramework Framework.
+
+Para utilizar esta herramienta deben realizarse los siguientes pasos:
+\begin{itemize}
+  \item Dirigirse al menú \textit{Project}
+  \item Seleccionar la opción \textit{Generate Javadoc\ldots}
+  \item Del árbol del proyecto seleccionar el directorio \textit{/src}
+  \item Elegir el nivel de visibilidad deseado (\textit{public} para usuarios
+  del framework, \textit{private} para desarrolladores)
+  \item Elegir la ubicación donde se generará la documentación
+  \item Hacer click en \textit{Finish}
+\end{itemize}
+
+\section{Generación de la documentación de Test}
+En los repositorios mencionados previamente se encuentra el código fuente de los
+casos de prueba automatizados. A fin de conocer estos casos, se genera la
+documentación de los mismos.
+Esto se realiza siguiendo los pasos descriptos en la sección \ref{genJavadoc}
+con la salvedad de que se elige la carpeta \texit{/test} del árbol del proyecto.
+
+De esta manera se genera una página HTML conteniendo la descripción de los casos
+de test desarrollados, explicitando \textit{precondiciones}, \textit{acciones} y
+\textit{resultados esperados}.
+
+Para ejecutar los casos de prueba, debe ejecutarse el directorio \texit{/test}
+utilizando JUnit.

@@ -9,7 +9,7 @@ Para más información sobre el estándar PNML, el sitio online de referencia de
 lenguaje es \cite{PnmlSite}.
 
 \begin{framed}
-    \paragraph{Nota:}
+    \textbf{Nota:}
     Como TINA no tiene soporte para arcos de reset, el usuario debe especificar
     este tipo de conexión modificando el archivo PNML con un editor de texto.
     Se recomienda utilizar otro tipo de arco en TINA y luego cambiar el valor del
@@ -120,7 +120,7 @@ El formato del mensaje es el siguiente:
 \end{minted}
 \end{figure}
 
-\paragraph{Generar y Anular una Suscripción a Eventos:}
+\textbf{Generar y Anular una Suscripción a Eventos:}
 Para generar una suscripción a los eventos de una transición debe haber una
 implementación concreta de \mint{java}|rx.Observer<String>|
 (\url{http://reactivex.io/RxJava/javadoc/rx/Observer.html}), que en su
@@ -188,7 +188,7 @@ En la figura \ref{fig:guarda_como_decision} se muestra cómo la guarda
 principio de la ejecución del programa.
 \end{framed}
 
-\paragraph{Modificación del valor de una Guarda:} En el siguiente fragmento de
+\textbf{Modificación del valor de una Guarda:} En el siguiente fragmento de
 código se muestra cómo cambiar el valor de una guarda \textit{fooGuard}:
 
 \begin{figure}[H]
@@ -333,7 +333,7 @@ disparos.
 
 \begin{framed}
 \textbf{Nota:} El disparo explícito de una transición automática provoca un
-error \mint{java}|IllegalTransitionFiringError|.
+error \textit{IllegalTransitionFiringError}.
 \end{framed}
 
 \subsection{Política de Transiciones}
@@ -374,7 +374,7 @@ son:
     }
 \end{itemize}
 
-\paragraph{Creación de una Política de Transiciones:}
+\textbf{Creación de una Política de Transiciones:}
 Cualquier instancia de una clase que extienda la clase abstracta
 \mint{java}|TransitionsPolicy| es una política de transiciones aceptada por el
 monitor. La forma de especificar la próxima transición a elegir sobre un

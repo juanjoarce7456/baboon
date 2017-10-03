@@ -35,7 +35,7 @@ mostrando sus principales bloques e interacciones.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=125mm]{JPCM_Arquitectura}
+  \includegraphics[width=0.8\textwidth]{JPCM_Arquitectura}
   \caption{Arquitectura de JPCM}
   \label{fig:JPCM_Arquitectura}
 \end{figure}
@@ -113,8 +113,7 @@ En el diagrama de la figura \ref{fig:JPCM_PetriMonitor_Structure} se observan
 las clases que componen a esta sección, sus relaciones y colaboraciones:
 
 \begin{figure}[H]
-  \hspace*{-2.5cm}
-  \includegraphics[width=180mm]{JPCM_PetriMonitor_Structure_Simple}
+  \includegraphics[width=\textwidth]{JPCM_PetriMonitor_Structure_Simple}
   \caption{Diagrama de clases de la sección \textit{Conducción}}
   \label{fig:JPCM_PetriMonitor_Structure}
 \end{figure}
@@ -250,8 +249,7 @@ La figura \ref{fig:JPCM_Fire_General} es un diagrama de secuencias donde se
 muestra el flujo de un hilo que realiza un disparo de una transición:
 
 \begin{figure}[H]
-  \hspace*{-3cm}
-  \includegraphics[width=190mm]{JPCM_Fire_General}
+  \includegraphics[width=\textwidth]{JPCM_Fire_General}
   \caption{Disparo de una transición}
   \label{fig:JPCM_Fire_General}
 \end{figure}
@@ -303,7 +301,7 @@ en detalle el flujo de un disparo exitoso de una transición:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=140mm]{JPCM_Fire_SUCCESS}
+  \includegraphics[width=0.85\textwidth]{JPCM_Fire_SUCCESS}
   \caption{Manejo del disparo exitoso de una transición}
   \label{fig:JPCM_Fire_SUCCESS}
 \end{figure}
@@ -320,8 +318,7 @@ En el diagrama de secuencias de la figura \ref{fig:JPCM_Fire_NOT_ENABLED} se mue
 detallado el caso del disparo no exitoso.
 
 \begin{figure}[H]
-  \hspace*{-2cm}
-  \includegraphics[width=170mm]{JPCM_Fire_NOT_ENABLED}
+  \includegraphics[width=\textwidth]{JPCM_Fire_NOT_ENABLED}
   \caption{Manejo del disparo no exitoso de una transición}
   \label{fig:JPCM_Fire_NOT_ENABLED}
 \end{figure}
@@ -365,7 +362,7 @@ resultado de disparo.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=140mm]{JPCM_Fire_TIMED_BEFORE_TIMESPAN}
+  \includegraphics[width=0.85\textwidth]{JPCM_Fire_TIMED_BEFORE_TIMESPAN}
   \caption{Manejo del disparo de una transición temporal antes del instante
   menor de disparo}
   \label{fig:JPCM_Fire_TIMED_BEFORE_TIMESPAN}
@@ -685,7 +682,7 @@ del objeto \mint{java}|PetriNet| y son inicializadas con valor
 \mint{java}|false|.
 
 En cualquier momento un hilo puede modificar el valor de una guarda accediendo
-al método \mint{java}|PetriMonitor.setGuard()| con el nombre de la guarda a
+al método\\ \mint{java}|PetriMonitor.setGuard()| con el nombre de la guarda a
 modificar y su nuevo valor. Esto es coordinado por el lock de entrada de forma
 conjunta con el disparo de una transición para evitar problemas de acceso
 concurrente sobre la RdP. Se contempla la posible sensibilización de

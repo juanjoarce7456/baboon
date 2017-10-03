@@ -20,6 +20,21 @@
 \usepackage{scrextend}
 \usepackage{enumitem}
 \usepackage{subcaption}
+\usepackage{geometry}
+
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+%    \newenvironment{absolutelynopagebreak}
+%      {\par\nobreak\vfil\penalty0\vfilneg
+%        \vtop\bgroup}
+%      {\par\xdef\tpd{\the\prevdepth}\egroup
+%       \prevdepth=\tpd}
+
 \addtokomafont{labelinglabel}{\sffamily}
 \hypersetup{
      colorlinks=true,
@@ -62,7 +77,8 @@
     
     \listoffigures
     \listoftables
-    
+
+
     \setcounter{definitionsCounter}{0}
     \part{Introducción y Objetivos}
         \chapter{Introducción}
@@ -71,7 +87,7 @@
         \include{./sections/Introduccion_Objetivos/Objetivos}
     \part{Marco Teórico}
         \label{cap:marco_teorico}
-        \chapter{Introducción al Marco Teórico}
+        %\chapter{Introducción al Marco Teórico}
         \include{./sections/MarcoTeorico/Introduccion}
         \chapter{Modelos}
             \include{./sections/MarcoTeorico/RedesDePetri}
@@ -117,8 +133,11 @@
 
     \part{Anexos}
         \chapter{Ejemplo de Uso de \nombreFramework \ Framework}
-            \include{./sections/baboon_framework/ejemplos_de_uso/LavadoraBotellas}
-
+            \include{./sections/Anexos/ejemplos_de_uso/LavadoraBotellas}
+        \chapter{Documentación y Casos de Prueba de JPCM y \nombreFramework \
+        Framework}
+            \include{./sections/Anexos/DocYTest/DocTests.tex}
     \bibliography{./bibliografia}
 	\bibliographystyle{alpha}
+	
 \end{document}

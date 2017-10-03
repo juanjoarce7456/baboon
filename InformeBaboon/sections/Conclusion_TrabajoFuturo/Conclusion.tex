@@ -1,59 +1,58 @@
 \section{Conclusión}
 
-En este trabajo se logró construir \textit{\nombreFramework}, un framework para
-el desarrollo de sistemas reactivos capaz de manejar la gestión de recursos, la
-concurrencia y la sincronización de hilos de forma centralizada. El flujo de
-ejecución es conducido a través de un modelo de Red de Petri que implementa la
-lógica del sistema.
-La gestión de prioridad de ejecución de los hilos se implementa a través de
-políticas de prioridad a cargo del usuario, de forma separada al modelo.
+En este trabajo se realizó el diseño e implementación
+\textit{\nombreFramework}, un framework para el desarrollo de sistemas
+reactivos. Como resultado de este desarrollo se logró la centralización de la
+gestión de los recursos, la concurrencia y la sincronización de hilos y,
+además, se obtuvo la conducción del flujo de ejecución utilizando un modelo de
+Red de Petri que implementa la lógica del sistema. A su vez, se desarrolló un
+mecanismo de gestión de prioridad de ejecución de los hilos por medio de
+políticas configurables por el usuario.
 
-El framework transforma el modelo de RdP en un código interpretado simplificando
-el diseño del software del usuario. En consecuencia la implementación de la
-concurrencia y gestión de recursos se realiza únicamente a través de la RdP.
+La centralización de gestión de recursos, manejo de concurrencia y
+sincronización de hilos mencionada en el párrafo previo se obtuvo mediante:
+\begin{itemize}
+ \item La transformación del modelo de RdP en código interpretado.
 
-Dada la necesidad de ejecutar Redes de Petri se construyó \textit{Java Petri
-Concurrency Monitor} (JPCM), un monitor de concurrencia que implementa la
-ecuación generalizada desarrollada en \cite{Ecuacion_generalizada_LAC}.
+ \item El desarrollo mecanismo de suscripción a disparos de transiciones.
 
-JPCM cuenta con un mecanismo de suscripción a disparos de transiciones que
-permite la existencia de observers asíncronos a la ejecución de la RdP.
-Además implementa las colas de espera y suspensión de hilos necesarias para 
-la gestión de concurrencia y sincronización mencionadas previamente.
+ \item La implementación de colas de espera y suspensión de hilos.
+\end{itemize}
 
-La comunicación entre los componentes de \textit{\nombreFramework Framework} y
-los componentes del software del usuario se realiza mediante el intercambio de
-eventos. De forma similar, el software del usuario es responsable de emitir y
-recibir eventos del mundo físico.
+Estas características fueron implementadas como parte de Java Petri Concurrency
+ Monitor (JPCM), un monitor de concurrencia que ejecuta Redes de Petri haciendo
+ uso de la ecuación generalizada desarrollada en
+ \cite{Ecuacion_generalizada_LAC}.
 
-El sistema de usuario queda comprendido por:
+Se obtuvo una arquitectura de framework que gestiona los eventos y mecanismos
+de comunicación necesarios para desacoplar el modelo de RdP, el código de
+usuario y el entorno.
+Como resultado, se simplifica el diseño del software de usuario, el que queda
+definido por:
+
 \begin{itemize}
     \item El modelo de RdP
     \item El conjunto de acciones: Son porciones de código con una
-    responsabilidad concreta y simple. Intercambian eventos con el mundo físico.
+    responsabilidad concreta y simple. Intercambian eventos con el entorno.
     \item El conjunto de eventos de acción: Contienen las reglas de traducción
-    entre los eventos del mundo físico y eventos comprensibles para el modelo de
+    entre los eventos del entorno y eventos comprensibles para el modelo de
     RdP.
     \item El conjunto de suscripciones de acciones a eventos de acción
 \end{itemize}
 
-Los eventos de acción funcionan como una capa de abstracción para el programador
-de acciones, evitando la necesidad de conocer detalles del modelo de RdP.
-
-\textit{\nombreFramework Framework} está diseñado para no imponer restricciones
-sobre las herramientas que ofrece el lenguaje de programación. Permitiendo así
-al usuario utilizar todas las características de la programación orientada a
-objetos en el diseño de su sistema.
+Se logró un diseño de framework no restrictivo sobre las herramientas
+que ofrece el lenguaje de programación. En consecuencia, el usuario dispone
+de todas las características de la programación orientada a objetos para el
+diseño de su sistema.
 
 Se implementó la inversión de control del framework mediante la utilización de
 prácticas de \textit{Reflection} y \textit{Aspect Oriented Programming}. Como
-resultado, el flujo de control del programa es responsabilidad únicamente del
-framework y el código de usuario se centra en las funcionalidades concretas del
-sistema a implementar.
+resultado, el flujo de control del programa es responsabilidad del framework y
+el código de usuario se centra en las funcionalidades concretas del sistema a implementar.
 
 El código del framework se encuentra disponible de forma pública en repositorios
-en la red (ver sección \ref{config_baboon_env}). En dichos repositorios se
-encuentra también la documentación en formato \textit{Javadoc} y los casos de
+en la red (ver sección \ref{config_baboon_env}). En los repositorios mencionados
+se encuentra también la documentación en formato \textit{Javadoc} y los casos de
 test automatizados para las funcionalidades implementadas.
 
 La utilización de Baboon Framework en conjunto con el proceso de diseño de

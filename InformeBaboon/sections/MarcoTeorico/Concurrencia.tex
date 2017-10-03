@@ -40,14 +40,14 @@ de poder diferenciarlos:
 
 \begin{itemize}
 	\stepcounter{definitionsCounter}
-	\item [\underline{Definición \thedefinitionsCounter :} ] Dos hilos
+	\item \underline{Definición \thedefinitionsCounter :}  Dos hilos
 	\footnote{En adelante, se hablará de concurrencia de hilos dado que los
 	sistemas de referencia son de memoria compartida. En el caso que corresponda
 	hablar de procesos se lo mencionará explícitamente.} son \textit{concurrentes}
 	si la primera instrucción de uno de ellos se ejecuta después de la primera del
 	otro y antes de la última.
 	\stepcounter{definitionsCounter}
-	\item [\underline{Definición \thedefinitionsCounter :} ] Dos hilos 	se están
+	\item \underline{Definición \thedefinitionsCounter :}  Dos hilos 	se están
 	ejecutando de manera \textit{paralela} si son concurrentes y la ejecución de
 	ambos se da al mismo tiempo.
 \end{itemize}
@@ -245,7 +245,7 @@ sistema operativo, como la provisión del servicio de
 bloqueo.\cite{SistOpStallings}
 
 \begin{framed}
-\textbf{Nota:}A los fines de este proyecto integrador sólo es de interés la
+\textbf{Nota:} A los fines de este proyecto integrador sólo es de interés la
 concurrencia basada en memoria compartida. Dentro de este modelo se destacan dos
 mecanismos de sincronización por competencia: los \textit{semáforos} y los
 \textit{monitores}.
@@ -460,7 +460,7 @@ segunda representa el estado de las colas del monitor.
 \begin{figure}[H]
   \centering
   \makebox[\textwidth][c]{
-    \includegraphics[width=180mm]{Segundo_Automata_Monitor}
+    \includegraphics[width=\textwidth]{Segundo_Automata_Monitor}
   }
   \caption{Segundo Autómata de un Monitor de Concurrencia}
   \label{fig:automata_monitor02}
@@ -573,7 +573,7 @@ de un hilo que accede a un monitor.
 \begin{figure}[H]
   \centering
   \makebox[\textwidth][c]{
-    \includegraphics[width=180mm]{Actividad_Proceso_Monitor}
+    \includegraphics[width=\textwidth]{Actividad_Proceso_Monitor}
   }
   \caption{Diagrama de actividades UML de un hilo ejecutándo una rutina de
   un monitor}
