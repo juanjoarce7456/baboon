@@ -53,8 +53,8 @@
 
 \begin{document}
     %Nombre templetizado para poder cambiarlo fácil hasta tenerlo definido
-    \newcommand{\nombreTesis}{Framework de Sincronización de Tareas Coordinado
-    por Redes de Petri}
+    \newcommand{\nombreTesis}{Framework para la Sincronización de Eventos
+    Coordinado por Redes de Petri}
     %Nombre templetizada por si lo tenemos que cambiar
     \newcommand{\nombreFramework}{Baboon}
     %Nombre del monitor templetizado
@@ -65,13 +65,58 @@
 
     % reset subfigure counter
     \newcommand{\ResetCounter}{\setcounter{subfigure}{0}}
-
+    
     \title{\nombreTesis}
     \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
         \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
+
+\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+	
+	%------------------------------------------------
+	%	Grey title box
+	%------------------------------------------------
+	\definecolor{titleColor}{RGB}{150, 180, 220}
+	\colorbox{titleColor}{
+		\parbox[t]{0.93\textwidth}{ % Outer full width box
+			\parbox[t]{0.91\textwidth}{ % Inner box for inner right text margin
+				\raggedleft % Right align the text
+				\fontsize{50pt}{30pt}\sffamily % Title font size, the first argument is
+				% the font size and the second is the line spacing, adjust depending on
+				% title length
+				\vspace{0.7cm} % Space between the start of the title and the top of the
+				% grey box
+				
+				\nombreTesis
+				
+				\vspace{0.7cm} % Space between the end of the title and the bottom of the
+				% grey box
+			}
+		}
+	}
+	
+	\vfill % Space between the title box and author information
+	
+	%------------------------------------------------
+	%	Author name and information
+	%------------------------------------------------
+	
+	\parbox[t]{0.93\textwidth}{ % Box to inset this section slightly
+		\raggedleft % Right align the text
+		\large % Increase the font size
+		{\Large Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}}\\[4pt] % Extra space after name
+		{\Large Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}\\[4pt] %
+% Extra space after name Department Name\\
+		Facultad de Ciencias Exactas, Físicas y Naturales\\[4pt]
+		
+		\hfill\rule{0.2\linewidth}{1pt}% Horizontal line, first argument width, second thickness
+	}
+	
+\end{titlepage}
+
+    
     \graphicspath{ {resources/images/} }
     
-    \maketitle
+    %\maketitle
     
     \tableofcontents
     
@@ -133,10 +178,9 @@
 
     \part{Anexos}
         \chapter{Ejemplo de Uso de \nombreFramework \ Framework}
-            \include{./sections/Anexos/ejemplos_de_uso/LavadoraBotellas}
-        \chapter{Documentación y Casos de Prueba de JPCM y \nombreFramework \
-        Framework}
-            \include{./sections/Anexos/DocYTest/DocTests.tex}
+            \include{./sections/Anexos/EjemplosUso/LavadoraDeBotellas}
+        \chapter{Documentación y Casos de Prueba de JPCM y \nombreFramework \ Framework}
+            \include{./sections/Anexos/DocYTests/DocYTests}
     \bibliography{./bibliografia}
 	\bibliographystyle{alpha}
 	
