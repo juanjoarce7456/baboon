@@ -20,7 +20,10 @@
 \usepackage{scrextend}
 \usepackage{enumitem}
 \usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{titling}
 \usepackage{geometry}
+
 
  \geometry{
  a4paper,
@@ -53,8 +56,8 @@
 
 \begin{document}
     %Nombre templetizado para poder cambiarlo fácil hasta tenerlo definido
-    \newcommand{\nombreTesis}{Framework de Sincronización de Tareas Coordinado
-    por Redes de Petri}
+    \newcommand{\nombreTesis}{Framework Conducido por Red de Petri para la Sincronización de Eventos, 
+    Gestión de los Recursos y Manejo de la Concurrencia}
     %Nombre templetizada por si lo tenemos que cambiar
     \newcommand{\nombreFramework}{Baboon}
     %Nombre del monitor templetizado
@@ -67,11 +70,42 @@
     \newcommand{\ResetCounter}{\setcounter{subfigure}{0}}
 
     \title{\nombreTesis}
-    \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
-        \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
+    \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com} \\ Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
     \graphicspath{ {resources/images/} }
     
-    \maketitle
+\begin{titlepage}
+    \begin{center}
+        {  \Huge Universidad Nacional de Córdoba }
+        
+        \vspace{0.8cm}
+        {  \huge Facultad de Ciencias Exactas, Físicas y Naturales }
+    \end{center}
+    
+    \vspace{1cm}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=60mm]{logo_unc}
+    \end{figure}
+    
+    \vspace{1cm}
+    \begin{center}
+        \begin{doublespacing}
+            { \Huge \textbf{\nombreTesis}}
+        \end{doublespacing}
+    \end{center}
+    
+    \vspace{1.5cm}
+    \begin{flushright}
+       \begin{onehalfspacing}
+           {\Large \textbf{Autores: } } \hspace*{6cm} \\
+           {\Large \theauthor} \\
+        
+       \vspace{0.7cm}
+           {\Large \textbf{Director: } } \hspace*{5.9cm} \\ 
+           {\Large Dr. Orlando Micolini \\ \href{mailto:omicolini@compuar.com}{omicolini@compuar.com} } \\
+       \end{onehalfspacing}
+     \end{flushright}
+\end{titlepage}
     
     \tableofcontents
     
@@ -136,7 +170,7 @@
             \include{./sections/Anexos/ejemplos_de_uso/LavadoraBotellas}
         \chapter{Documentación y Casos de Prueba de JPCM y \nombreFramework \
         Framework}
-            \include{./sections/Anexos/DocYTest/DocTests.tex}
+            \include{./sections/Anexos/DocYTest/DocTests}
     \bibliography{./bibliografia}
 	\bibliographystyle{alpha}
 	
