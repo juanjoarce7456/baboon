@@ -1,5 +1,6 @@
 package org.unc.lac.baboon.test.utils.appsetup;
 
+import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.exceptions.BadPolicyException;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
@@ -21,9 +22,14 @@ import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory
  * @see BaboonFramework
  */
 public class TaskExecutionAppSetup implements BaboonApplication {
-    private static TaskExecutionController controller = new TaskExecutionController();
-    private final String pnmlFile = "/org/unc/lac/baboon/test/resources/pnml01.pnml";
-    private final String topicsFile = "/org/unc/lac/baboon/test/resources/topics04.json";
+    private ControllerEnum controller;
+    private final String pnmlFile = "/pnml01.pnml";
+    private final String topicsFile = "/topics04.json";
+    
+    public TaskExecutionAppSetup() {
+		controller = ControllerEnum.INSTANCE;
+		controller.reset();
+	}
 
     @Override
     public void declare() {
@@ -42,14 +48,37 @@ public class TaskExecutionAppSetup implements BaboonApplication {
     @Override
     public void subscribe() {
         try {
-            BaboonFramework.subscribeControllerToTopic("topic1", controller, "increaseNumber");
+			BaboonFramework.subscribeControllerToTopic("topic1", controller, "increaseNumber");
         } catch (NotSubscribableException e) {
 
         }
     }
 
-    public static TaskExecutionController getController() {
+    public ControllerEnum getController() {
         return controller;
     }
 
+    public enum ControllerEnum {
+    	INSTANCE(0);
+    	
+    	private int counter;
+    	
+    	ControllerEnum(int counter) {
+    		this.counter = counter;
+    	}
+    	
+    	@TaskController
+    	public void increaseNumber() {
+    		this.counter++;
+    	}
+    	
+    	public int getNumber() {
+    		return counter;
+    	}
+    	
+    	public void reset() {
+    		this.counter = 0;
+    	}
+    }
 }
+

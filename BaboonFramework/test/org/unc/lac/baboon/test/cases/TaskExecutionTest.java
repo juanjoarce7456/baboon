@@ -2,13 +2,21 @@ package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.unc.lac.baboon.main.BaboonFramework;
 import org.unc.lac.baboon.test.utils.appsetup.TaskExecutionAppSetup;
 import org.unc.lac.baboon.test.utils.tasks.TaskExecutionController;
 
 public class TaskExecutionTest {
-
+	
+	private TaskExecutionAppSetup appSetup;
+	
+	@Before
+	public void setUp() {
+		appSetup = new TaskExecutionAppSetup();
+	}
+	
     /**
      * <li>Given I have a class {@link TaskExecutionAppSetup} which implements
      * {@link BaboonApplication} interface</li>
@@ -23,14 +31,14 @@ public class TaskExecutionTest {
      */
     @Test
     public void taskExecutionTest() {
-        assertEquals(0,TaskExecutionAppSetup.getController().getNumber());
+        assertEquals(0, appSetup.getController().getNumber());
         BaboonFramework.main(null);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             fail("Interrupted Thread");
         }
-        assertEquals(5,TaskExecutionAppSetup.getController().getNumber());
+        assertEquals(5, appSetup.getController().getNumber());
     }
 
 }

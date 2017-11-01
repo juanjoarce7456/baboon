@@ -13,7 +13,7 @@ import org.unc.lac.baboon.utils.TopicsJsonParser;
 
 public class TopicsParserTest {
 
-    private final String topicsPath01 = "/org/unc/lac/baboon/test/resources/topics01.json";
+    private final String topicsPath01 = "/topics01.json";//"/org/unc/lac/baboon/test/resources/topics01.json";
 
     /**
      * <li>Given I have a topics json file containing three topics</li>
