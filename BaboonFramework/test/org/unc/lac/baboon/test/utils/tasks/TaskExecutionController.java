@@ -4,23 +4,32 @@ import org.unc.lac.baboon.annotations.TaskController;
 import org.unc.lac.baboon.test.cases.TaskExecutionTest;
 
 /**
- * MockController is used by {@link TaskExecutionTest} for testing purposes.
+ * This Mock Controller is used by {@link TaskExecutionTest} for testing purposes.
  * 
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * 
  * @see TaskController
  */
-public class TaskExecutionController {
+public enum TaskExecutionController {
+	INSTANCE(0);
 
-    private int number = 0;
+	private int counter;
 
-    @TaskController
-    public void increaseNumber() {
-        this.number++;
-    }
+	TaskExecutionController(int counter) {
+		this.counter = counter;
+	}
 
-    public int getNumber() {
-        return number;
-    }
+	@TaskController
+	public void increaseNumber() {
+		this.counter++;
+	}
+
+	public int getNumber() {
+		return counter;
+	}
+
+	public void reset() {
+		this.counter = 0;
+	}
 }

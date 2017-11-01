@@ -22,12 +22,12 @@ import org.unc.lac.javapetriconcurrencymonitor.petrinets.factory.PetriNetFactory
  * @see BaboonFramework
  */
 public class TaskExecutionAppSetup implements BaboonApplication {
-    private ControllerEnum controller;
+    private TaskExecutionController controller;
     private final String pnmlFile = "/pnml01.pnml";
     private final String topicsFile = "/topics04.json";
     
     public TaskExecutionAppSetup() {
-		controller = ControllerEnum.INSTANCE;
+		controller = TaskExecutionController.INSTANCE;
 		controller.reset();
 	}
 
@@ -54,31 +54,8 @@ public class TaskExecutionAppSetup implements BaboonApplication {
         }
     }
 
-    public ControllerEnum getController() {
+    public TaskExecutionController getController() {
         return controller;
-    }
-
-    public enum ControllerEnum {
-    	INSTANCE(0);
-    	
-    	private int counter;
-    	
-    	ControllerEnum(int counter) {
-    		this.counter = counter;
-    	}
-    	
-    	@TaskController
-    	public void increaseNumber() {
-    		this.counter++;
-    	}
-    	
-    	public int getNumber() {
-    		return counter;
-    	}
-    	
-    	public void reset() {
-    		this.counter = 0;
-    	}
     }
 }
 

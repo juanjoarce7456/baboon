@@ -29,8 +29,6 @@ public class HappeningControllerJoinPointReporter {
      * The pointcut happening is defined as any execution of a method annotated
      * with {@link HappeningController}
      */
-//    pointcut happening():
-//           execution(@org.unc.lac.baboon.annotations.HappeningController * *(..));
     @Pointcut(value = "execution(@org.unc.lac.baboon.annotations.HappeningController * *(..))",
     		argNames = "joinPoint")
     public void happening(final JoinPoint joinPoint){
@@ -42,9 +40,6 @@ public class HappeningControllerJoinPointReporter {
      * is done to allow the framework to manage the synchronization of the
      * {@link HappeningController} annotated method.
      */
-//    before(): happening(){
-//        observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.BEFORE_EXECUTION);
-//    }
     @Before(value = "happening(joinPoint)", argNames = "joinPoint")
     public void beforeHappening(final JoinPoint joinPoint) {
         observer.update(joinPoint.getTarget(), joinPoint.getSignature().getName(), State.BEFORE_EXECUTION);
@@ -56,10 +51,6 @@ public class HappeningControllerJoinPointReporter {
      * is done to allow the framework to manage the synchronization of the
      * {@link HappeningController} annotated method.
      */
-//    after() : happening(){
-//        observer.update(thisJoinPoint.getTarget(), thisJoinPoint.getSignature().getName(), State.AFTER_EXECUTION);
-//    }
-    
     @After(value = "happening(joinPoint)", argNames = "joinPoint")
     public void afterHappening(final JoinPoint joinPoint) {
         observer.update(joinPoint.getTarget(), joinPoint.getSignature().getName(), State.AFTER_EXECUTION);
