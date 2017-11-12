@@ -224,26 +224,26 @@ Figura~\ref{fig:petri_cinta_transportadora_3}
 	Comienza la ejecución de la acción ``accion\_1''. La transición
 	``ejecutar\_accion\_2' no se encuentra sensibilizada dado que la guarda
 	``fin\_accion\_1'' tiene estado ``false''.
-	\item Finaliza la ejecución de ``accion\_1'' y se setea la guarda
+	\item Finaliza la ejecución de ``accion\_1'' y se establece la guarda
 	``fin\_accion\_1'' con estado ``true''.
 	\item Al estar sensibilizada ``ejecutar\_accion\_2'', se dispara y se libera el hilo
 	bloqueado en su cola de condición. Se coloca un token en ``accion\_2'' y
 	comienza la ejecución de esta acción. La transición ``ejecutar\_mov\_cont'' no
 	se encuentra sensibilizada dado que la guarda ``fin\_accion\_2'' tiene estado
 	``false''.
-	Se setea la guarda ``fin\_accion\_1'' a ``false'' nuevamente.
-	\item Finaliza la ejecución de ``accion\_2'' y se setea la guarda
+	Se establece la guarda ``fin\_accion\_1'' a ``false'' nuevamente.
+	\item Finaliza la ejecución de ``accion\_2'' y se establece la guarda
 	``fin\_accion\_2'' con estado ``true''.
 	\item Al estar sensibilizada ``ejecutar\_mov\_cont'', se dispara y se libera
 	el hilo bloqueado en su cola de condición. Se coloca un token en
 	``movimiento\_a\_cont'' y comienza la ejecución de esta acción. La transición
 	``liberar\_cinta'' no se encuentra sensibilizada dado que la guarda
 	``fin\_mov\_cont'' tiene estado ``false''.
-	Se setea la guarda ``fin\_accion\_1'' a ``false'' nuevamente.
-	\item Finaliza la ejecución de ``movimiento\_a\_cont'' y se setea la guarda
+	Se establece la guarda ``fin\_accion\_1'' a ``false'' nuevamente.
+	\item Finaliza la ejecución de ``movimiento\_a\_cont'' y se establece la guarda
 	``fin\_mov\_cont'' con estado ``true''.
 	\item Al estar sensibilidada, se dispara la transición ``liberar\_cinta'', que es
-	automática, y se libera el recurso ``cintaTransp''. Se setea la guarda
+	automática, y se libera el recurso ``cintaTransp''. Se establece la guarda
 	``fin\_mov\_cont'' a ``false'' nuevamente.
 \end{enumerate}
 
@@ -271,11 +271,11 @@ caso de ejemplo:
 	ejecutar la ``tarea A'' al mismo tiempo. En el estado que muestra la
 	figura existen tres hilos corriendo la ``tarea A''. De acuerdo al planteo de
 	este problema, la ``tarea B'' es ejecutada por un único hilo. Cuando dos o más
-	hilos finalizan la ``tarea A'' y setean la guarda ``Fin\_TareaA'' en ``true'',
+	hilos finalizan la ``tarea A'' y establecen la guarda ``Fin\_TareaA'' en ``true'',
 	existe la posibilidad de que otro hilo dispare ``t1'' antes de comenzar la
 	ejecución de la ``tareaB''. En este momento, el hilo que dispara ``t1''
 	modifica el valor de la guarda ``Fin\_TareaA'' a ``false'', sobreescribiendo
-	el aviso de finalización de acción de los hilos que ya habían seteado
+	el aviso de finalización de acción de los hilos que ya habían establecido
 	``Fin\_TareaA'' en ``true''. De esta manera, se pierden eventos de aviso de fin
 	de ejecución, provocando la incorrecta sincronización del sistema.
 \end{labeling}

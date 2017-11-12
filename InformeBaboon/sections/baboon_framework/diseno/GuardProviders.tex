@@ -4,12 +4,12 @@ Las guardas permiten relacionar la RdP con el estado del medio, y representar
 condiciones de ejecución síncronas propias del mismo sistema (ver
 secciones~\ref{sec:arquitectura_alto_nivel} y ~\ref{guardas}).
 
-El monitor de Petri ofrece una interfaz para realizar el seteo del valor
-de una guarda. De esta manera se permite al usuario indicar directamente
-dicho valor. Sin embargo, el uso de esta alternativa trae aparejada una pérdida
-de la inversión de control debido a que se modifica el estado
-de la red de manera directa y en cualquier instante, permitiendo al usuario tomar
-decisiones sobre el control del flujo de ejecución.
+El monitor de Petri ofrece una interfaz para establecer el valor de una guarda.
+De esta manera se permite al usuario indicar directamente dicho valor. Sin
+embargo, el uso de esta alternativa trae aparejada una pérdida de la inversión
+de control debido a que se modifica el estado de la red de manera directa y en
+cualquier instante, permitiendo al usuario tomar decisiones sobre el control del
+flujo de ejecución.
 
 Para lidiar con este problema se propone el concepto de Guard Provider. Un Guard
 Provider es un método asociado a una guarda que retorna una variable de tipo
