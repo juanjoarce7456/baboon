@@ -143,11 +143,15 @@ sean extendidos cuando la ocasión lo demande.
 
 En la tabla \ref {tab:comparacion_frameworks_apis} se observa una comparación
 entre frameworks y APIs.
-\begin{table}
+\begin{table}[H]
 	\centering
-	\begin{tabularx}{\textwidth}{ | p{2.5cm} | X | X | }
+	\begin{tabular}{|>{\raggedright}m{3cm}|m{6cm}|m{6cm}|}%{
+	% | p{2.5cm} | X | X | }
 	\hline
-	\textbf{Categoría} & \textbf{Framework} & \textbf{API (Biblioteca)} \\[10pt]
+	\multicolumn{1}{|>{\centering\arraybackslash}m{3cm}|}{\textbf{Categoría}}
+	& \multicolumn{1}{>{\centering\arraybackslash}m{6cm}|}{\textbf{Framework}} 
+    & \multicolumn{1}{>{\centering\arraybackslash}m{6cm}|}{\textbf{API (Biblioteca)}}\\
+	%\textbf{Categoría} & \textbf{Framework} & \textbf{API (Biblioteca)} \\[10pt]
 	\hline
     \textbf{Gestión del Flujo Principal} & El framework toma el
     flujo principal del software & A cargo del programador\\[10pt] \hline
@@ -175,7 +179,7 @@ entre frameworks y APIs.
 	desarrollar en el mismo lenguaje en el que está hecho el framework & No restringe a un lenguaje.
 	Permite llamadas desde cualquier lenguaje mientras se respete la firma de las funciones expuestas\\[10pt] 
 	\hline
-	\end{tabularx}
+	\end{tabular}
 	\caption{Comparación entre Frameworks y APIs}
 	\label{tab:comparacion_frameworks_apis}
 \end{table}
