@@ -66,15 +66,15 @@ El desarrollo del framework se realizó siguiendo los requerimientos planteados
 en la sección \ref{sec:definicion_reqs}. A continuación se presenta un listado
 de los resultados obtenidos:
 \begin{itemize}
-  \item El framework interactúa con el monitor de Redes de Petri desarrollado en
-  este proyecto, JPCM. El mismo es un componente del framework.
+  \item El framework interactúa con JPCM, el monitor de Redes de Petri
+  desarrollado en este proyecto.
   \item El control del flujo de ejecución es delegado al monitor de RdP
   mediante la utilización de prácticas de \textit{Reflection} y \textit{Aspect
   Oriented Programming}.
   \item Se requiere aprender menos de diez conceptos para desarrollar un
   sistema utilizando Baboon Framework (task controller, happening
   controller, complex secuential task controller, interfaz declare, interfaz subscribe, transition policies, topic,
-  guard provider).
+  guard provider, RdP).
   \item Se desarrollaron diversos casos de uso, disponibles de forma pública en
   el repositorio de ejemplos (\url{\repoEjemplos}). En estos ejemplos se muestra
   la forma de uso de todas las interfaces de usuario del framework.
@@ -82,11 +82,12 @@ de los resultados obtenidos:
   el modelo de RdP.
   \item Actualmente el framework no es compatible con otros monitores
   desarrollados en el Laboratorio de Arquitectura de Computadoras, pero su
-  arquitectura fue diseñada para no necesitar cambio ante una implementación
+  arquitectura fue diseñada para no necesitar cambios ante una implementación
   futura de este requerimiento.
   \item El reporte de cobertura de los casos de prueba arroja un resultado del
   82,5\% de las instrucciones cubiertas. Este porcentaje está por debajo del requerido,
-  pero la prioridad asignada es la de requerimiento importante no obligatorio.
+  pero fue considerado satisfactorio dado que la prioridad asignada es la de
+  requerimiento importante no obligatorio.
   \item El framework tiene al menos un test automatizado por cada funcionalidad
   implementada.
   \item Se realizó documentación de código utilizando JavaDoc.
