@@ -7,10 +7,17 @@ gestión de los recursos, la concurrencia y la sincronización de hilos y,
 además, se obtuvo la conducción del flujo de ejecución utilizando un modelo de
 Red de Petri que implementa la lógica del sistema. A su vez, se desarrolló un
 mecanismo de gestión de prioridad de ejecución de los hilos por medio de
-políticas configurables por el usuario.
+políticas configurables por el usuario. En consecuencia, se cumplió con
+el objetivo principal del proyecto, descripto en la sección
+\ref{sec:objetivo_principal}.
 
-La centralización de gestión de recursos, manejo de concurrencia y
-sincronización de hilos mencionada en el párrafo previo se obtuvo mediante:
+El proceso de diseño e implementación también estuvo guiado por los objetivos
+secundarios planteados en la sección \ref{sec:objetivos_secundarios}. A lo largo
+de los siguientes párrafos se explica como se cumplieron estos objetivos.
+
+La centralización de gestión de recursos, manejo de
+concurrencia y sincronización de hilos mencionada previamente se obtuvo
+mediante:
 \begin{itemize}
  \item La transformación del modelo de RdP en código interpretado.
 
@@ -55,7 +62,42 @@ en la red (ver sección \ref{config_baboon_env}). En los repositorios mencionado
 se encuentra también la documentación en formato \textit{Javadoc} y los casos de
 test automatizados para las funcionalidades implementadas.
 
-La utilización de Baboon Framework en conjunto con el proceso de diseño de
-sistemas reactivos expuesto en \cite{Bentivegna-Ludemann} permite el diseño y
-desarrollo de sistemas reactivos confiables, mantenibles y portables a
-múltiples plataformas.
+El desarrollo del framework se realizó siguiendo los requerimientos planteados
+en la sección \ref{sec:definicion_reqs}. A continuación se presenta un listado
+de los resultados obtenidos:
+\begin{itemize}
+  \item El framework interactúa con el monitor de Redes de Petri desarrollado en
+  este proyecto, JPCM. El mismo es un componente del framework.
+  \item El control del flujo de ejecución es delegado al monitor de RdP
+  mediante la utilización de prácticas de \textit{Reflection} y \textit{Aspect
+  Oriented Programming}.
+  \item Se requiere aprender menos de diez conceptos para desarrollar un
+  sistema utilizando Baboon Framework (task controller, happening
+  controller, complex secuential task controller, interfaz declare, interfaz subscribe, transition policies, topic,
+  guard provider).
+  \item Se desarrollaron diversos casos de uso, disponibles de forma pública en
+  el repositorio de ejemplos (\url{\repoEjemplos}). En estos ejemplos se muestra
+  la forma de uso de todas las interfaces de usuario del framework.
+  \item El framework utiliza las interfaces que ofrece JPCM para interactuar con
+  el modelo de RdP.
+  \item Actualmente el framework no es compatible con otros monitores
+  desarrollados en el Laboratorio de Arquitectura de Computadoras, pero su
+  arquitectura fue diseñada para no necesitar cambio ante una implementación
+  futura de este requerimiento.
+  \item El reporte de cobertura de los casos de prueba arroja un resultado del
+  82,5\% de las instrucciones cubiertas. Este porcentaje está por debajo del requerido,
+  pero la prioridad asignada es la de requerimiento importante no obligatorio.
+  \item El framework tiene al menos un test automatizado por cada funcionalidad
+  implementada.
+  \item Se realizó documentación de código utilizando JavaDoc.
+  \item Todos los objetos del framework tienen documentación sobre sus métodos,
+  explicando la forma de uso y su función.
+  \item La documentación no brinda detalles de implementación.
+  \item La documentación se encuentra disponible de forma pública. Ver la
+  sección \ref{genJavadoc}
+\end{itemize}
+
+A modo de corolario se menciona que la utilización de Baboon Framework
+en conjunto con el proceso de diseño de sistemas reactivos expuesto en
+\cite{Bentivegna-Ludemann} permite el diseño y desarrollo de sistemas reactivos
+confiables, mantenibles y portables a múltiples plataformas.
