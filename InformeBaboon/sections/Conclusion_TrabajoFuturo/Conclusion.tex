@@ -1,8 +1,8 @@
 \section{Conclusión}
 
-En este trabajo se realizó el diseño e implementación
-\textit{\nombreFramework}, un framework para el desarrollo de sistemas
-reactivos. Como resultado de este desarrollo se logró la centralización de la
+En este trabajo se realizó el diseño e implementación de
+\textit{\nombreFramework \ Framework}, un framework para el desarrollo de
+sistemas reactivos. Como resultado de este desarrollo se logró la centralización de la
 gestión de los recursos, la concurrencia y la sincronización de hilos y,
 además, se obtuvo la conducción del flujo de ejecución utilizando un modelo de
 Red de Petri que implementa la lógica del sistema. A su vez, se desarrolló un
@@ -13,7 +13,7 @@ el objetivo principal del proyecto, descripto en la sección
 
 El proceso de diseño e implementación también estuvo guiado por los objetivos
 secundarios planteados en la sección \ref{sec:objetivos_secundarios}. A lo largo
-de los siguientes párrafos se explica como se cumplieron estos objetivos.
+de los siguientes párrafos se explica cómo se cumplieron estos objetivos.
 
 La centralización de gestión de recursos, manejo de
 concurrencia y sincronización de hilos mencionada previamente se obtuvo
@@ -21,15 +21,15 @@ mediante:
 \begin{itemize}
  \item La transformación del modelo de RdP en código interpretado.
 
- \item El desarrollo mecanismo de suscripción a disparos de transiciones.
+ \item El desarrollo de un mecanismo de suscripción a disparos de transiciones.
 
  \item La implementación de colas de espera y suspensión de hilos.
 \end{itemize}
 
-Estas características fueron implementadas como parte de Java Petri Concurrency
- Monitor (JPCM), un monitor de concurrencia que ejecuta Redes de Petri haciendo
- uso de la ecuación generalizada desarrollada en
- \cite{Ecuacion_generalizada_LAC}.
+Estas características fueron implementadas como parte de
+\javapetriconcurrencymonitor (JPCM), un monitor de concurrencia que ejecuta
+Redes de Petri haciendo uso de la ecuación generalizada desarrollada en
+\cite{Ecuacion_generalizada_LAC}.
 
 Se obtuvo una arquitectura de framework que gestiona los eventos y mecanismos
 de comunicación necesarios para desacoplar el modelo de RdP, el código de
@@ -58,8 +58,8 @@ resultado, el flujo de control del programa es responsabilidad del framework y
 el código de usuario se centra en las funcionalidades concretas del sistema a implementar.
 
 El código del framework se encuentra disponible de forma pública en repositorios
-en la red (ver sección \ref{config_baboon_env}). En los repositorios mencionados
-se encuentra también la documentación en formato \textit{Javadoc} y los casos de
+en la red (ver sección \ref{config_baboon_env}) bajo licencia Apache 2.0. En los
+repositorios mencionados se encuentra también la documentación en formato \textit{Javadoc} y los casos de
 test automatizados para las funcionalidades implementadas.
 
 El desarrollo del framework se realizó siguiendo los requerimientos planteados
@@ -73,8 +73,8 @@ de los resultados obtenidos:
   Oriented Programming}.
   \item Se requiere aprender menos de diez conceptos para desarrollar un
   sistema utilizando Baboon Framework (task controller, happening
-  controller, complex secuential task controller, interfaz declare, interfaz subscribe, transition policies, topic,
-  guard provider, RdP).
+  controller, complex secuential task controller, interfaz declare, interfaz
+  subscribe, transition policies, topic, guard provider, RdP).
   \item Se desarrollaron diversos casos de uso, disponibles de forma pública en
   el repositorio de ejemplos (\url{\repoEjemplos}). En estos ejemplos se muestra
   la forma de uso de todas las interfaces de usuario del framework.
@@ -82,15 +82,14 @@ de los resultados obtenidos:
   el modelo de RdP.
   \item Actualmente el framework no es compatible con otros monitores
   desarrollados en el Laboratorio de Arquitectura de Computadoras, pero su
-  arquitectura fue diseñada para no necesitar cambios ante una implementación
-  futura de este requerimiento.
+  arquitectura fue diseñada para adaptarse a un cambio de monitor de forma
+  simple.
   \item El reporte de cobertura de los casos de prueba arroja un resultado del
-  82,5\% de las instrucciones cubiertas. Este porcentaje está por debajo del requerido,
-  pero fue considerado satisfactorio dado que la prioridad asignada es la de
-  requerimiento importante no obligatorio.
+  82,5\% de líneas de código cubiertas. Este porcentaje supera al requerido.
   \item El framework tiene al menos un test automatizado por cada funcionalidad
   implementada.
-  \item Se realizó documentación de código utilizando JavaDoc.
+  \item Se realizó documentación de código utilizando el formato estándar
+  \textit{Javadoc}.
   \item Todos los objetos del framework tienen documentación sobre sus métodos,
   explicando la forma de uso y su función.
   \item La documentación no brinda detalles de implementación.

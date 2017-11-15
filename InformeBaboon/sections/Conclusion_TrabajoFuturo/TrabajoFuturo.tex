@@ -20,7 +20,8 @@ nuevos aspectos y mejoras a desarrollar en versiones futuras:
   \item Soporte para ejecución de otros tipos de modelo: en principio, dentro
   del monitor JPCM se podría ejecutar múltiples tipos de modelos (máquinas de
   estado finitas, máquinas de Turing, etc). Esta capacidad amplía la gama de
-  usuarios interesados en la utilización de \nombreFramework Framework.
+  usuarios interesados en la utilización de \textit{\nombreFramework \
+  Framework}.
   \item Embeber el manejo e intercambio de datos entre procesos dentro del
   framework: Actualmente, el framework controla el flujo de control de las
   instrucciones del programa, pero el manejo de los datos es responsabilidad
@@ -30,7 +31,12 @@ nuevos aspectos y mejoras a desarrollar en versiones futuras:
   programarse el manejo del flujo de datos. La implementación de nuevas
   interfaces para el intercambio de datos entre acciones de software
   facilitaría aún más la creación de sistemas reactivos utilizando
-  \nombreFramework Framework.
+  \textit{\nombreFramework \ Framework}.
+  \item Agregar una interfaz para la liberación de recursos en tiempo de
+  finalización del programa. Esta interfaz debe formar parte de
+  \mint{java}|BaboonApplication|. Así, el usuario deberá implementar esta
+  funcionalidad en un método que será ejecutado por \textit{\nombreFramework \
+  Framework}.
 \end{itemize}
 
 
