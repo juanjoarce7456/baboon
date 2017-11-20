@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.unc.lac.baboon.topic.Topic;
+
 /**
  * This annotation should be used on methods.
  * A method annotated with HappeningController can be subscribed
@@ -15,10 +17,9 @@ import java.lang.annotation.Target;
  * After a HappeningController annotated method ends its execution, the framework automatically
  * fires the transitions and sets the guards specified by the subscribed topic's fire callback
  * and set guard callback.
- * 
+ *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
- * 
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})

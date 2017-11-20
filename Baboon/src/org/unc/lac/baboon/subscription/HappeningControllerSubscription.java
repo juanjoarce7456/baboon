@@ -1,10 +1,10 @@
 package org.unc.lac.baboon.subscription;
 
-import org.unc.lac.baboon.subscription.AbstractActionControllerSubscription;
 import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
+import org.unc.lac.baboon.annotations.GuardProvider;
 
 /**
  * A SimpleTaskSubscription is one {@link HappeningActionController} object
@@ -14,7 +14,7 @@ import org.unc.lac.baboon.topic.Topic;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  * 
- * @see AbstractTaskSubscription
+ * @see AbstractActionControllerSubscription
  */
 public class HappeningControllerSubscription extends AbstractActionControllerSubscription {
 

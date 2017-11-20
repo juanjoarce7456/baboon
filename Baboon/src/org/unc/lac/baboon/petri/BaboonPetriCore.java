@@ -86,7 +86,7 @@ public class BaboonPetriCore {
     }
 
     /**
-     * Changes the petri monitor trasition firing prolicy. If the policy
+     * Changes the petri monitor transition firing policy. If the policy
      * provided is null then no actions are taken.
      * 
      * @param firingPolicy
@@ -141,7 +141,7 @@ public class BaboonPetriCore {
      * @param _observer the observer to subscribe
      * @throws IllegalArgumentException if the given transition is not informed
      * @return a Subscription object used to unsubscribe
-     * @see PetriMonitor#subscribeToTransition(Transition, Observer)
+     * @see PetriMonitor#subscribeToTransition(String, Observer)
      */
     public Subscription listenToTransitionInforms (final String _transitionName, final Observer<String> _observer){
         return monitor.subscribeToTransition(_transitionName, _observer);

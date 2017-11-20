@@ -17,7 +17,7 @@ public class MethodDictionary {
     /**
      * Map of {@link Method} objects already solved
      */
-    private static HashMap<Pair<Object, String>, Method> methodDict = new HashMap<Pair<Object, String>, Method>();
+    private static HashMap<Pair<Object, String>, Method> methodDict = new HashMap<>();
 
     /**
      * Given an object instance and a method's name returns the Method object
@@ -34,7 +34,7 @@ public class MethodDictionary {
     public static Method getMethod(Object object, String methodName, Class<?>... parameterClasses)
             throws NoSuchMethodException, SecurityException {
         Class<?> c = object.getClass();
-        Pair<Object, String> key = new Pair<Object, String>(object, methodName);
+        Pair<Object, String> key = new Pair<>(object, methodName);
         if (methodDict.containsKey(key)) {
             return methodDict.get(key);
         } else {
@@ -46,7 +46,7 @@ public class MethodDictionary {
     }
     
     public static Method getStaticMethod(Class<?> methodsClass, String methodName, Class<?>... parameterClasses) throws NoSuchMethodException, SecurityException{
-    	Pair<Object, String> key = new Pair<Object, String>(null, methodName);
+    	Pair<Object, String> key = new Pair<>(null, methodName);
     	 if (methodDict.containsKey(key)) {
              return methodDict.get(key);
          } else {

@@ -21,9 +21,10 @@ public interface JoinPointObserver {
      * {@link State#AFTER_EXECUTION} indicates the HappeningController method
      * execution just finished.
      */
-    public enum State {
-        AFTER_EXECUTION, BEFORE_EXECUTION
-    };
+    enum State {
+        AFTER_EXECUTION,
+        BEFORE_EXECUTION
+    }
 
     /**
      * This method is called when a HappeningController method is about to be
@@ -38,5 +39,5 @@ public interface JoinPointObserver {
      *            The {@link State} of the execution of the
      *            {@link HappeningController} annotated method.
      */
-    public void update(Object target, String methodName, JoinPointObserver.State state);
+    void update(Object target, String methodName, JoinPointObserver.State state);
 }

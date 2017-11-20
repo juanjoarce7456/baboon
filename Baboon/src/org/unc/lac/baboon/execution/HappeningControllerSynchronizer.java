@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.javatuples.Pair;
 import org.unc.lac.baboon.aspect.JoinPointObserver;
-import org.unc.lac.baboon.aspect.JoinPointObserver.State;
 import org.unc.lac.baboon.config.BaboonConfig;
 import org.unc.lac.baboon.petri.BaboonPetriCore;
 import org.unc.lac.baboon.aspect.HappeningControllerJoinPointReporter;
@@ -15,13 +14,14 @@ import org.unc.lac.baboon.subscription.HappeningControllerSubscription;
 import org.unc.lac.baboon.utils.MethodDictionary;
 import org.unc.lac.javapetriconcurrencymonitor.errors.IllegalTransitionFiringError;
 import org.unc.lac.javapetriconcurrencymonitor.exceptions.PetriNetException;
+import org.unc.lac.baboon.annotations.HappeningController;
 
 /**
  * This class uses the {@link BaboonPetriCore} and the
- * {@link HappeningControllerSubscription} objects from {@BaboonConfig} to
+ * {@link HappeningControllerSubscription} objects from {@link BaboonConfig} to
  * Synchronize the execution of {@link HappeningController} annotated methods.
  * Also, to achieve the synchronization, this class implements
- * {@JoinPointObserver} to observe the aspect advices in
+ * {@link JoinPointObserver} to observe the aspect advices in
  * {@link HappeningControllerJoinPointReporter}.
  *
  * @author Ariel Ivan Rabinovich
@@ -47,7 +47,7 @@ public class HappeningControllerSynchronizer implements JoinPointObserver {
      * method by firing the permission transition before the method execution,
      * and by firing the transition callbacks and setting the guard callbacks
      * after the method execution.
-     * 
+     *
      * @param target
      *            The instance of the object invoking the
      *            {@link HappeningController} annotated method.
@@ -67,8 +67,8 @@ public class HappeningControllerSynchronizer implements JoinPointObserver {
             else{
             	method = MethodDictionary.getMethod(target, methodName);
             }
-            HappeningControllerSubscription happeningController = (HappeningControllerSubscription) baboonConfig
-                    .getHappeningController(new Pair<Object, Method>(target, method));
+            HappeningControllerSubscription happeningController = baboonConfig
+                    .getHappeningController(new Pair<>(target, method));
             if (happeningController == null) {
                 throw new RuntimeException("This Happening Handler is not subscribed");
             } else {
@@ -93,7 +93,7 @@ public class HappeningControllerSynchronizer implements JoinPointObserver {
      * This method is called after the execution of a {@link HappeningController}
      * annotated method. Inside this method the transition callbacks are fired
      * and the guard callbacks are setted.
-     * 
+     *
      * @param happeningControllerSubscription
      *            The {@link HappeningControllerSubscription} object containing the
      *            {@link HappeningController} annotated method, the invoking
@@ -133,7 +133,7 @@ public class HappeningControllerSynchronizer implements JoinPointObserver {
     /**
      * This method is called before the execution of a {@link HappeningController}
      * annotated method. Inside this method the permission transition is fired.
-     * 
+     *
      * @param happeningControllerSubscription
      *            The {@link HappeningControllerSubscription} object containing the
      *            {@link HappeningController} annotated method, the invoking

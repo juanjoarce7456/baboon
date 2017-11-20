@@ -10,6 +10,7 @@ import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
+import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
 import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
 import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
@@ -44,26 +45,26 @@ public class BaboonConfig {
      * {@link HappeningActionController#actionObject} and
      * {@link HappeningActionController#actionMethod}
      */
-    private HashMap<Pair<Object, Method>, HappeningControllerSubscription> happeningControllerSubscriptionsMap = new HashMap<Pair<Object, Method>, HappeningControllerSubscription>();
+    private HashMap<Pair<Object, Method>, HappeningControllerSubscription> happeningControllerSubscriptionsMap = new HashMap<>();
 
     /**
      * List containing all the {@link SimpleTaskControllerSubscription} subscriptions
      * registered in this {@link BaboonConfig}.
      */
-    private ArrayList<SimpleTaskControllerSubscription> simpleTaskSubscriptionsList = new ArrayList<SimpleTaskControllerSubscription>();
+    private ArrayList<SimpleTaskControllerSubscription> simpleTaskSubscriptionsList = new ArrayList<>();
 
     /**
      * Map containing all the {@link ComplexSecuentialTaskControllerSubscription}
      * subscriptions registered in this {@link BaboonConfig}, indexed by name
      * given by user.
      */
-    private HashMap<String, ComplexSecuentialTaskControllerSubscription> complexTaskMap = new HashMap<String, ComplexSecuentialTaskControllerSubscription>();
+    private HashMap<String, ComplexSecuentialTaskControllerSubscription> complexTaskMap = new HashMap<>();
 
     /**
      * Map of Topics registered this {@link BaboonConfig}, indexed by the names
      * given by user on topics .json file
      */
-    private HashMap<String, Topic> topicsList = new HashMap<String, Topic>();
+    private HashMap<String, Topic> topicsList = new HashMap<>();
 
     /**
      * Returns the {@link HappeningControllerSubscription} mapped to key on
@@ -128,7 +129,7 @@ public class BaboonConfig {
      * @param name
      *            A name given by user on the creation of a new
      *            {@link ComplexSecuentialTaskControllerSubscription}, by using
-     *            {@link #createNewComplexTask(String, String)}
+     *            {@link #createNewComplexTaskController(String, String)}
      * 
      * @return a {@link ComplexSecuentialTaskControllerSubscription} to which the
      *         specified name is mapped, or null if this map contains no mapping
@@ -331,14 +332,14 @@ public class BaboonConfig {
         try {
             if(!staticMethod){
                 method = MethodDictionary.getMethod(object, methodName, paramClasses);
-                key = new Pair<Object, Method>(object, method);
+                key = new Pair<>(object, method);
             }
             else{
                 method = MethodDictionary.getStaticMethod((Class<?>) object, methodName, paramClasses);
                 if(!Modifier.isStatic(method.getModifiers())){
                     throw new NotSubscribableException("The method to subscribe is not static");
                 }
-                key = new Pair<Object, Method>(null, method);
+                key = new Pair<>(null, method);
             }
             if (method.isAnnotationPresent(HappeningController.class)) {
                 HappeningActionController happeningController;
@@ -436,7 +437,7 @@ public class BaboonConfig {
      * 
      * @param complexTaskName
      *            The name that identifies the complex taskController, it is provided on
-     *            {@link #createNewComplexTask(String, String)} when creating
+     *            {@link #createNewComplexTaskController(String, String)} when creating
      *            the taskController.
      * @param object
      *            The object instance to be subscribed on a new
@@ -485,7 +486,7 @@ public class BaboonConfig {
      * 
      * @param complexTaskName
      *            The name that identifies the complex taskController, it is provided on
-     *            {@link #createNewComplexTask(String, String)} when creating
+     *            {@link #createNewComplexTaskController(String, String)} when creating
      *            the taskController.
      * @param methodsClass
      *            The class on which the method is defined

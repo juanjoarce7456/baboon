@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
+import org.unc.lac.baboon.annotations.GuardProvider;
 
-/* This class defines an AbstractActionControllerSubscription as a list of {@link ActionController}
+/** This class defines an AbstractActionControllerSubscription as a list of {@link ActionController}
  * objects, which are subscribed to a topic. It is used internally by framework
  * and should not be known by user.
  *
@@ -14,7 +15,6 @@ import org.unc.lac.baboon.topic.Topic;
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
  */
-
 public abstract class AbstractActionControllerSubscription {
 
     /**
@@ -68,8 +68,8 @@ public abstract class AbstractActionControllerSubscription {
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
      *
-     * @see {@link Topic#permission}
-     * @see {@link Topic#setGuardCallback}
+     * @see Topic#permission
+     * @see Topic#setGuardCallback
      * 
      */
     protected boolean addAction(ActionController actionController) throws NotSubscribableException {

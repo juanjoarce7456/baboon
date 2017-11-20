@@ -3,7 +3,6 @@ package org.unc.lac.baboon.actioncontroller;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
@@ -88,9 +87,9 @@ public class TaskActionController extends ActionController {
     }
 
     /**
-     * Returns the name of the {@link #actionMethod} of this {@link TaskAction}
+     * Returns the name of the {@link #actionMethod} of this {@link TaskActionController}
      * 
-     * @return the name of the {@link #actionMethod} of this {@link TaskAction}
+     * @return the name of the {@link #actionMethod} of this {@link TaskActionController}
      * 
      */
     public String getMethodName() {

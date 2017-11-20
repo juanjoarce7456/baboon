@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+
+import com.google.common.base.Strings;
 import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
@@ -36,7 +38,7 @@ public abstract class ActionController {
     protected Method actionMethod;
 
     /**
-     * The {@link Map} of {@link GuardProvider} annotated methods of this
+     * The Map of {@link GuardProvider} annotated methods of this
      * actionController. They must be members of {#actionObject} class. The map is indexed
      * by guard names, taken from {@link GuardProvider#value()}.
      */
@@ -77,7 +79,7 @@ public abstract class ActionController {
         }
         this.actionMethod = actionMethod;
         this.actionObject = actionObject;
-        this.guardProviderMethodsMap = new HashMap<String, Method>();
+        this.guardProviderMethodsMap = new HashMap<>();
         resolveGuardProviderMethods();
     }
 
@@ -101,8 +103,7 @@ public abstract class ActionController {
      */
     public boolean getGuardValue(String guardName)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Boolean result = (Boolean) guardProviderMethodsMap.get(guardName).invoke(actionObject);
-        return result.booleanValue();
+        return (Boolean) guardProviderMethodsMap.get(guardName).invoke(actionObject);
     }
 
     /**
@@ -152,7 +153,7 @@ public abstract class ActionController {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
                     + "annotated as GuardProvider must be static since it is a static controller");
                 }
-                if (provider.value() != null && !provider.value().isEmpty()) {
+                if (!Strings.isNullOrEmpty(provider.value())) {
                     if (guardProviderMethodsMap.putIfAbsent(provider.value(), method) != null) {
                         throw new MultipleGuardProvidersException(
                                 "There is another method declared as a GuardProvider for guard: " + provider.value());

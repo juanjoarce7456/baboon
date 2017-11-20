@@ -2,8 +2,8 @@ package org.unc.lac.baboon.subscription;
 
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
-import org.unc.lac.baboon.subscription.AbstractTaskControllerSubscription;
 import org.unc.lac.baboon.topic.Topic;
+import org.unc.lac.baboon.annotations.GuardProvider;
 
 /**
  * A ComplexSecuentialTaskSubscription is a list of {@link TaskActionController} objects

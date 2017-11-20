@@ -7,6 +7,7 @@ import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
+import org.unc.lac.baboon.annotations.GuardProvider;
 
 /**
  * Topic template. Instances of this class will be created when reading the
@@ -29,19 +30,19 @@ public class Topic {
      * {@link ActionController} subscribed to this topic (one array of guard names per
      * {@link ActionController}).
      */
-    private ArrayList<String[]> setGuardCallback = new ArrayList<String[]>();
+    private ArrayList<String[]> setGuardCallback = new ArrayList<>();
     /**
      * {@link List} of permission transitions names that belongs to each
      * {@link ActionController} subscribed to this topic (one permission per
      * {@link ActionController}).
      */
-    private ArrayList<String> permission = new ArrayList<String>();
+    private ArrayList<String> permission = new ArrayList<>();
     /**
      * {@link List} of callback transitions names that belongs to all of the
      * {@link ActionController} objects subscribed to this topic. They are fired after
      * finish the execution of the last {@link ActionController} method.
      */
-    private ArrayList<String> fireCallback = new ArrayList<String>();
+    private ArrayList<String> fireCallback = new ArrayList<>();
 
     /**
      * Returns a {@link String} object describing the name of the {@link Topic}.

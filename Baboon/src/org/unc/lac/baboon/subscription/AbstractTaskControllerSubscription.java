@@ -3,8 +3,9 @@ package org.unc.lac.baboon.subscription;
 import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
-import org.unc.lac.baboon.subscription.AbstractActionControllerSubscription;
-import org.unc.lac.baboon.topic.Topic; 
+import org.unc.lac.baboon.topic.Topic;
+import org.unc.lac.baboon.annotations.GuardProvider;
+
 /**
  * This class defines an AbstractTaskControllerSubscription as a list of
  * {@link TaskActionController} objects, which are subscribed to a topic. 

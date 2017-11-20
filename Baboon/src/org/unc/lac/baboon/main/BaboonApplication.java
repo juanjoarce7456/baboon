@@ -15,12 +15,12 @@ public interface BaboonApplication {
      * method should be used for creating and instatiating objects and
      * controllers.
      */
-    public void declare();
+    void declare();
 
     /**
      * This method gets called automatically on application initialization. This
      * method should be used for subscribing taskControllers and happeningControllers to specific
      * events.
      */
-    public void subscribe();
+    void subscribe();
 }

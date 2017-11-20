@@ -53,7 +53,7 @@ public class BaboonFramework {
      * List of BaboonApplication objects automatically instantiated by the
      * framework
      */
-    private static ArrayList<BaboonApplication> appSetupObjects = new ArrayList<BaboonApplication>();
+    private static ArrayList<BaboonApplication> appSetupObjects = new ArrayList<>();
 
     private static BaboonConfig baboonConfig = new BaboonConfig();
 
@@ -302,7 +302,7 @@ public class BaboonFramework {
      * @throws IllegalArgumentException
      *             if the given transition is not informed
      * @return a Subscription object used to unsubscribe
-     * @see PetriMonitor#subscribeToTransition(Transition, Observer)
+     * @see PetriMonitor#subscribeToTransition(String, Observer)
      */
     public static Subscription listenToTransitionInforms(final String _transitionName,
             final Observer<String> _observer) {
@@ -354,7 +354,7 @@ public class BaboonFramework {
      * 
      * @param complexTaskName
      *            The name that identifies the complex taskController, it is provided on
-     *            {@link #createNewComplexTask(String, String)} when creating
+     *            {@link #createNewComplexTaskController(String, String)} when creating
      *            the taskController.
      * @param object
      *            The object instance to be subscribed on a new
@@ -404,7 +404,7 @@ public class BaboonFramework {
      * 
      * @param complexTaskName
      *            The name that identifies the complex taskController, it is provided on
-     *            {@link #createNewComplexTask(String, String)} when creating
+     *            {@link #createNewComplexTaskController(String, String)} when creating
      *            the taskController.
      * @param methodsClass
      *            The class on which the method is defined

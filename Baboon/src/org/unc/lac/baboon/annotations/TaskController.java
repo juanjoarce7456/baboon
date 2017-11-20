@@ -5,6 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.unc.lac.baboon.topic.Topic;
+import org.unc.lac.javapetriconcurrencymonitor.monitor.PetriMonitor;
+
 /**
  * This annotation should be used on methods. A method annotated with TaskController can
  * be subscribed to a {@link Topic}, allowing Baboon framework to handle its

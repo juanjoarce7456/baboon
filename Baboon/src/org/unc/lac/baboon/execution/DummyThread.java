@@ -35,11 +35,11 @@ public class DummyThread implements Callable<Void> {
     /**
      * The taskController to be executed.
      */
-    AbstractTaskControllerSubscription taskSubscription;
+    private AbstractTaskControllerSubscription taskSubscription;
     /**
      * The Petri core used to synchronize the execution of the taskController.
      */
-    BaboonPetriCore petriCore;
+    private BaboonPetriCore petriCore;
 
     public DummyThread(AbstractTaskControllerSubscription taskSubscription, BaboonPetriCore petriCore) {
         if (taskSubscription == null) {

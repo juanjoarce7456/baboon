@@ -45,7 +45,7 @@ public class TopicsJsonParser {
             }
             ArrayList<Topic> topics = objectMapper.readValue(jsonFileStream, new TypeReference<ArrayList<Topic>>() {
             });
-            HashMap<String, Topic> topicsIndexedByName = new HashMap<String, Topic>();
+            HashMap<String, Topic> topicsIndexedByName = new HashMap<>();
             for (Topic topic : topics) {
                 topicsIndexedByName.put(topic.getName(), topic);
             }
