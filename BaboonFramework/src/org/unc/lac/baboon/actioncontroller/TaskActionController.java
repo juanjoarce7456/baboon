@@ -87,14 +87,4 @@ public class TaskActionController extends ActionController {
         actionMethod.invoke(actionObject, parameters);
     }
 
-    /**
-     * Returns the name of the {@link #actionMethod} of this {@link TaskAction}
-     * 
-     * @return the name of the {@link #actionMethod} of this {@link TaskAction}
-     * 
-     */
-    public String getMethodName() {
-        return actionMethod.getName();
-    }
-
 }

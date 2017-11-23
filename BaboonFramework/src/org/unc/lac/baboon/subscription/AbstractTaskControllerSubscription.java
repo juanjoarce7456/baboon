@@ -94,11 +94,11 @@ public abstract class AbstractTaskControllerSubscription extends AbstractActionC
         if (!(actionController instanceof TaskActionController)) {
             throw new NotSubscribableException("The actionController must be of type TaskActionController");
         }
-        if (topic.getPermission().get(getSize()).isEmpty()) {
-            throw new NotSubscribableException("The topic permission string cannot be empty for a taskController subscription");
-        }
         if (topic.getPermission().get(getSize()) == null) {
             throw new NotSubscribableException("The topic permission array cannot be null for a taskController subscription");
+        }
+        else if (topic.getPermission().get(getSize()).isEmpty()) {
+            throw new NotSubscribableException("The topic permission string cannot be empty for a taskController subscription");
         }
         return super.addAction(actionController);
     }

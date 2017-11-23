@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
- <net id="n-80-41E20-0" type ="http://www.laas.fr/tina/tpn">
+ <net id="n-124C-B0401-0" type ="http://www.laas.fr/tina/tpn">
   <name>
    <text>pnml01</text>
   </name>
- <page id="g-80-41E2C-1">
-  <place id="p-80-41E2F-2">
+ <page id="g-124C-B040F-1">
+  <place id="p-124C-B0411-2">
   <name>
    <text>p0</text>
     <graphics>
@@ -19,7 +19,7 @@
     <position x="50" y="50"/>
    </graphics>
   </place>
-  <place id="p-80-41E3D-3">
+  <place id="p-124C-B041F-3">
   <name>
    <text>p1</text>
     <graphics>
@@ -30,7 +30,7 @@
     <position x="50" y="190"/>
    </graphics>
   </place>
-  <place id="p-80-41E41-4">
+  <place id="p-124C-B0423-4">
   <name>
    <text>p2</text>
     <graphics>
@@ -38,10 +38,10 @@
     </graphics>
   </name>
    <graphics>
-    <position x="50" y="355"/>
+    <position x="50" y="360"/>
    </graphics>
   </place>
-  <transition id="t-80-41E44-5">
+  <transition id="t-124C-B0425-5">
   <name>
    <text>t0</text>
     <graphics>
@@ -49,16 +49,16 @@
     </graphics>
   </name>
    <label>
-    <text>&lt;D,N&gt;</text>
+    <text>&lt;D,I&gt;</text>
     <graphics>
      <offset x="10" y="-10" />
     </graphics>
    </label>
    <graphics>
-    <position x="50" y="115"/>
+    <position x="50" y="120"/>
    </graphics>
   </transition>
-  <transition id="t-80-41E49-6">
+  <transition id="t-124C-B042A-6">
   <name>
    <text>t1</text>
     <graphics>
@@ -66,22 +66,22 @@
     </graphics>
   </name>
    <label>
-    <text>&lt;D,N&gt;</text>
+    <text>&lt;D,I&gt;</text>
     <graphics>
      <offset x="10" y="-10" />
     </graphics>
    </label>
    <graphics>
-    <position x="50" y="265"/>
+    <position x="50" y="260"/>
    </graphics>
   </transition>
-  <arc id="e-80-41E54-7" source="t-80-41E49-6" target="p-80-41E41-4">
+  <arc id="e-124C-B042E-7" source="t-124C-B042A-6" target="p-124C-B0423-4">
   </arc>
-  <arc id="e-80-41E57-8" source="p-80-41E3D-3" target="t-80-41E49-6">
+  <arc id="e-124C-B0431-8" source="p-124C-B041F-3" target="t-124C-B042A-6">
   </arc>
-  <arc id="e-80-41E58-9" source="t-80-41E44-5" target="p-80-41E3D-3">
+  <arc id="e-124C-B0433-9" source="t-124C-B0425-5" target="p-124C-B041F-3">
   </arc>
-  <arc id="e-80-41E5A-10" source="p-80-41E2F-2" target="t-80-41E44-5">
+  <arc id="e-124C-B0433-10" source="p-124C-B0411-2" target="t-124C-B0425-5">
   </arc>
  </page>
  </net>

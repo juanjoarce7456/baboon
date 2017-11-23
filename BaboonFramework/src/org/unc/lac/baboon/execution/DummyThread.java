@@ -41,6 +41,19 @@ public class DummyThread implements Callable<Void> {
      */
     BaboonPetriCore petriCore;
 
+    /**
+     * Constructor of the class. Receives an {@link AbstractTaskControllerSubscription} to be executed
+     * and the {@link BaboonPetriCore} used to synchronize the execution.
+     * 
+     * @param taskSubscription
+     *       The {@link AbstractTaskControllerSubscription} object to be executed.
+     * @param petriCore
+     *       The {@link BaboonPetriCore} object, used to synchronize the execution.
+     * @throws
+     *      IllegalArgumentException
+     *          <li> If taskSubscription is null </li>
+     *          <li> If petriCore is null </li>
+     */
     public DummyThread(AbstractTaskControllerSubscription taskSubscription, BaboonPetriCore petriCore) {
         if (taskSubscription == null) {
             throw new IllegalArgumentException("Task can not be null");
@@ -75,8 +88,10 @@ public class DummyThread implements Callable<Void> {
         while (true) {
             TaskActionController taskController = taskSubscription.getAction(secuenceStatus);
             String permission = taskSubscription.getTopic().getPermission().get(secuenceStatus);
+            System.out.println("Permission: " + permission);
             try {
                 petriCore.fireTransition(permission, false);
+                System.out.println("Fired");
             } catch (IllegalTransitionFiringError | PetriNetException e) {
                 LOGGER.log(Level.SEVERE, "Error while firing the callback transition " + permission, e);
                 throw new RuntimeException("Error while firing the permission transition ", e);
@@ -113,7 +128,9 @@ public class DummyThread implements Callable<Void> {
             if (secuenceStatus == 0) {
                 for (String transitionCallback : taskSubscription.getTopic().getFireCallback()) {
                     try {
+                        System.out.println("Firing: " + transitionCallback);
                         petriCore.fireTransition(transitionCallback, true);
+
                     } catch (IllegalTransitionFiringError | PetriNetException e) {
                         LOGGER.log(Level.SEVERE, "Error while firing the callback transition " + transitionCallback, e);
                         throw new RuntimeException("Error while firing the callback transition " + transitionCallback,

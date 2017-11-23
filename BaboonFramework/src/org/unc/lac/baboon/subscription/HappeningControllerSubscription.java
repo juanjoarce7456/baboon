@@ -7,7 +7,7 @@ import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
 
 /**
- * A SimpleTaskSubscription is one {@link HappeningActionController} object
+ * A HappeningControllerSubscription is one {@link HappeningActionController} object
  * subscribed to a topic.
  *
  * @author Ariel Ivan Rabinovich

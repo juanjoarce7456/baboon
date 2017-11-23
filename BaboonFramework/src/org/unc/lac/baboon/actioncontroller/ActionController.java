@@ -152,7 +152,7 @@ public abstract class ActionController {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
                     + "annotated as GuardProvider must be static since it is a static controller");
                 }
-                if (provider.value() != null && !provider.value().isEmpty()) {
+                if (!provider.value().isEmpty()) {
                     if (guardProviderMethodsMap.putIfAbsent(provider.value(), method) != null) {
                         throw new MultipleGuardProvidersException(
                                 "There is another method declared as a GuardProvider for guard: " + provider.value());
@@ -160,6 +160,16 @@ public abstract class ActionController {
                 }
             }
         }
+    }
+    
+    /**
+     * Returns the name of the {@link #actionMethod}
+     * 
+     * @return the name of the {@link #actionMethod}
+     * 
+     */
+    public String getMethodName() {
+        return actionMethod.getName();
     }
 
 }
