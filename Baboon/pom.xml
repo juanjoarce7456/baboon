@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.github.airabinovich</groupId>
             <artifactId>java_petri_engine</artifactId>
-            <version>dev-SNAPSHOT</version>
+            <version>v1.0-RC1</version>
         </dependency>
     </dependencies>
 </project>

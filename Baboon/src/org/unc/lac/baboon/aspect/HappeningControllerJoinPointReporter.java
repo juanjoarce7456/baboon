@@ -11,7 +11,7 @@ import org.unc.lac.baboon.aspect.JoinPointObserver.State;
 /**
  * In this Aspect are declared the pointcut and advices to be applied when a
  * {@link HappeningController} annotated method execution JoinPoints is reached.
- * 
+ *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * @version 1.0
@@ -30,8 +30,8 @@ public class HappeningControllerJoinPointReporter {
      * with {@link HappeningController}
      */
     @Pointcut(value = "execution(@org.unc.lac.baboon.annotations.HappeningController * *(..))",
-    		argNames = "joinPoint")
-    public void happening(final JoinPoint joinPoint){
+            argNames = "joinPoint")
+    public void happening(final JoinPoint joinPoint) {
     }
 
     /**
