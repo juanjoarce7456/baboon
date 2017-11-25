@@ -7,16 +7,17 @@ import org.junit.Test;
 import org.unc.lac.baboon.main.BaboonFramework;
 import org.unc.lac.baboon.test.utils.appsetup.TaskExecutionAppSetup;
 import org.unc.lac.baboon.test.utils.tasks.TaskExecutionController;
+import org.unc.lac.baboon.main.BaboonApplication;
 
 public class TaskExecutionTest {
-	
-	private TaskExecutionAppSetup appSetup;
-	
-	@Before
-	public void setUp() {
-		appSetup = new TaskExecutionAppSetup();
-	}
-	
+
+    private TaskExecutionAppSetup appSetup;
+
+    @Before
+    public void setUp() {
+        appSetup = new TaskExecutionAppSetup();
+    }
+
     /**
      * <li>Given I have a class {@link TaskExecutionAppSetup} which implements
      * {@link BaboonApplication} interface</li>
