@@ -1,11 +1,8 @@
 package org.unc.lac.baboon.test.cases;
 
-import static org.junit.Assert.*;
-
 import java.lang.reflect.Method;
 
 import org.junit.Test;
-import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.exceptions.InvalidGuardProviderMethod;
@@ -29,9 +26,7 @@ public class ControllersTest {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockUserSystemObj, taskMethod); 
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(null,methodObj);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(null,methodObj);
     }
     
     /**
@@ -42,9 +37,7 @@ public class ControllersTest {
     @Test (expected=IllegalArgumentException.class)
     public void creatingActionControllerWithNullActionMethodShouldThrowException() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(mockUserSystemObj,null);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(mockUserSystemObj,null);
     }
     
     /**
@@ -57,9 +50,7 @@ public class ControllersTest {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockNotSubscribableMethod";
         Method methodObj = MethodDictionary.getMethod(mockUserSystemObj, taskMethod); 
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(mockUserSystemObj,methodObj);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(mockUserSystemObj,methodObj);
     }
     
     /**
@@ -72,9 +63,7 @@ public class ControllersTest {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockNotSubscribableMethod";
         Method methodObj = MethodDictionary.getMethod(mockUserSystemObj, taskMethod); 
-        @SuppressWarnings("unused")
-        ActionController actionController = new HappeningActionController(mockUserSystemObj,methodObj);
-        fail("Exception should have been thrown before this point");
+        new HappeningActionController(mockUserSystemObj,methodObj);
     }
     
     /**
@@ -88,10 +77,7 @@ public class ControllersTest {
         final MockUserSystemObjWithBadReturnGuardProviders mockUserSystemObj = new MockUserSystemObjWithBadReturnGuardProviders();
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockUserSystemObj, taskMethod);
-        
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(mockUserSystemObj,methodObj);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(mockUserSystemObj,methodObj);
     }
     
     /**
@@ -105,10 +91,7 @@ public class ControllersTest {
         final MockUserSystemObjWithBadParamGuardProviders mockUserSystemObj = new MockUserSystemObjWithBadParamGuardProviders();
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockUserSystemObj, taskMethod);
-        
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(mockUserSystemObj,methodObj);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(mockUserSystemObj,methodObj);
     }
     
     /**
@@ -122,10 +105,7 @@ public class ControllersTest {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "staticMockTask";
         Method methodObj = MethodDictionary.getStaticMethod(MockUserSystemObject.class, taskMethod);
-        
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(mockUserSystemObj,methodObj);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(mockUserSystemObj,methodObj);
     }
     
     /**
@@ -139,10 +119,7 @@ public class ControllersTest {
         final MockUserSystemObjWithMultipleGuardProvidersProblem mockUserSystemObj = new MockUserSystemObjWithMultipleGuardProvidersProblem();
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockUserSystemObj, taskMethod);
-        
-        @SuppressWarnings("unused")
-        ActionController actionController = new TaskActionController(mockUserSystemObj,methodObj);
-        fail("Exception should have been thrown before this point");
+        new TaskActionController(mockUserSystemObj,methodObj);
     }
 
 }

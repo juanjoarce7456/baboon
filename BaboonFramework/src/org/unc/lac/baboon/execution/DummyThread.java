@@ -88,10 +88,8 @@ public class DummyThread implements Callable<Void> {
         while (true) {
             TaskActionController taskController = taskSubscription.getAction(secuenceStatus);
             String permission = taskSubscription.getTopic().getPermission().get(secuenceStatus);
-            System.out.println("Permission: " + permission);
             try {
                 petriCore.fireTransition(permission, false);
-                System.out.println("Fired");
             } catch (IllegalTransitionFiringError | PetriNetException e) {
                 LOGGER.log(Level.SEVERE, "Error while firing the callback transition " + permission, e);
                 throw new RuntimeException("Error while firing the permission transition ", e);
@@ -128,9 +126,7 @@ public class DummyThread implements Callable<Void> {
             if (secuenceStatus == 0) {
                 for (String transitionCallback : taskSubscription.getTopic().getFireCallback()) {
                     try {
-                        System.out.println("Firing: " + transitionCallback);
                         petriCore.fireTransition(transitionCallback, true);
-
                     } catch (IllegalTransitionFiringError | PetriNetException e) {
                         LOGGER.log(Level.SEVERE, "Error while firing the callback transition " + transitionCallback, e);
                         throw new RuntimeException("Error while firing the callback transition " + transitionCallback,

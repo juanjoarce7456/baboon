@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.unc.lac.baboon.subscription.ComplexSecuentialTaskControllerSubscription;
 import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.annotations.TaskController;
-import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
-import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.config.BaboonConfig;
 import org.unc.lac.baboon.test.utils.tasks.MockUserSystemObject;
@@ -15,7 +13,8 @@ import org.unc.lac.baboon.topic.Topic;
 
 public class ComplexTaskControllersSubscriptionTest {
     private final String topicsPath = "/org/unc/lac/baboon/test/resources/topics02.json";
-    private final String[] topicNamesDefined = { "topic1", "topic2", "topic3", "topic4","complex_topic" };
+    private final String TOPIC_1 = "topic1";
+    private final String TOPIC_COMPLEX = "complex_topic";
     
     /**
      * <li>Given I have a topics json file containing three topics</li>
@@ -27,15 +26,13 @@ public class ComplexTaskControllersSubscriptionTest {
      * {@link Topic}</li>
      */
     @Test
-    public void subscribingAComplexTaskToAnExistingTopicShouldGetRegisteredInConfigTest() 
-            throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingAComplexTaskToAnExistingTopicShouldGetRegisteredInConfigTest() throws Exception {
         final BaboonConfig baboonConfig = new BaboonConfig();
             baboonConfig.addTopics(topicsPath);
             String complexTaskName = "complexFooTask";
-            baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
+            baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
             ComplexSecuentialTaskControllerSubscription complexTask = baboonConfig.getComplexSecuentialTask(complexTaskName);
-            assertEquals(0, complexTask.getSize());
-            assertEquals(topicNamesDefined[4], complexTask.getTopic().getName());
+            assertEquals(TOPIC_COMPLEX, complexTask.getTopic().getName());
     }
     
     /**
@@ -54,19 +51,19 @@ public class ComplexTaskControllersSubscriptionTest {
      * two actions ordered by insertion time</li>
      */
     @Test
-    public void appendingTaskstoAComplexTaskShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void appendingTaskstoAComplexTaskShouldGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObject = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         final String taskMethod2 = "mockTask2";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
         baboonConfig.appendControllerToComplexTaskController(complexTaskName,mockUserSystemObject,taskMethod);
         baboonConfig.appendControllerToComplexTaskController(complexTaskName,mockUserSystemObject,taskMethod2);
         ComplexSecuentialTaskControllerSubscription complexTask = baboonConfig.getComplexSecuentialTask(complexTaskName);
         assertEquals(2, complexTask.getSize());
-        assertEquals(topicNamesDefined[4], complexTask.getTopic().getName());
+        assertEquals(TOPIC_COMPLEX, complexTask.getTopic().getName());
         assertEquals(mockUserSystemObject, complexTask.getAction(0).getActionObject());
         assertEquals(taskMethod, complexTask.getAction(0).getMethodName());
         assertEquals(mockUserSystemObject, complexTask.getAction(1).getActionObject());
@@ -85,7 +82,7 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void appendingMoreTasksThanPermissionsOnAComplexTaskShouldNotBeAllowed() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void appendingMoreTasksThanPermissionsOnAComplexTaskShouldNotBeAllowed() throws Exception {
         final MockUserSystemObject mockUserSystemObject = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         final String taskMethod2 = "mockTask2";
@@ -93,13 +90,12 @@ public class ComplexTaskControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
         baboonConfig.appendControllerToComplexTaskController(complexTaskName,mockUserSystemObject,taskMethod);
         baboonConfig.appendControllerToComplexTaskController(complexTaskName,mockUserSystemObject,taskMethod2);
         ComplexSecuentialTaskControllerSubscription complexTask = baboonConfig.getComplexSecuentialTask(complexTaskName);
         assertEquals(2, complexTask.getSize());
         baboonConfig.appendControllerToComplexTaskController(complexTaskName,mockUserSystemObject,taskMethod3);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -111,13 +107,11 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void creatingAComplexTaskUsingANotExistingTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException{
+    public void creatingAComplexTaskUsingANotExistingTopicShouldNotGetRegisteredInConfigTest() throws Exception{
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
         baboonConfig.createNewComplexTaskController(complexTaskName, "notExistingTopic");
-        fail("Exception should have been thrown before this point");
-
     }
     
     /**
@@ -128,12 +122,11 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void creatingAComplexTaskUsingANullTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException{
+    public void creatingAComplexTaskUsingANullTopicShouldNotGetRegisteredInConfigTest() throws Exception{
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
         baboonConfig.createNewComplexTaskController(complexTaskName, null);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -144,12 +137,11 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void creatingAComplexTaskUsingAnEmptyTopicNameShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException{
+    public void creatingAComplexTaskUsingAnEmptyTopicNameShouldNotGetRegisteredInConfigTest() throws Exception{
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
         baboonConfig.createNewComplexTaskController(complexTaskName, "");
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -160,11 +152,10 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void creatingAComplexTaskUsingANullTaskNameShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException{
+    public void creatingAComplexTaskUsingANullTaskNameShouldNotGetRegisteredInConfigTest() throws Exception{
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
-        baboonConfig.createNewComplexTaskController(null, topicNamesDefined[4]);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.createNewComplexTaskController(null, TOPIC_COMPLEX);
     }
     
     /**
@@ -175,11 +166,10 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li> 
      */
     @Test (expected=NotSubscribableException.class)
-    public void creatingAComplexTaskUsingAnEmptyTaskNameShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException{
+    public void creatingAComplexTaskUsingAnEmptyTaskNameShouldNotGetRegisteredInConfigTest() throws Exception{
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
-        baboonConfig.createNewComplexTaskController("", topicNamesDefined[4]);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.createNewComplexTaskController("", TOPIC_COMPLEX);
     }
     
     
@@ -199,16 +189,16 @@ public class ComplexTaskControllersSubscriptionTest {
      * action with the static method</li>
      */
     @Test
-    public void appendingAStaticTaskControllerToAComplexTaskShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void appendingAStaticTaskControllerToAComplexTaskShouldGetRegisteredInConfigTest() throws Exception {
         final String taskMethod = "staticMockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
         baboonConfig.appendStaticControllerToComplexTaskController(complexTaskName, MockUserSystemObject.class, taskMethod);
         ComplexSecuentialTaskControllerSubscription complexTask = baboonConfig.getComplexSecuentialTask(complexTaskName);
         assertEquals(1, complexTask.getSize());
-        assertEquals(topicNamesDefined[4], complexTask.getTopic().getName());
+        assertEquals(TOPIC_COMPLEX, complexTask.getTopic().getName());
         assertEquals(MockUserSystemObject.class, complexTask.getAction(0).getActionObject());
         assertEquals(taskMethod, complexTask.getAction(0).getMethodName());
     }
@@ -225,13 +215,12 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li> 
      */
     @Test (expected=NotSubscribableException.class)
-    public void appendingANonExistingMethodToAComplexTaskShouldNotBeAllowed() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void appendingANonExistingMethodToAComplexTaskShouldNotBeAllowed() throws Exception {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
         baboonConfig.appendStaticControllerToComplexTaskController(complexTaskName, MockUserSystemObject.class, "NonExistingMethod");
-        fail("Exception should have been thrown before this point");
     }
     
     
@@ -247,14 +236,13 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li> 
      */
     @Test (expected=NotSubscribableException.class)
-    public void appendingANonStaticTaskControllerToAComplexTaskUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void appendingANonStaticTaskControllerToAComplexTaskUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws Exception {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
         baboonConfig.appendStaticControllerToComplexTaskController(complexTaskName, MockUserSystemObject.class, taskMethod);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -264,13 +252,12 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li> 
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingAComplexTaskToAnEmptyTopicShouldThrowAnException() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingAComplexTaskToAnEmptyTopicShouldThrowAnException() throws Exception {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
-        baboonConfig.getTopicByName(topicNamesDefined[4]).getPermission().clear();
+        baboonConfig.getTopicByName(TOPIC_COMPLEX).getPermission().clear();
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
     }
     
     /**
@@ -280,13 +267,12 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li> 
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingMoreThanOneComplexTaskWithTheSameNameShouldThrowAnException() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingMoreThanOneComplexTaskWithTheSameNameShouldThrowAnException() throws Exception {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath);
         String complexTaskName = "complexFooTask";
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[4]);
-        baboonConfig.createNewComplexTaskController(complexTaskName, topicNamesDefined[0]);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_COMPLEX);
+        baboonConfig.createNewComplexTaskController(complexTaskName, TOPIC_1);
     }
     
     /**
@@ -296,13 +282,10 @@ public class ComplexTaskControllersSubscriptionTest {
      * thrown</li> 
      */
     @Test (expected=NotSubscribableException.class)
-    public void appendingControllerToNonExistingComplexTaskSubscriptionShouldThrowAnException() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void appendingControllerToNonExistingComplexTaskSubscriptionShouldThrowAnException() throws Exception {
         final BaboonConfig baboonConfig = new BaboonConfig();
         final MockUserSystemObject mockUserSystemObject = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         baboonConfig.appendControllerToComplexTaskController("NonExistingComplexTask", mockUserSystemObject, taskMethod);
-        fail("Exception should have been thrown before this point");
-        
-
     }
 }

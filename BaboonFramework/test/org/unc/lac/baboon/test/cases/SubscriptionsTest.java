@@ -30,9 +30,7 @@ public class SubscriptionsTest {
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockController, taskMethod); 
         TaskActionController taskController = new TaskActionController(mockController,methodObj);
-        @SuppressWarnings("unused")
-        SimpleTaskControllerSubscription subscription  = new SimpleTaskControllerSubscription(topic, taskController);
-        fail("Exception should have been thrown before this point");
+        new SimpleTaskControllerSubscription(topic, taskController);
     }
     
     /**
@@ -46,9 +44,7 @@ public class SubscriptionsTest {
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockController, taskMethod); 
         TaskActionController taskController = new TaskActionController(mockController,methodObj);
-        @SuppressWarnings("unused")
-        SimpleTaskControllerSubscription subscription  = new SimpleTaskControllerSubscription(null, taskController);
-        fail("Exception should have been thrown before this point");
+        new SimpleTaskControllerSubscription(null, taskController);
     }
   
     /**
@@ -66,9 +62,7 @@ public class SubscriptionsTest {
         final String taskMethod = "mockTask";
         Method methodObj = MethodDictionary.getMethod(mockController, taskMethod); 
         TaskActionController taskController = new TaskActionController(mockController,methodObj);
-        @SuppressWarnings("unused")
-        SimpleTaskControllerSubscription subscription  = new SimpleTaskControllerSubscription(topic, taskController);
-        fail("Exception should have been thrown before this point");
+        new SimpleTaskControllerSubscription(topic, taskController);
     }
 
     /**
@@ -86,9 +80,7 @@ public class SubscriptionsTest {
         final String happeningMethod = "mockHappeningController";
         Method methodObj = MethodDictionary.getMethod(mockController, happeningMethod); 
         HappeningActionController happeningController = new HappeningActionController(mockController,methodObj);
-        @SuppressWarnings("unused")
-        HappeningControllerSubscription subscription  = new HappeningControllerSubscription(topic, happeningController);
-        fail("Exception should have been thrown before this point");
+        new HappeningControllerSubscription(topic, happeningController);
     }
     
     /**
@@ -109,9 +101,7 @@ public class SubscriptionsTest {
         final String happeningMethod = "mockHappeningController"; 
         Method methodObj = MethodDictionary.getMethod(mockController, happeningMethod); 
         HappeningActionController happeningController = new HappeningActionController(mockController,methodObj);
-        @SuppressWarnings("unused")
-        HappeningControllerSubscription subscription  = new HappeningControllerSubscription(topic, happeningController);
-        fail("Exception should have been thrown before this point");
+        new HappeningControllerSubscription(topic, happeningController);
     }
     
     /**
@@ -126,7 +116,6 @@ public class SubscriptionsTest {
         topic.getPermission().add("t0");
         ComplexSecuentialTaskControllerSubscription subscription  = new ComplexSecuentialTaskControllerSubscription(topic);
         subscription.addTask(null);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -149,7 +138,6 @@ public class SubscriptionsTest {
         assertEquals(taskController1,subscription.getAction(0));
         TaskActionController taskController2 = new TaskActionController(mockController,methodObj);
         subscription.addTask(taskController2);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -174,7 +162,6 @@ public class SubscriptionsTest {
         assertEquals(taskController1,subscription.getAction(0));
         TaskActionController taskController2 = new TaskActionController(mockController,methodObj);
         subscription.addTask(taskController2);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -199,6 +186,5 @@ public class SubscriptionsTest {
         assertEquals(taskController1,subscription.getAction(0));
         TaskActionController taskController2 = new TaskActionController(mockController,methodObj);
         subscription.addTask(taskController2);
-        fail("Exception should have been thrown before this point");
     }
 }

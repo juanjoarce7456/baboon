@@ -14,22 +14,22 @@ import org.unc.lac.baboon.test.cases.TaskExecutionTest;
 public enum TaskExecutionMockSingletonObject {
 
     INSTANCE(0);
-    
+
     private int counter;
-    
+
     TaskExecutionMockSingletonObject(int counter) {
           this.counter = counter;
     }
-    
+
     @TaskController
     public void increaseNumber() {
         this.counter++;
     }
-    
+
     public int getNumber() {
         return counter;
     }
-    
+
     public void reset() {
         this.counter = 0;
     }

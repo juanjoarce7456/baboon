@@ -59,7 +59,6 @@ public class HappeningControllerJoinPointTest {
         
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "eventInserterHappeningController";
-        Boolean result = new Boolean(false);
         String expectedEventT0 = "t0";
         String expectedEventT1 = "t1";
         String eventToAdd = "TEST_EVENT";
@@ -67,13 +66,13 @@ public class HappeningControllerJoinPointTest {
         petriCore.listenToTransitionInforms("t0", tObserver);
         petriCore.listenToTransitionInforms("t1", tObserver);
         
-        baboonConfig.subscribeControllerToTopic(topicName, mockUserSystemObj, happeningControllerMethod, tObserver, expectedEventT0, result, eventToAdd);
+        baboonConfig.subscribeControllerToTopic(topicName, mockUserSystemObj, happeningControllerMethod, tObserver, eventToAdd);
 
        hcSyncronizer = new HappeningControllerSynchronizer(baboonConfig, petriCore);
        HappeningControllerJoinPointReporter.setObserver(hcSyncronizer);
        
        //HappeningControllerJoinPointReporter before is executed Here
-       mockUserSystemObj.eventInserterHappeningController(tObserver, expectedEventT0, result, eventToAdd);
+       mockUserSystemObj.eventInserterHappeningController(tObserver, eventToAdd);
        //HappeningControllerJoinPointReporter after is executed Here
        
        assertEquals(3,tObserver.getEvents().size());
@@ -85,11 +84,6 @@ public class HappeningControllerJoinPointTest {
        assertEquals(expectedEventT0,receivedEventT0);
        assertEquals(eventToAdd,tObserver.getEvents().get(1));
        assertEquals(expectedEventT1,receivedEventT1);
-       
-       for(String event : tObserver.getEvents()){
-           System.out.println(event);
-       }
-       
     }
 
 }

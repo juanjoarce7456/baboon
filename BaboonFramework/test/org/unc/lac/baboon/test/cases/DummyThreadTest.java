@@ -29,14 +29,20 @@ public class DummyThreadTest {
     final String petriNetFile_02 = "/org/unc/lac/baboon/test/resources/pnml02.pnml";
     private final String topicsPath02 = "/org/unc/lac/baboon/test/resources/topics02.json";
     
+    
+    @After
+    public void turnOnLogger(){
+        Logger.getLogger(DummyThread.class.getName()).setLevel(Level.ALL);
+    }
+    
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains fired transitions "t0" and "t1" </li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains fired transitions "t0" and "t1" </li>
      * <li>And "t0" is enabled to be fired repeatedly </li>
      * <li>And I configure a {@link Topic} with permission "t0" and a fireCallback "t1" </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
      * <li>And I have a {@link TransitionEventObserver} object listening for firing events on "t0" and "t1" </li>
      * <li>And the {@link TaskController} method in the {@link TaskActionController} increases the count on a {@link CustomCounter} object. </li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I create a Thread to execute {@link DummyThread#call()} method</li>
      * <li>And I let the Thread execute for a second before interrupting it</li>
      * <li>Then {@link CustomCounter#getVal()} should be greater than zero </li>
@@ -96,11 +102,11 @@ public class DummyThreadTest {
     
     
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains fired transitions "t0" and "t1" </li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains fired transitions "t0" and "t1" </li>
      * <li>And "t0" is enabled to be fired repeatedly </li>
      * <li>And I configure a {@link Topic} with a permission "t2", that does not exists on Petri Net model </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I execute {@link DummyThread#call()} method</li>
      * <li>And The framework tries to fire "t2" </li>
      * <li>Then a {@link RuntimeException} should be thrown </li>
@@ -122,20 +128,19 @@ public class DummyThreadTest {
         DummyThread dummyThreadInstance = new DummyThread(taskSubscription, petriCore);
         Logger.getLogger(DummyThread.class.getName()).setLevel(Level.OFF);
         dummyThreadInstance.call();
-        fail("Exception should have been thrown before this point");
     }
     
     
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains fired transitions "t0" and "t1" </li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains fired transitions "t0" and "t1" </li>
      * <li>And "t0" is enabled to be fired repeatedly </li>
      * <li>And I configure a {@link Topic} with permission "t0" </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
      * <li>And I after change the {@link Topic} permission to an empty string </li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I execute {@link DummyThread#call()} method</li>
-     * <li>And the empty permission is detected </li>
-     * <li>Then a {@link RuntimeException} should be thrown </li>
+     * <li>Then the empty permission is detected </li>
+     * <li>And a {@link RuntimeException} should be thrown </li>
      */
     @Test (expected=RuntimeException.class)
     public void emptyPermissionTransitionShouldMakeDummyThreadInterruptItsExecution() throws Exception{
@@ -155,15 +160,14 @@ public class DummyThreadTest {
         DummyThread dummyThreadInstance = new DummyThread(taskSubscription, petriCore);
         Logger.getLogger(DummyThread.class.getName()).setLevel(Level.OFF);
         dummyThreadInstance.call();
-        fail("Exception should have been thrown before this point");
     }
     
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains transition "t0" of "automatic" type</li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains transition "t0" of "automatic" type</li>
      * <li>And "t0" is enabled</li>
      * <li>And I configure a {@link Topic} with permission "t0" </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I execute {@link DummyThread#call()} method</li>
      * <li>And the framework tries to fire the automatic transition </li>
      * <li>Then a {@link RuntimeException} should be thrown </li>
@@ -184,18 +188,17 @@ public class DummyThreadTest {
         DummyThread dummyThreadInstance = new DummyThread(taskSubscription, petriCore);
         Logger.getLogger(DummyThread.class.getName()).setLevel(Level.OFF);
         dummyThreadInstance.call();
-        fail("Exception should have been thrown before this point");
     }
     
 
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains transition "t0" of "automatic" type and transition "t1" of "fired" type </li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains transition "t0" of "automatic" type and transition "t1" of "fired" type </li>
      * <li>And "t0" is enabled</li>
      * <li>And "t1" is enabled</li>
      * <li>And I configure a {@link Topic} with permission "t1" </li>
      * <li>And I configure the {@link Topic} with fire callback "t0" </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I execute {@link DummyThread#call()} method</li>
      * <li>And the framework tries to fire the automatic transition "t0"</li>
      * <li>Then a {@link RuntimeException} should be thrown </li>
@@ -217,17 +220,16 @@ public class DummyThreadTest {
         DummyThread dummyThreadInstance = new DummyThread(taskSubscription, petriCore);
         Logger.getLogger(DummyThread.class.getName()).setLevel(Level.OFF);
         dummyThreadInstance.call();
-        fail("Exception should have been thrown before this point");
     }
     
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains transition "t0" of "automatic" type and transition "t1" of "fired" type </li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains transition "t0" of "automatic" type and transition "t1" of "fired" type </li>
      * <li>And "t0" is enabled</li>
      * <li>And "t1" is enabled</li>
      * <li>And I configure a {@link Topic} with permission "t1" </li>
      * <li>And I configure the {@link Topic} with fire callback "t3", that does not exists on Petri Net model</li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I execute {@link DummyThread#call()} method</li>
      * <li>And the framework tries to fire the non existent transition "t3"</li>
      * <li>Then a {@link RuntimeException} should be thrown </li>
@@ -248,18 +250,17 @@ public class DummyThreadTest {
         DummyThread dummyThreadInstance = new DummyThread(taskSubscription, petriCore);
         Logger.getLogger(DummyThread.class.getName()).setLevel(Level.OFF);
         dummyThreadInstance.call();
-        fail("Exception should have been thrown before this point");
     }
     
     
     /**
-     * <li>Given I have a Petri Net model inside a {@BaboonPetriCore} object, which contains transition "t0" of "automatic" type and transition "t1" of "fired" type </li>
+     * <li>Given I have a Petri Net model inside a {@link BaboonPetriCore} object, which contains transition "t0" of "automatic" type and transition "t1" of "fired" type </li>
      * <li>And "t0" is enabled</li>
      * <li>And "t1" is enabled</li>
      * <li>And I configure a {@link Topic} with permission "t1" </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
      * <li>And I configure the {@link Topic} with a guard callback callback "g2", that does not exists on Petri Net model </li>
-     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@BaboonPetriCore} </li>
+     * <li>And I configure a {@link DummyThread} object to execute the {@link SimpleTaskControllerSubscription} using the {@link BaboonPetriCore} </li>
      * <li>When I execute {@link DummyThread#call()} method</li>
      * <li>And the framework tries to set the non existent guard "g2"</li>
      * <li>Then a {@link RuntimeException} should be thrown </li>
@@ -281,13 +282,11 @@ public class DummyThreadTest {
         DummyThread dummyThreadInstance = new DummyThread(taskSubscription, petriCore);
         Logger.getLogger(DummyThread.class.getName()).setLevel(Level.OFF);
         dummyThreadInstance.call();
-        fail("Exception should have been thrown before this point");
     }
     
     /**
      * <li>Given I configure a {@link Topic} with permission "t1" </li>
      * <li>And I subscribe a {@link TaskActionController} to the {@link Topic}, creating the {@link SimpleTaskControllerSubscription}</li>
-     * <li>And I configure the {@link Topic} with a guard callback callback "g2", that does not exists on Petri Net model </li>
      * <li>When I use a null object as petriCore on {@link DummyThread#DummyThread(AbstractTaskControllerSubscription, BaboonPetriCore)} </li>
      * <li>Then an {@link IllegalArgumentException} should be thrown </li>
      */
@@ -301,9 +300,8 @@ public class DummyThreadTest {
         CustomCounter counter = new CustomCounter();
         TaskActionController taskController = new TaskActionController(mockUserSystemObj,methodObj, counter);
         SimpleTaskControllerSubscription taskSubscription = new SimpleTaskControllerSubscription(topic, taskController);
-        @SuppressWarnings("unused")
-        DummyThread dummyThreadInstance = new DummyThread(taskSubscription, null);
-        fail("Exception should have been thrown before this point");
+        BaboonPetriCore petriCore = null;
+        new DummyThread(taskSubscription, petriCore);
     }
     
     /**
@@ -315,14 +313,6 @@ public class DummyThreadTest {
     public void dummyThreadInitializationWithNullTaskShouldNotBePossible() throws Exception{
         BaboonPetriCore petriCore = new BaboonPetriCore(petriNetFile_02, petriNetType.PLACE_TRANSITION, null);
         petriCore.initializePetriNet();
-        @SuppressWarnings("unused")
-        DummyThread dummyThreadInstance = new DummyThread(null, petriCore);
-        fail("Exception should have been thrown before this point");
+        new DummyThread(null, petriCore);
     }
-    
-    @After
-    public void turnOnLogger(){
-        Logger.getLogger(DummyThread.class.getName()).setLevel(Level.ALL);
-    }
-
 }

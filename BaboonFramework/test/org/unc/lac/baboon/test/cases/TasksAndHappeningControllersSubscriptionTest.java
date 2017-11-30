@@ -1,7 +1,6 @@
 package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -23,7 +22,11 @@ import org.unc.lac.baboon.utils.MethodDictionary;
 public class TasksAndHappeningControllersSubscriptionTest {
     private final String topicsPath02 = "/org/unc/lac/baboon/test/resources/topics02.json";
     private final String topicsPath03 = "/org/unc/lac/baboon/test/resources/topics03.json";
-    private final String[] topicNamesDefined = { "topic1", "topic2", "topic3", "topic4","complex_topic" };
+    
+    private final String TOPIC_1 = "topic1";
+    private final String TOPIC_2 = "topic2";
+    private final String TOPIC_3 = "topic3";
+    private final String TOPIC_4 = "topic4";
 
     /**
      * <li>Given I have a topics json file containing three topics</li>
@@ -44,12 +47,12 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[0], mockUserSystemObj, happeningControllerMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockUserSystemObj, happeningControllerMethod);
         Method testMethod = MethodDictionary.getMethod(mockUserSystemObj, happeningControllerMethod);
         Pair<Object, Method> testKey = new Pair<Object, Method>(mockUserSystemObj, testMethod);
         assertEquals(1, baboonConfig.getHappeningController(testKey).getSize());
         assertEquals(mockUserSystemObj, baboonConfig.getHappeningController(testKey).getAction().getActionObject());
-        assertEquals(topicNamesDefined[0], baboonConfig.getHappeningController(testKey).getTopic().getName());
+        assertEquals(TOPIC_1, baboonConfig.getHappeningController(testKey).getTopic().getName());
         assertEquals(happeningControllerMethod, baboonConfig.getHappeningController(testKey).getAction().getMethodName());
     }
 
@@ -70,12 +73,12 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[0], mockUserSystemObj, taskMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockUserSystemObj, taskMethod);
         List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
         assertEquals(1, tasksList.size());
         assertEquals(1,tasksList.get(0).getSize());
         assertEquals(mockUserSystemObj,tasksList.get(0).getAction(0).getActionObject());
-        assertEquals(topicNamesDefined[0], tasksList.get(0).getTopic().getName());
+        assertEquals(TOPIC_1, tasksList.get(0).getTopic().getName());
         assertEquals(taskMethod, tasksList.get(0).getAction(0).getMethodName());
     }
 
@@ -95,8 +98,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String method = "mockNotSubscribableMethod";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj, method);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj, method);
     }
 
     /**
@@ -114,8 +116,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj,null);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj,null);
     }
 
     /**
@@ -134,8 +135,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj, "methodNotExistingOnClass");
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj, "methodNotExistingOnClass");
     }
 
     /**
@@ -155,7 +155,6 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
         baboonConfig.subscribeControllerToTopic("notExistingTopicName", mockUserSystemObj, method);
-        fail("Exception should have been thrown before this point");
     }
     
     /**
@@ -174,7 +173,6 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
         baboonConfig.subscribeControllerToTopic(null, mockUserSystemObj, method);
-        fail("Exception should have been thrown before this point");
     }
 
     /**
@@ -190,8 +188,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String method = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[0], null, method);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, null, method);
     }
 
     /**
@@ -218,34 +215,34 @@ public class TasksAndHappeningControllersSubscriptionTest {
         // Subscribing HappeningController and then TaskController should be possible
         BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, happeningControllerMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod);
         assertEquals(1, baboonConfig.getHappeningControllerCount());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, taskMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, taskMethod);
         assertEquals(1, baboonConfig.getSimpleTasksCollection().size());
 
         // Subscribing TaskController and then HappeningController should be possible
         baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, taskMethod2);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, taskMethod2);
         assertEquals(1, baboonConfig.getSimpleTasksCollection().size());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, happeningControllerMethod2);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod2);
         assertEquals(1, baboonConfig.getHappeningControllerCount());
 
         // Subscribing TaskController and then TaskController should should be possible
         baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, taskMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, taskMethod);
         assertEquals(1, baboonConfig.getSimpleTasksCollection().size());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, taskMethod2);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, taskMethod2);
         assertEquals(2, baboonConfig.getSimpleTasksCollection().size());
 
         // Subscribing HappeningController and then HappeningController should be
         // possible
         baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, happeningControllerMethod2);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod2);
         assertEquals(1, baboonConfig.getHappeningControllerCount());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, happeningControllerMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod);
         assertEquals(2, baboonConfig.getHappeningControllerCount());
     }
 
@@ -262,10 +259,9 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj, happeningControllerMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj, happeningControllerMethod);
         assertEquals(1, baboonConfig.getHappeningControllerCount());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, happeningControllerMethod);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod);
     }
     
 
@@ -281,9 +277,9 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[0], mockUserSystemObj, taskMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockUserSystemObj, taskMethod);
         assertEquals(1, baboonConfig.getSimpleTasksCollection().size());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj, taskMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj, taskMethod);
         assertEquals(2, baboonConfig.getSimpleTasksCollection().size());
         
     }
@@ -305,9 +301,8 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath03);
-        assertEquals("", baboonConfig.getTopicByName(topicNamesDefined[0]).getPermission().get(0));
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[0], mockUserSystemObj, taskMethod);
-        fail("Exception should have been thrown before this point");
+        assertEquals("", baboonConfig.getTopicByName(TOPIC_1).getPermission().get(0));
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockUserSystemObj, taskMethod);
     }
 
     /**
@@ -325,9 +320,8 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath03);
-        assertTrue(baboonConfig.getTopicByName(topicNamesDefined[1]).getPermission().isEmpty());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj, taskMethod);
-        fail("Exception should have been thrown before this point");
+        assertTrue(baboonConfig.getTopicByName(TOPIC_2).getPermission().isEmpty());
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj, taskMethod);
     }
 
     /**
@@ -349,15 +343,15 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath03);
-        assertEquals("", baboonConfig.getTopicByName(topicNamesDefined[0]).getPermission().get(0));
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[0], mockUserSystemObj, happeningControllerMethod);
+        assertEquals("", baboonConfig.getTopicByName(TOPIC_1).getPermission().get(0));
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockUserSystemObj, happeningControllerMethod);
         Pair<Object, Method> testHHOKey = new Pair<Object, Method>(mockUserSystemObj,
                 MethodDictionary.getMethod(mockUserSystemObj, happeningControllerMethod));
         HappeningControllerSubscription happeningController = baboonConfig.getHappeningController(testHHOKey);
         assertEquals(1, baboonConfig.getHappeningControllerCount());
         assertEquals(1,happeningController.getSize());
         assertEquals(mockUserSystemObj, happeningController.getAction().getActionObject());
-        assertEquals(topicNamesDefined[0], happeningController.getTopic().getName());
+        assertEquals(TOPIC_1, happeningController.getTopic().getName());
     }
 
     /**
@@ -379,15 +373,15 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath03);
-        assertTrue(baboonConfig.getTopicByName(topicNamesDefined[1]).getPermission().isEmpty());
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[1], mockUserSystemObj, happeningControllerMethod);
+        assertTrue(baboonConfig.getTopicByName(TOPIC_2).getPermission().isEmpty());
+        baboonConfig.subscribeControllerToTopic(TOPIC_2, mockUserSystemObj, happeningControllerMethod);
         Pair<Object, Method> testHHOKey = new Pair<Object, Method>(mockUserSystemObj,
                 MethodDictionary.getMethod(mockUserSystemObj, happeningControllerMethod));
         HappeningControllerSubscription happeningController = baboonConfig.getHappeningController(testHHOKey);
         assertEquals(1, baboonConfig.getHappeningControllerCount());
         assertEquals(1,happeningController.getSize());
         assertEquals(mockUserSystemObj, happeningController.getAction().getActionObject());
-        assertEquals(topicNamesDefined[1], happeningController.getTopic().getName());
+        assertEquals(TOPIC_2, happeningController.getTopic().getName());
     }
 
     /**
@@ -419,11 +413,11 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath03);
-        List<String>guardCallBack = Arrays.asList(baboonConfig.getTopicByName(topicNamesDefined[2]).getSetGuardCallback().get(0)); 
+        List<String>guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_3).getSetGuardCallback().get(0)); 
                
         assertTrue(guardCallBack.contains("g1"));
         assertTrue(guardCallBack.contains("g2"));
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[2], mockUserSystemObj, happeningControllerMethod);
+        baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod);
         Pair<Object, Method> testHHOKey = new Pair<Object, Method>(mockUserSystemObj,
                 MethodDictionary.getMethod(mockUserSystemObj, happeningControllerMethod));
         assertEquals(1, baboonConfig.getHappeningControllerCount());
@@ -434,7 +428,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         assertFalse(baboonConfig.getHappeningController(testHHOKey).getAction().getGuardValue("g2"));
         mockUserSystemObj.setGuard2Value(true);
         assertTrue(baboonConfig.getHappeningController(testHHOKey).getAction().getGuardValue("g2"));
-        assertEquals(topicNamesDefined[2], baboonConfig.getHappeningController(testHHOKey).getTopic().getName());
+        assertEquals(TOPIC_3, baboonConfig.getHappeningController(testHHOKey).getTopic().getName());
     }
 
     /**
@@ -458,11 +452,10 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         final String taskMethod = "mockTask";
         baboonConfig.addTopics(topicsPath03);
-        List<String>guardCallBack = Arrays.asList(baboonConfig.getTopicByName(topicNamesDefined[3]).getSetGuardCallback().get(0));
+        List<String>guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_4).getSetGuardCallback().get(0));
         assertTrue(guardCallBack.contains("g1"));
         assertTrue(guardCallBack.contains("g3"));
-        baboonConfig.subscribeControllerToTopic(topicNamesDefined[3], mockUserSystemObj, taskMethod);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeControllerToTopic(TOPIC_4, mockUserSystemObj, taskMethod);
     }
     
     /**
@@ -481,12 +474,12 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String taskMethod = "staticMockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeStaticControllerToTopic(topicNamesDefined[0], MockUserSystemObject.class, taskMethod);
+        baboonConfig.subscribeStaticControllerToTopic(TOPIC_1, MockUserSystemObject.class, taskMethod);
         List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
         assertEquals(1, tasksList.size());
         assertEquals(1,tasksList.get(0).getSize());
         assertEquals(MockUserSystemObject.class,tasksList.get(0).getAction(0).getActionObject());
-        assertEquals(topicNamesDefined[0], tasksList.get(0).getTopic().getName());
+        assertEquals(TOPIC_1, tasksList.get(0).getTopic().getName());
         assertEquals(taskMethod, tasksList.get(0).getAction(0).getMethodName());
     }
     
@@ -504,8 +497,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeStaticControllerToTopic(topicNamesDefined[0], MockUserSystemObject.class, taskMethod);
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeStaticControllerToTopic(TOPIC_1, MockUserSystemObject.class, taskMethod);
     }
     
     /**
@@ -520,8 +512,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
     public void subscribingANonExistingMethodUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
-        baboonConfig.subscribeStaticControllerToTopic(topicNamesDefined[0], MockUserSystemObject.class, "NonExistingMethod");
-        fail("Exception should have been thrown before this point");
+        baboonConfig.subscribeStaticControllerToTopic(TOPIC_1, MockUserSystemObject.class, "NonExistingMethod");
     }
 
 }
