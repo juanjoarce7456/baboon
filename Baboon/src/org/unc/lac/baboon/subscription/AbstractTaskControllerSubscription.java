@@ -4,6 +4,9 @@ import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.topic.Topic;
+
+import com.google.common.base.Strings;
+
 import org.unc.lac.baboon.annotations.GuardProvider;
 
 /**
@@ -95,11 +98,8 @@ public abstract class AbstractTaskControllerSubscription extends AbstractActionC
         if (!(actionController instanceof TaskActionController)) {
             throw new NotSubscribableException("The actionController must be of type TaskActionController");
         }
-        if (topic.getPermission().get(getSize()).isEmpty()) {
-            throw new NotSubscribableException("The topic permission string cannot be empty for a taskController subscription");
-        }
-        if (topic.getPermission().get(getSize()) == null) {
-            throw new NotSubscribableException("The topic permission array cannot be null for a taskController subscription");
+        if (Strings.isNullOrEmpty(topic.getPermission().get(getSize()))) {
+            throw new NotSubscribableException("The topic permission array cannot be empty or null for a taskController subscription");
         }
         return super.addAction(actionController);
     }

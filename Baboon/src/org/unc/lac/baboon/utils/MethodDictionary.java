@@ -79,6 +79,9 @@ public class MethodDictionary {
             }
             throw new NoSuchMethodException(e.getMessage());
         }
+        catch(NullPointerException e){
+            throw new NoSuchMethodException(e.getMessage());
+        }
     }
 
 }

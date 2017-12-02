@@ -13,5 +13,15 @@
     "name":"topic3",
     "permission":["t4"],
     "fireCallback":["t5"]
+    },
+    {
+    "name":"complex_topic",
+    "permission":["t6","t7"],
+    "fireCallback":["t8"]
+    },
+    {
+    "name":"topic_dummy_th_wrong_permission",
+    "permission":["t2"],
+    "fireCallback":["t1"]
     }
 ]

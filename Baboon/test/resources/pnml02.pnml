@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-1404-735E3-0" type ="http://www.laas.fr/tina/tpn">
+  <name>
+   <text>pnml02</text>
+  </name>
+ <page id="g-1404-735ED-1">
+  <place id="p-1404-735F0-2">
+  <name>
+   <text>p0</text>
+    <graphics>
+     <offset x="10" y="0" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="140" y="170"/>
+   </graphics>
+  </place>
+  <place id="p-1404-735FE-3">
+  <name>
+   <text>p2</text>
+    <graphics>
+     <offset x="0" y="-10" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="70" y="55"/>
+   </graphics>
+  </place>
+  <place id="p-1404-73601-4">
+  <name>
+   <text>p3</text>
+    <graphics>
+     <offset x="0" y="-10" />
+    </graphics>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+   <graphics>
+    <position x="140" y="50"/>
+   </graphics>
+  </place>
+  <transition id="t-1404-73604-5">
+  <name>
+   <text>t0</text>
+    <graphics>
+     <offset x="0" y="0" />
+    </graphics>
+  </name>
+   <label>
+    <text>&lt;A,I&gt;</text>
+    <graphics>
+     <offset x="-10" y="0" />
+    </graphics>
+   </label>
+   <graphics>
+    <position x="70" y="125"/>
+   </graphics>
+  </transition>
+  <transition id="t-1404-73609-6">
+  <name>
+   <text>t1</text>
+    <graphics>
+     <offset x="0" y="0" />
+    </graphics>
+  </name>
+   <label>
+    <text>&lt;D,I&gt;</text>
+    <graphics>
+     <offset x="10" y="-10" />
+    </graphics>
+   </label>
+   <graphics>
+    <position x="140" y="105"/>
+   </graphics>
+  </transition>
+  <arc id="e-1404-7360D-7" source="p-1404-73601-4" target="t-1404-73609-6">
+  </arc>
+  <arc id="e-1404-73610-8" source="p-1404-735FE-3" target="t-1404-73604-5">
+  </arc>
+  <arc id="e-1404-73611-9" source="t-1404-73609-6" target="p-1404-735F0-2">
+  </arc>
+ </page>
+ </net>
+</pnml>

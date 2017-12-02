@@ -145,15 +145,16 @@ public abstract class ActionController {
             if (provider != null) {
                 if (method.getReturnType() != boolean.class) {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
-                            + "annotated as GuardProvider has a return type other than boolean");
+                            + " annotated as GuardProvider has a return type other than boolean");
                 } else if (method.getParameterCount() != 0) {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
-                            + "annotated as GuardProvider cannot require parameters on its declaration");
+                            + " annotated as GuardProvider cannot require parameters on its declaration");
                 } else if(isStaticController && !Modifier.isStatic(method.getModifiers())){
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
-                    + "annotated as GuardProvider must be static since it is a static controller");
+                    + " annotated as GuardProvider must be static since it is a static controller");
                 }
                 if (!Strings.isNullOrEmpty(provider.value())) {
+
                     if (guardProviderMethodsMap.putIfAbsent(provider.value(), method) != null) {
                         throw new MultipleGuardProvidersException(
                                 "There is another method declared as a GuardProvider for guard: " + provider.value());
@@ -161,6 +162,16 @@ public abstract class ActionController {
                 }
             }
         }
+    }
+    
+    /**
+     * Returns the name of the {@link #actionMethod}
+     * 
+     * @return the name of the {@link #actionMethod}
+     * 
+     */
+    public String getMethodName() {
+        return actionMethod.getName();
     }
 
 }

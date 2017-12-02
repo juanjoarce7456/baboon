@@ -41,6 +41,15 @@ public class DummyThread implements Callable<Void> {
      */
     private BaboonPetriCore petriCore;
 
+    /**
+     * Constructor of the class. Receives an {@link AbstractTaskControllerSubscription} to be executed
+     * and the {@link BaboonPetriCore} used to synchronize the execution.
+     * 
+     * @param taskSubscription
+     *       The {@link AbstractTaskControllerSubscription} object to be executed.
+     * @param petriCore
+     *       The {@link BaboonPetriCore} object, used to synchronize the execution.
+     */
     public DummyThread(AbstractTaskControllerSubscription taskSubscription, BaboonPetriCore petriCore) {
         if (taskSubscription == null) {
             throw new IllegalArgumentException("Task can not be null");

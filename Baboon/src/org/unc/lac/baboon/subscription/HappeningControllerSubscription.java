@@ -7,7 +7,7 @@ import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.annotations.GuardProvider;
 
 /**
- * A SimpleTaskSubscription is one {@link HappeningActionController} object
+ * A HappeningControllerSubscription is one {@link HappeningActionController} object
  * subscribed to a topic.
  *
  * @author Ariel Ivan Rabinovich

@@ -66,9 +66,7 @@ public class ComplexSecuentialTaskControllerSubscription extends AbstractTaskCon
      * 
      */
     public void addTask(TaskActionController taskController) throws NotSubscribableException {
-        if (!(super.addAction(taskController))) {
-            throw new NotSubscribableException("Failed to add the taskController");
-        }
+        super.addAction(taskController); 
     }
 
 }

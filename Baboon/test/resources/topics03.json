@@ -19,5 +19,10 @@
     "permission":["t0"],
     "fireCallback":["t1"],
     "setGuardCallback":[["g1","g3"]]
+    },
+    {
+    "name":"topic5",
+    "permission":["t1","t2"],
+    "setGuardCallback":[["g1","g3"],[],["g2"]]
     }
 ]
