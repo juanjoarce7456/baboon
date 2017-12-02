@@ -10,20 +10,30 @@ import org.unc.lac.baboon.subscription.HappeningControllerSubscription;
 import org.unc.lac.baboon.subscription.SimpleTaskControllerSubscription;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
+import org.unc.lac.baboon.annotations.GuardProvider;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.config.BaboonConfig;
 import org.unc.lac.baboon.test.utils.tasks.MockUserSystemObject;
+import org.unc.lac.baboon.test.utils.tasks.MockUserSystemObject2;
+import org.unc.lac.baboon.test.utils.tasks.parameters.AbstractParameter;
+import org.unc.lac.baboon.test.utils.tasks.parameters.IncorrectParameter;
+import org.unc.lac.baboon.test.utils.tasks.parameters.Parameter;
+import org.unc.lac.baboon.test.utils.tasks.parameters.Parameter2;
+import org.unc.lac.baboon.test.utils.tasks.parameters.Parameter3;
+import org.unc.lac.baboon.test.utils.tasks.parameters.Testable;
 import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 
 public class TasksAndHappeningControllersSubscriptionTest {
     private final String topicsPath02 = "/org/unc/lac/baboon/test/resources/topics02.json";
     private final String topicsPath03 = "/org/unc/lac/baboon/test/resources/topics03.json";
+    private final String topicsPath04 = "/org/unc/lac/baboon/test/resources/topics04.json";
     
     private final String TOPIC_1 = "topic1";
     private final String TOPIC_2 = "topic2";
     private final String TOPIC_3 = "topic3";
     private final String TOPIC_4 = "topic4";
+    private final String TOPIC_5 = "topic5";
 
     /**
      * <li>Given I have a topics json file containing three topics</li>
@@ -411,7 +421,6 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath03);
         List<String>guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_3).getSetGuardCallback().get(0)); 
-               
         assertTrue(guardCallBack.contains("g1"));
         assertTrue(guardCallBack.contains("g2"));
         baboonConfig.subscribeControllerToTopic(TOPIC_3, mockUserSystemObj, happeningControllerMethod);
@@ -510,6 +519,252 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
         baboonConfig.subscribeStaticControllerToTopic(TOPIC_1, MockUserSystemObject.class, "NonExistingMethod");
+    }
+    
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic5"</li>
+     * <li>And topic5 has a set_guard_callback [["g1","g3"],[],["g2"]]</li>
+     * <li>And topic5 has a permission ["t1,"t2"]</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>And I have a user's system object with a method that returns a boolean and
+     * requires no parameters annotated with {@link GuardProvider#value()}
+     * "g1"</li>
+     * <li>And the system's object has a method that returns a boolean and requires
+     * no parameters annotated with {@link GuardProvider#value()} "g2"</li> *
+     * <li>And the system's object has a method that returns a boolean and requires
+     * no parameters annotated with {@link GuardProvider#value()} "g3"</li>
+     * <li>When I subscribe a {@link SimpleTaskControllerSubscription} to topic5</li>
+     * <li>Then a {@link NotSubscribableException} exception should be thrown
+     * indicating that permission and setGuardCallback are of different
+     * sizes</li>
+     */
+    @Test (expected=NotSubscribableException.class)
+    public void subscribingTaskControllerToATopicWithDifferentPermissionAndSetGuardCallbackSizesShouldNotBePossibleTest() throws Exception {
+        final MockUserSystemObject2 mockUserSystemObj = new MockUserSystemObject2();
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final String taskMethod = "mockTask";
+        baboonConfig.addTopics(topicsPath03);
+        List<String> guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(0));
+        assertEquals(2, guardCallBack.size());
+        assertTrue(guardCallBack.contains("g1"));
+        assertTrue(guardCallBack.contains("g3"));
+        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(1));
+        assertTrue(guardCallBack.isEmpty());
+        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(2));
+        assertEquals(1, guardCallBack.size());
+        assertTrue(guardCallBack.contains("g2"));
+        baboonConfig.subscribeControllerToTopic(TOPIC_5, mockUserSystemObj, taskMethod);
+    }
+    
+    
+    
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic5"</li>
+     * <li>And topic5 has a set_guard_callback [["g1","g3"],[],["g2"]]</li>
+     * <li>And topic5 has a permission ["t1,"t2"]</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>And I have a user's system object with a method that returns a boolean and
+     * requires no parameters annotated with {@link GuardProvider#value()}
+     * "g1"</li>
+     * <li>And the system's object has a method that returns a boolean and requires
+     * no parameters annotated with {@link GuardProvider#value()} "g2"</li> *
+     * <li>And the system's object has a method that returns a boolean and requires
+     * no parameters annotated with {@link GuardProvider#value()} "g3"</li>
+     * <li>When I subscribe a {@link HappeningControllerSubscription} to topic5</li>
+     * <li>Then a {@link NotSubscribableException} exception should be thrown
+     * indicating that permission and setGuardCallback are of different
+     * sizes</li>
+     */
+    @Test (expected=NotSubscribableException.class)
+    public void subscribingHappeningControllerToATopicWithDifferentPermissionAndSetGuardCallbackSizesShouldNotBePossibleTest() throws Exception {
+        final MockUserSystemObject2 mockUserSystemObj = new MockUserSystemObject2();
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final String happeningHandlerMethod = "mockHappeningHandler";
+        baboonConfig.addTopics(topicsPath03);
+        List<String> guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(0));
+        assertEquals(2, guardCallBack.size());
+        assertTrue(guardCallBack.contains("g1"));
+        assertTrue(guardCallBack.contains("g3"));
+        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(1));
+        assertTrue(guardCallBack.isEmpty());
+        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(2));
+        assertEquals(1, guardCallBack.size());
+        assertTrue(guardCallBack.contains("g2"));
+        baboonConfig.subscribeControllerToTopic(TOPIC_5, mockUserSystemObj, happeningHandlerMethod);
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And I have an instance of user's system object with a method annotated
+     * with {@link TaskController} that takes a parameter of type {@link Parameter}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe the instance of the object, the {@link TaskController}
+     * annotated method and an instance of {@link Parameter} to a
+     * {@link Topic}</li>
+     * <li>Then the {@link SimpleTaskControllerSubscription} list should contain a
+     * {@link SimpleTaskControllerSubscription} with the object instance and the method
+     * subscribed</li>
+     * <li>And the {@link SimpleTaskControllerSubscription} should contain the
+     * {@link Topic}</li>
+     */
+    @Test
+    public void subscribingTaskMethodWithParameterOfTheClassRequiredShouldGetRegisteredInConfigTest() throws Exception {
+        final MockUserSystemObject2 mockController = new MockUserSystemObject2();
+        final String taskMethod = "mockTask2";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final Parameter parameter = new Parameter();
+        baboonConfig.addTopics(topicsPath04);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
+        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        assertEquals(1, tasksList.size());
+        assertEquals(1, tasksList.get(0).getSize());
+        assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
+        assertEquals(TOPIC_1, tasksList.get(0).getTopic().getName());
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And I have an instance of user's system object with a method annotated
+     * with {@link TaskController} that takes a parameter of type {@link Parameter}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe the instance of the object, the {@link TaskController}
+     * annotated method and an instance of {@link IncorrectParameter} to a
+     * {@link Topic}</li>
+     * <li>Then a {@link NotSubscribableException} exception should be thrown
+     * indicating that a method with the given characteristics cannot be
+     * found</li>
+     */
+    @Test (expected=NotSubscribableException.class)
+    public void subscribingTaskMethodWithIncorrectParameterClassShouldNotBePossibleTest() throws Exception {
+        final MockUserSystemObject2 mockController = new MockUserSystemObject2();
+        final String taskMethod = "mockTask2";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final IncorrectParameter parameter = new IncorrectParameter();
+        baboonConfig.addTopics(topicsPath04);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And I have an instance of controller object with a method annotated
+     * with {@link TaskController} that takes a parameter of type {@link Testable}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe the instance of the object, the {@link TaskController}
+     * annotated method and an instance of {@link Parameter} (which implements 
+     * the {@link Testable} interface) to a {@link Topic}</li>
+     * <li>Then the {@link SimpleTaskControllerSubscription} list should contain a
+     * {@link SimpleTaskControllerSubscription} with the object instance and the method
+     * subscribed</li>
+     * <li>And the {@link SimpleTaskControllerSubscription} should contain the
+     * {@link Topic}</li>
+     */
+    @Test
+    public void subscribingTaskMethodWithParameterOfAClassImplementingTheRequiredInterfaceShouldGetRegisteredInConfigTest() throws Exception {
+        final MockUserSystemObject2 mockController = new MockUserSystemObject2();
+        final String taskMethod = "mockTask3";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final Testable parameter = new Parameter();
+        baboonConfig.addTopics(topicsPath04);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
+        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        assertEquals(1, tasksList.size());
+        assertEquals(1, tasksList.get(0).getSize());
+        assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
+        assertEquals(TOPIC_1, tasksList.get(0).getTopic().getName());
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And I have an instance of user's system object with a method annotated
+     * with {@link TaskController} that takes a parameter of type
+     * {@link AbstractParameter}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe the instance of the object, the {@link TaskController}
+     * annotated method and an instance of {@link Parameter2} to a
+     * {@link Topic}</li>
+     * <li>Then the {@link SimpleTaskControllerSubscription} list should contain a
+     * {@link SimpleTaskControllerSubscription} with the object instance and the method
+     * subscribed</li>
+     * <li>And the {@link SimpleTaskControllerSubscription} should contain the
+     * {@link Topic}</li>
+     */
+    @Test
+    public void subscribingTaskMethodWithParameterOfAClassImplementingTheRequiredAbstractClassShouldGetRegisteredInConfigTest() throws Exception {
+        final MockUserSystemObject2 mockController = new MockUserSystemObject2();
+        final String taskMethod = "mockTask4";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final AbstractParameter parameter = new Parameter2();
+        baboonConfig.addTopics(topicsPath04);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
+        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        assertEquals(1, tasksList.size());
+        assertEquals(1, tasksList.get(0).getSize());
+        assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
+        assertEquals(TOPIC_1, tasksList.get(0).getTopic().getName());
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And I have an instance of controller object with a method annotated
+     * with {@link TaskController} that takes one parameter of type {@link Parameter}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe the instance of the object, the {@link TaskController}
+     * annotated method and two instances of {@link Parameter} to a
+     * {@link Topic}</li>
+     * <li>Then a {@link NotSubscribableException} exception should be thrown
+     * indicating that a method with the given characteristics cannot be
+     * found</li>
+     */
+    @Test (expected=NotSubscribableException.class)
+    public void subscribingTaskMethodWithIncorrectNumberOfParametersShouldNotBePossibleTest() throws Exception {
+        final MockUserSystemObject2 mockController = new MockUserSystemObject2();
+        final String taskMethod = "mockTask2";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final Parameter parameter1 = new Parameter();
+        final Parameter parameter2 = new Parameter();
+        baboonConfig.addTopics(topicsPath04);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter1, parameter2);
+    }
+
+    /**
+     * <li>Given I have a topics json file containing a topic with name
+     * "topic1"</li>
+     * <li>And I have an instance of controller object with a method annotated
+     * with {@link TaskController} that takes three parameters of type {@link Parameter},
+     * {@link Parameter2} and {@link Parameter3}</li>
+     * <li>And I add the topics configuration to the Framework</li>
+     * <li>When I subscribe the instance of the object, the {@link TaskController}
+     * annotated method and three objects of class {@link Parameter},
+     * {@link Parameter2} and {@link Parameter3} (in that order) to a
+     * {@link Topic}</li>
+     * <li>Then the {@link SimpleTaskControllerSubscription} list should contain a
+     * {@link SimpleTaskControllerSubscription} with the object instance and the method
+     * subscribed</li>
+     * <li>And the {@link SimpleTaskControllerSubscription} should contain the
+     * {@link Topic}</li>
+     */
+    @Test
+    public void subscribingTaskMethodWithMultipleParametersShouldGetRegisteredInConfigTest() throws Exception {
+        final MockUserSystemObject2 mockController = new MockUserSystemObject2();
+        final String taskMethod = "mockTask5";
+        final BaboonConfig baboonConfig = new BaboonConfig();
+        final Parameter parameter = new Parameter();
+        final Parameter2 parameter2 = new Parameter2();
+        final Parameter3 parameter3 = new Parameter3();
+        baboonConfig.addTopics(topicsPath04);
+        baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter, parameter2, parameter3);
+        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        assertEquals(1, tasksList.size());
+        assertEquals(1, tasksList.get(0).getSize());
+        assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
+        assertEquals(TOPIC_1, tasksList.get(0).getTopic().getName());
     }
 
 }
