@@ -1,7 +1,6 @@
 package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -11,8 +10,6 @@ import org.unc.lac.baboon.subscription.HappeningControllerSubscription;
 import org.unc.lac.baboon.subscription.SimpleTaskControllerSubscription;
 import org.unc.lac.baboon.annotations.HappeningController;
 import org.unc.lac.baboon.annotations.TaskController;
-import org.unc.lac.baboon.exceptions.BadTopicsJsonFormat;
-import org.unc.lac.baboon.exceptions.NoTopicsJsonFileException;
 import org.unc.lac.baboon.exceptions.NotSubscribableException;
 import org.unc.lac.baboon.config.BaboonConfig;
 import org.unc.lac.baboon.test.utils.tasks.MockUserSystemObject;
@@ -42,7 +39,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * contain the {@link Topic} as value for the key</li>
      */
     @Test
-    public void subscribingAnExistingHappeningControllerToAnExistingTopicShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException, NoSuchMethodException, SecurityException {
+    public void subscribingAnExistingHappeningControllerToAnExistingTopicShouldGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -68,7 +65,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * subscribed and the {@link Topic}</li>
      */
     @Test
-    public void subscribingAnExistingTaskToAnExistingTopicShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingAnExistingTaskToAnExistingTopicShouldGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -93,7 +90,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * for each subscription</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingAMethodThatIsNotAnnotatedToAnExistingTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingAMethodThatIsNotAnnotatedToAnExistingTopicShouldNotGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String method = "mockNotSubscribableMethod";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -112,7 +109,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * for each subscription</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingANullMethodNameToAnExistingTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingANullMethodNameToAnExistingTopicShouldNotGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
@@ -131,7 +128,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
 
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingANotExistingMethodNameToAnExistingTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingANotExistingMethodNameToAnExistingTopicShouldNotGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
@@ -149,7 +146,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingToANotExistingTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingToANotExistingTopicShouldNotGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String method = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -167,7 +164,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingToANullTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingToANullTopicShouldNotGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String method = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -184,7 +181,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingNullObjectToExistingTopicShouldNotGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingNullObjectToExistingTopicShouldNotGetRegisteredInConfigTest() throws Exception {
         final String method = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
@@ -205,7 +202,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * {@link SimpleTaskControllerSubscription} objects should be subscribed
      */
     @Test
-    public void subscribingMoreThanOneHappeningControllerOrTaskToTheSameTopicShouldBePossibleTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingMoreThanOneHappeningControllerOrTaskToTheSameTopicShouldBePossibleTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "mockHappeningController";
         final String taskMethod = "mockTask";
@@ -254,7 +251,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingSameHappeningControllerToMoreThanOneTopicShouldNotBePossibleTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingSameHappeningControllerToMoreThanOneTopicShouldNotBePossibleTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -272,7 +269,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * <li>Then the  {@link SimpleTaskControllerSubscription} should be subscribed.</li>
      */
     @Test
-    public void subscribingSameTaskToMoreThanOneTopicShouldGetRegisteredInConfig() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingSameTaskToMoreThanOneTopicShouldGetRegisteredInConfig() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -296,7 +293,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingTaskToTopicWithEmptyStringPermissionShouldNotBePossibleTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingTaskToTopicWithEmptyStringPermissionShouldNotBePossibleTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -315,7 +312,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingTaskToTopicWithEmptyPermissionArrayShouldNotBePossibleTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingTaskToTopicWithEmptyPermissionArrayShouldNotBePossibleTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -338,7 +335,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * contain the {@link Topic} as value for the key</li>
      */
     @Test
-    public void subscribingHappeningControllerToTopicWithEmptyPermissionStringShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException, NoSuchMethodException, SecurityException {
+    public void subscribingHappeningControllerToTopicWithEmptyPermissionStringShouldGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -368,7 +365,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * contain the {@link Topic} as value for the key</li>
      */
     @Test
-    public void subscribingHappeningControllerToTopicWithEmptyPermissionArrayShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException, NoSuchMethodException, SecurityException {
+    public void subscribingHappeningControllerToTopicWithEmptyPermissionArrayShouldGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -408,7 +405,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * should return a guard callback method with for "g2"</li>
      */
     @Test
-    public void subscribingAbstractTaskWithGuardProvidersToTopicWithGuardCallbackShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public void subscribingAbstractTaskWithGuardProvidersToTopicWithGuardCallbackShouldGetRegisteredInConfigTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final String happeningControllerMethod = "mockHappeningController";
         final BaboonConfig baboonConfig = new BaboonConfig();
@@ -447,7 +444,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingAnAbstractTaskWithMissingGuardProviderToTopicWithGuardCallbackShouldNotBePossibleTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingAnAbstractTaskWithMissingGuardProviderToTopicWithGuardCallbackShouldNotBePossibleTest() throws Exception {
         final MockUserSystemObject mockUserSystemObj = new MockUserSystemObject();
         final BaboonConfig baboonConfig = new BaboonConfig();
         final String taskMethod = "mockTask";
@@ -470,7 +467,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * subscribed and the {@link Topic}</li>
      */
     @Test
-    public void subscribingAStaticTaskControllerToAnExistingTopicShouldGetRegisteredInConfigTest() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingAStaticTaskControllerToAnExistingTopicShouldGetRegisteredInConfigTest() throws Exception {
         final String taskMethod = "staticMockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
@@ -493,7 +490,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingANonStaticTaskControllerUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingANonStaticTaskControllerUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws Exception {
         final String taskMethod = "mockTask";
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
@@ -509,7 +506,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
      * thrown</li>
      */
     @Test (expected=NotSubscribableException.class)
-    public void subscribingANonExistingMethodUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws BadTopicsJsonFormat, NoTopicsJsonFileException, NotSubscribableException {
+    public void subscribingANonExistingMethodUsingStaticSubscriptionInterfaceShouldNotBeAllowed() throws Exception {
         final BaboonConfig baboonConfig = new BaboonConfig();
         baboonConfig.addTopics(topicsPath02);
         baboonConfig.subscribeStaticControllerToTopic(TOPIC_1, MockUserSystemObject.class, "NonExistingMethod");

@@ -144,13 +144,13 @@ public abstract class ActionController {
             if (provider != null) {
                 if (method.getReturnType() != boolean.class) {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
-                            + "annotated as GuardProvider has a return type other than boolean");
+                            + " annotated as GuardProvider has a return type other than boolean");
                 } else if (method.getParameterCount() != 0) {
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
-                            + "annotated as GuardProvider cannot require parameters on its declaration");
+                            + " annotated as GuardProvider cannot require parameters on its declaration");
                 } else if(isStaticController && !Modifier.isStatic(method.getModifiers())){
                     throw new InvalidGuardProviderMethod("The method " + method.getName()
-                    + "annotated as GuardProvider must be static since it is a static controller");
+                    + " annotated as GuardProvider must be static since it is a static controller");
                 }
                 if (!provider.value().isEmpty()) {
                     if (guardProviderMethodsMap.putIfAbsent(provider.value(), method) != null) {
