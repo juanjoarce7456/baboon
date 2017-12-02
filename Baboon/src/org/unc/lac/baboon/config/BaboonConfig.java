@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import org.javatuples.Pair;
+import com.google.common.base.Strings;
+import javassist.Modifier;
 import org.unc.lac.baboon.actioncontroller.ActionController;
 import org.unc.lac.baboon.actioncontroller.HappeningActionController;
 import org.unc.lac.baboon.actioncontroller.TaskActionController;
@@ -23,7 +25,6 @@ import org.unc.lac.baboon.topic.Topic;
 import org.unc.lac.baboon.utils.MethodDictionary;
 import org.unc.lac.baboon.utils.TopicsJsonParser;
 
-import javassist.Modifier;
 
 /**
  * Configuration Class. This class allows to import a json file containing the
@@ -415,7 +416,7 @@ public class BaboonConfig {
      */
     public void createNewComplexTaskController(String complexTaskName, String topicName) throws NotSubscribableException {
         Topic topic = getTopicByName(topicName);
-        if (complexTaskName == null || complexTaskName.isEmpty()) {
+        if (Strings.isNullOrEmpty(complexTaskName)) {
             throw new NotSubscribableException("TaskController name cannot be empty or null");
         }
         if (topicName == null || topic == null) {

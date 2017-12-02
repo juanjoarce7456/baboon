@@ -49,10 +49,6 @@ public class DummyThread implements Callable<Void> {
      *       The {@link AbstractTaskControllerSubscription} object to be executed.
      * @param petriCore
      *       The {@link BaboonPetriCore} object, used to synchronize the execution.
-     * @throws
-     *      IllegalArgumentException
-     *          <li> If taskSubscription is null </li>
-     *          <li> If petriCore is null </li>
      */
     public DummyThread(AbstractTaskControllerSubscription taskSubscription, BaboonPetriCore petriCore) {
         if (taskSubscription == null) {

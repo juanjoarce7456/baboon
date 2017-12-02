@@ -11,6 +11,6 @@ import org.unc.lac.baboon.test.utils.tasks.MockUserSystemObject2;
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  */
-public class AbstractParameter {
+public abstract class AbstractParameter {
 
 }

@@ -2,6 +2,7 @@ package org.unc.lac.baboon.test.cases;
 
 import static org.junit.Assert.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.javatuples.Pair;
@@ -545,15 +546,6 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         final String taskMethod = "mockTask";
         baboonConfig.addTopics(topicsPath03);
-        List<String> guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(0));
-        assertEquals(2, guardCallBack.size());
-        assertTrue(guardCallBack.contains("g1"));
-        assertTrue(guardCallBack.contains("g3"));
-        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(1));
-        assertTrue(guardCallBack.isEmpty());
-        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(2));
-        assertEquals(1, guardCallBack.size());
-        assertTrue(guardCallBack.contains("g2"));
         baboonConfig.subscribeControllerToTopic(TOPIC_5, mockUserSystemObj, taskMethod);
     }
     
@@ -583,15 +575,6 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final BaboonConfig baboonConfig = new BaboonConfig();
         final String happeningHandlerMethod = "mockHappeningHandler";
         baboonConfig.addTopics(topicsPath03);
-        List<String> guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(0));
-        assertEquals(2, guardCallBack.size());
-        assertTrue(guardCallBack.contains("g1"));
-        assertTrue(guardCallBack.contains("g3"));
-        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(1));
-        assertTrue(guardCallBack.isEmpty());
-        guardCallBack = Arrays.asList(baboonConfig.getTopicByName(TOPIC_5).getSetGuardCallback().get(2));
-        assertEquals(1, guardCallBack.size());
-        assertTrue(guardCallBack.contains("g2"));
         baboonConfig.subscribeControllerToTopic(TOPIC_5, mockUserSystemObj, happeningHandlerMethod);
     }
 
@@ -618,7 +601,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final Parameter parameter = new Parameter();
         baboonConfig.addTopics(topicsPath04);
         baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
-        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        List<SimpleTaskControllerSubscription> tasksList = new ArrayList<>(baboonConfig.getSimpleTasksCollection());
         assertEquals(1, tasksList.size());
         assertEquals(1, tasksList.get(0).getSize());
         assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
@@ -671,7 +654,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final Testable parameter = new Parameter();
         baboonConfig.addTopics(topicsPath04);
         baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
-        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        List<SimpleTaskControllerSubscription> tasksList = new ArrayList<>(baboonConfig.getSimpleTasksCollection());
         assertEquals(1, tasksList.size());
         assertEquals(1, tasksList.get(0).getSize());
         assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
@@ -702,7 +685,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final AbstractParameter parameter = new Parameter2();
         baboonConfig.addTopics(topicsPath04);
         baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter);
-        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        List<SimpleTaskControllerSubscription> tasksList = new ArrayList<>(baboonConfig.getSimpleTasksCollection());
         assertEquals(1, tasksList.size());
         assertEquals(1, tasksList.get(0).getSize());
         assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
@@ -760,7 +743,7 @@ public class TasksAndHappeningControllersSubscriptionTest {
         final Parameter3 parameter3 = new Parameter3();
         baboonConfig.addTopics(topicsPath04);
         baboonConfig.subscribeControllerToTopic(TOPIC_1, mockController, taskMethod, parameter, parameter2, parameter3);
-        List<SimpleTaskControllerSubscription> tasksList = (List<SimpleTaskControllerSubscription>) baboonConfig.getSimpleTasksCollection();
+        List<SimpleTaskControllerSubscription> tasksList = new ArrayList<>(baboonConfig.getSimpleTasksCollection());
         assertEquals(1, tasksList.size());
         assertEquals(1, tasksList.get(0).getSize());
         assertEquals(mockController, tasksList.get(0).getAction(0).getActionObject());
