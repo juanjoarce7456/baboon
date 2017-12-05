@@ -1,20 +1,23 @@
-\section{Generación de la documentación en formato HTML}
+\section{Documentación del Código Fuente}
 \label{genJavadoc}
 Junto con el código fuente desarrollado se encuentra en formato Javadoc la
 documentación del mismo. El código mencionado se obtiene de los repositorios
 ubicados en:
 \begin{itemize}
   \item JPCM: \url{\repoMonitor}
-  \item \nombreFramework Framework: \url{\repoFramework}
+  \item \nombreFramework: \url{\repoFramework}
 \end{itemize}
 
- Al ser Javadoc un formato estándar existen intérpretes
-que lo llevan a una forma legible para desarrolladores de software.
-La IDE Eclipse incluye una herramienta que realiza esta tarea, mediante la cual
-se construye la documentación de \nombreFramework Framework.
+Cada repositorio tiene un botón en la página de inicio que lleva a su
+documentación online.
 
-Para utilizar esta herramienta deben realizarse los siguientes pasos dentro del
-proyecto de Eclipse:
+\subsection{Generación de la Documentación}
+Si se desea construir la documentación, al ser Javadoc un formato estándar,
+existen intérpretes que lo llevan a una forma legible para desarrolladores de
+software. Múltiples IDEs incluyen herramientas que realiza esta tarea.
+Para utilizar esta herramienta deben realizarse los siguientes pasos:
+
+\subsubsection* {Eclipse}
 \begin{itemize}
   \item Dirigirse al menú \textit{Project}
   \item Seleccionar la opción \textit{Generate Javadoc\ldots}
@@ -25,16 +28,33 @@ proyecto de Eclipse:
   \item Hacer click en \textit{Finish}
 \end{itemize}
 
+\subsubsection* {IntelliJ}
+\begin{itemize}
+  \item Dirigirse al menú \textit{Tools}
+  \item Seleccionar la opción \textit{Generate JavaDoc\ldots}
+  \item Sleccionar \textit{Custom Scope} y especificar \textit{Project
+  Production Files}
+  \item Destildar la opción \textit{Include test sources}
+  \item Elegir el nivel de visibilidad deseado (\textit{public} para usuarios
+  del framework, \textit{private} para desarrolladores)
+  \item En el campo \textit{Output Directory} Elegir la ubicación donde se
+  generará la documentación
+  \item Hacer click en \textit{Ok}
+\end{itemize}
+
 \section{Generación de la documentación de Test}
 En los repositorios mencionados previamente se encuentra el código fuente de los
 casos de prueba automatizados. A fin de conocer estos casos, se genera la
 documentación de los mismos.
 Esto se realiza siguiendo los pasos descriptos en la sección \ref{genJavadoc}
-con la salvedad de que se elige la carpeta \textit{/test} del árbol del proyecto.
+con la salvedad de que se elige la carpeta \textit{/test} del árbol del proyecto
+en Eclipse, y se especifica \textit{Custom Scope} como \textit{Project
+  Test Files} en IntelliJ.
 
 De esta manera se genera una página HTML que contiene la descripción de los casos
-de test desarrollados. La descripción mencionada explicita \textit{precondiciones}, \textit{acciones} y
-\textit{resultados esperados} de cada caso de prueba.
+de test desarrollados. La descripción mencionada explicita
+\textit{precondiciones}, \textit{acciones} y \textit{resultados esperados} de
+cada caso de prueba.
 
 Para ejecutar los casos de prueba, debe ejecutarse el directorio \textit{/test}
-utilizando JUnit.
+utilizando JUnit ó mediante Maven ejecutando el comando \textit{mvn test}.

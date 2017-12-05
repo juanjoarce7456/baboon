@@ -480,12 +480,14 @@ public class AppSetup implements BaboonApplication {
 }
 \end{minted}
 
-\section {Configuración del Entorno de Desarrollo de \nombreFramework Framework}
+\section {Configuración del Entorno de Desarrollo con \nombreFramework
+Framework}
 \label{config_baboon_env}
 
 La configuración del entorno de desarrollo para \nombreFramework
 Framework consta de los siguientes pasos:
 
+\subsection* {Eclipse}
 \begin{enumerate}
     \item Descargar e instalar Java JDK version \textgreater= 8
     \item Descargar e instalar Eclipse IDE 
@@ -502,66 +504,36 @@ Framework consta de los siguientes pasos:
             “Work with”.
         \end{itemize}
    \item Instalar Git Client
-   \item Clonar repositorio de monitor de Petri:
+   \item Importar Proyecto Maven:
         \begin{itemize}
-          \item git clone \url{\repoMonitor}
-        \end{itemize}
-   \item Clonar repositorio de \nombreFramework framework:
-        \begin{itemize}
-          \item git clone \url{\repoFramework}
-        \end{itemize}
-   \item Configurar nuevo proyecto en Eclipse
-        \begin{itemize}
-          \item Crear nuevo proyecto Java
-          \item En Package Explorer, hacer click derecho sobre el proyecto.
-          Configure -\textgreater  Convert To Maven Project. Configurar los
-          datos deseados del artefacto Maven para el proyecto actual y luego click en finish.
-          \item En Package Explorer hacer click derecho sobre el proyecto.
-          Configure -\textgreater  Convert To AspectJ Project
-        \end{itemize}
-   \item Linkear código fuente del monitor de Petri al proyecto:
-        \begin{itemize}
-          \item En Package Explorer, hacer click derecho sobre el proyecto.
-          \item Build Path -\textgreater Link Source
-          \item Click en Browse y seleccionar la carpeta source:               
-          \emph{/path/repositorio/monitor\_petri/src}
-          \item Completar el campo name con \emph{petri\_monitor\_src} y aceptar
-          (por defecto el campo name es \emph{src}, pero no está
-          permitido porque ya existe una carpeta de código fuente con ese nombre).
-        \end{itemize}
-   \item Linkear código fuente del framework al proyecto: 
-        \begin{itemize}
-          \item Repetir los pasos del punto anterior, seleccionando como carpeta
-          source: \emph{/path/repositorio/framework/src}
-        \end{itemize}
-   \item Resolver dependencias:
-        \begin{itemize}
-          \item Abrir el archivo pom del framework:
-                \emph{/path/repositorio/framework/pom.xml}
-          \item Buscar datos Group Id, Artifact Id y Version. (ver
-          figura~\ref{fig:run_pom_file}) 
-            \begin{figure}[H]
-                \centering
-                \includegraphics[width=80mm]{run_pom_file}
-                \caption{Definición de Artefacto BaboonFramework en archivo
-                pom.xml}
-            \label{fig:run_pom_file}
-                \end{figure}
-          \item Abrir el archivo pom.xml del nuevo proyecto. Luego click en la
-          pestaña “Dependencies”, en la parte inferior.
-          \item Click en Add… y  luego completar los campos Group Id, Artifact
-          Id y Version con los datos previos (Por ejemplo:
-          BaboonFramework, BaboonFramework, 0.0.1-SNAPSHOT). Luego click en OK.
-          \item Guardar el archivo pom.xml del proyecto.
-          \item Click Derecho en el nuevo proyecto. Maven -\textgreater Update Project -\textgreater
-          Ok
+          \item En Eclipse, ir a File -\textgreater Import\ldots -\textgreater
+          Maven -\textgreater Existing Maven Projects. Luego seleccionar la
+          carpeta \textit{/path/baboon\_examples/LavadoraBotellas}
         \end{itemize}
 \end{enumerate}
 
+\subsection* {Intellij}
+\begin{enumerate}
+    \item En Intellij, ir a File -\textgreater Open\ldots. Luego seleccionar el
+    archivo
+    \textit{/path/baboon\_examples/LavadoraBotellas/pom.xml}
+    y hacer click en el botón ``Open as Project''
+\end{enumerate}
 
 \section {Construcción y Ejecución del sistema utilizando \nombreFramework \
 Framework}
 
+\subsection* {Maven}
+Desde una consola, ubicado en el directorio
+\textit{/path/baboon\_examples/LavadoraBotellas} correr el comando:
+\begin{itemize}
+    \item mvn exec:java
+\end{itemize}
+La configuración de Maven escrita en el archivo \textit{pom.xml} especifica la
+forma de ejecutar el proyecto. Gracias a esto resulta muy simple compilar y
+ejecutar el proyecto actual.
+
+\subsection* {Eclipse}
 Para comenzar la ejecución del sistema desde la IDE Eclipse, debe seleccionarse
 \emph{BaboonFramework} como punto de entrada al programa en las configuraciones:
     \begin{itemize}
@@ -576,53 +548,40 @@ Para comenzar la ejecución del sistema desde la IDE Eclipse, debe seleccionarse
       \end{figure}
     \end{itemize}
 
-Para exportar un archivo JAR que ejecutable (requiere JRE \textgreater= 8) deben
-realizarse los siguientes pasos:
-
-\begin{enumerate}
-  \item Incluir el archivo PNML y el archivo JSON de tópicos dentro de un
-  paquete que forme parte del build path, como se observa en la
-  figura~\ref{fig:run_recursos_topics_pnml}.
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=70mm]{run_recursos_topics_pnml}
-    \caption{Inclusión de Archivo PNML y Archivo de Tópicos en el Build
-    Path}
-    \label{fig:run_recursos_topics_pnml}
-   \end{figure}
-   En este caso, el path a los archivos debe especificarse en el programa de la
-   siguiente forma:
-   \begin{itemize}
-     \item \textbf{\emph{``/topic/topics.json''}}
-     \item \textbf{\emph{``/pnml/lavadoBotellas.pnml''}}
-   \end{itemize}
-   
-   \item Dentro de las configuraciones del Build Path del proyecto, incluir
-   las dependencias de Maven y las bibliotectas de AspectJ como exported
-   entries, junto con el código fuente del framework, del monitor de RdP y del
-   proyecto desarrollado:
+\subsection* {Intellij}
+Para ejecutar el proyecto desde Intellij, primero se deben realizas las
+configuraciones necesarias:
+\begin{itemize}
+    \item Ir a Run -\textgreater Run\ldots -\textgreater Edit Configurations
+    \item En la ventana Run hacer click sobre el signo '+' -\textgreater Maven
+    \item Llenar los campos:
+    \begin{itemize}
+        \item Name: \textit{LavadoraBotellas}
+        \item Working Directory:
+        \textit{/path/baboon\_examples/LavadoraBotellas}
+        \item Command Line: \textit{exec:java}
+    \end{itemize}
     \begin{figure}[H]
     \centering
-    \includegraphics[width=60mm]{run_build_path}
-    \caption{Configuración de Exported Entries en Build Path}
-    \label{fig:run_build_path}
+    \subfigure{\includegraphics[width=0.49\textwidth]{Ejemplo_intellij_run_config_01}}
+    \subfigure{\includegraphics[width=0.49\textwidth]{Ejemplo_intellij_run_config_02}}
+    \caption{Configuración para correr LavadoraBotellas desde IntelliJ}
     \end{figure}
-    
-   \item Exportar un archivo JAR ejecutable.
-       \begin{itemize}
-         \item En Package Explorer, hacer click derecho sobre el proyecto.
-         \item Seleccionar Export\ldots -\textgreater Runnable JAR File
-         \item Elegir BaboonFramework como configuración de lanzamiento
-         (esta configuración se hace visible una vez que se ha ejecutado
-         el sistema utilizando \emph{Run As}, como se describe previamente).
-         \item Elegir la opcion \emph{Extract required libraries into generated
-         JAR} (Ver figura~\ref{fig:run_export_runnable_jar})
-         \begin{figure}[H]
-            \centering
-            \includegraphics[width=70mm]{run_export_runnable_jar}
-            \caption{Configuración de Archivo JAR Ejecutable}
-            \label{fig:run_export_runnable_jar}
-         \end{figure}
-       \end{itemize}
-\end{enumerate}
+\end{itemize}
+
+Luego se ejecuta la aplicación con el botón \textit{Run}
+
+\subsection* {Exportar a un Archivo Ejecutable}
+
+Para generar un archivo \textit{.jar} ejecutable, se debe correr el siguientes
+comando:
+\begin{itemize}
+    \item mvn package
+\end{itemize}
+El archivo resultante es
+\textit{./target/LavadoraBotellas-0.0.1-SNAPSHOT-jar-with-dependencies.jar}
+y para ejecutarlo basta con darle doble click, o desde una consola ejecutar:
+\begin{itemize}
+    \item java -jar ./target/LavadoraBotellas-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+\end{itemize}
 
