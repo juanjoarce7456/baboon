@@ -145,7 +145,7 @@
         <!-- Java Petri Concurrency Monitor -->
         <dependency>
             <groupId>com.github.airabinovich</groupId>
-            <artifactId>java_petri_engine</artifactId>
+            <artifactId>java_petri_concurrency_monitor</artifactId>
             <version>v1.0-RC1</version>
         </dependency>
     </dependencies>
