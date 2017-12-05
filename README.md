@@ -1,2 +1,4 @@
-# petri_event_dispatcher
-Java framework for dispatching events from and to java petri engine (github: airabinovich/java_petri_engine)
+# Baboon
+
+Baboon is a framework written in Java 8, it manages the user's code actions by using a Petri Net as the system's logic.
+
