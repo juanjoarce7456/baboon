@@ -148,6 +148,10 @@ public class BaboonConfig {
      * @param topicsJsonFilePath
      *            the path of the json file containing the topics configuration.
      * 
+     * @throws BadTopicsJsonFormat
+     *            If the topic file provided is badly formed.
+     * @throws NoTopicsJsonFileException
+     *            If the topic file provided does not exist.           
      * @see TopicsJsonParser
      */
     public void addTopics(String topicsJsonFilePath) throws BadTopicsJsonFormat, NoTopicsJsonFileException {
@@ -184,6 +188,7 @@ public class BaboonConfig {
      *            {@link TaskActionController} or {@link HappeningActionController} as
      *            {@link ActionController#actionMethod}
      * @param parameters
+     *            <ul>
      *            <li>The parameters to be used as arguments of the method on
      *            the new {@link TaskActionController} or {@link HappeningActionController}.
      *            This parameters are used along with the methodName to resolve
@@ -195,8 +200,10 @@ public class BaboonConfig {
      *            framework. In this case, mock instances of the classes
      *            required by the method could be used, allowing the framework
      *            to resolve and subscribe the method.</li>
+     *            </ul>
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the topicName provided as argument is null</li>
      *             <li>When a topic with name topicName does not exist</li>
      *             <li>If there is more than one permission on
@@ -224,6 +231,7 @@ public class BaboonConfig {
      *             <li>If the {@link ActionController#actionObject} does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
+     *             </ul>
      *
      * 
      * @see Topic
@@ -254,6 +262,7 @@ public class BaboonConfig {
      *            {@link TaskActionController} or {@link HappeningActionController} as
      *            {@link ActionController#actionMethod}
      * @param parameters
+     *            <ul>
      *            <li>The parameters to be used as arguments of the method on
      *            the new {@link TaskActionController} or {@link HappeningActionController}.
      *            This parameters are used along with the methodName to resolve
@@ -265,8 +274,10 @@ public class BaboonConfig {
      *            framework. In this case, mock instances of the classes
      *            required by the method could be used, allowing the framework
      *            to resolve and subscribe the method.</li>
+     *            </ul>
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the topicName provided as argument is null</li>
      *             <li>When a topic with name topicName does not exist</li>
      *             <li>If there is more than one permission on
@@ -295,6 +306,7 @@ public class BaboonConfig {
      *             <li>If the {@link ActionController#actionObject} does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
+     *             </ul>
      *
      * 
      * @see Topic
@@ -403,6 +415,7 @@ public class BaboonConfig {
      * @see TaskActionController
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If complexTaskName is empty String</li>
      *             <li>If complexTaskName is null</li>
      *             <li>If complexTaskName is already registered</li>
@@ -413,6 +426,7 @@ public class BaboonConfig {
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
+     *             </ul>
      */
     public void createNewComplexTaskController(String complexTaskName, String topicName) throws NotSubscribableException {
         Topic topic = getTopicByName(topicName);
@@ -453,6 +467,7 @@ public class BaboonConfig {
      *            the methodName to resolve the right method to use.
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the object provided as argument is null</li>
      *             <li>If the methodName provided as argument is null</li>
      *             <li>If complexTaskName is empty String</li>
@@ -475,6 +490,7 @@ public class BaboonConfig {
      *             null</li>
      *             <li>If fails to append the {@link TaskActionController} to
      *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
+     *             </ul>
      *
      */
     public void appendControllerToComplexTaskController(String complexTaskName, Object object, String methodName, Object... parameters)
@@ -503,6 +519,7 @@ public class BaboonConfig {
      *            the methodName to resolve the right method to use.
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the methodsClass provided as argument is null</li>
      *             <li>If the methodName provided as argument is null</li>
      *             <li>If complexTaskName is empty String</li>
@@ -526,6 +543,7 @@ public class BaboonConfig {
      *             null</li>
      *             <li>If fails to append the {@link TaskActionController} to
      *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
+     *             </ul>
      */
     public void appendStaticControllerToComplexTaskController(String complexTaskName, Class<?> methodsClass, String methodName, Object... parameters)
             throws NotSubscribableException {

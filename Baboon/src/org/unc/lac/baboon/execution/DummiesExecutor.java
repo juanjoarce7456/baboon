@@ -23,6 +23,11 @@ public class DummiesExecutor extends ThreadPoolExecutor {
      * and increases in one the size of the core pool.
      * @see ThreadPoolExecutor#submit(java.util.concurrent.Callable)
      * @see ThreadPoolExecutor#setCorePoolSize(int)
+     * 
+     * @param dummy
+     *      the {@link DummyThread} object. The method {@link DummyThread#call()} 
+     *      is called by this {@link ThreadPoolExecutor}.
+     *       
      */
     public void executeDummy(DummyThread dummy) {
         this.setCorePoolSize(this.getCorePoolSize() + 1);

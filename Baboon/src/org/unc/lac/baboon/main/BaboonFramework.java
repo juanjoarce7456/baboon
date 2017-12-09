@@ -71,6 +71,9 @@ public class BaboonFramework {
      * {@link BaboonApplication} instance. After, calls
      * {@link BaboonApplication#subscribe()} for every {@link BaboonApplication}
      * instance.
+     * 
+     * @param args 
+     *      No arguments are received yet.
      */
     public static void main(String[] args) {
         Reflections reflections = new Reflections("org.unc.lac.baboon");
@@ -128,7 +131,10 @@ public class BaboonFramework {
      *            A {@link Class} object that extends {@link TransitionsPolicy} used by 
      *            petri monitor to decide which transition to fire next. It might be null, 
      *            in which case {@link FirstInLinePolicy} will be used.
-     * @throws BadPolicyException 
+     * @param <A> 
+     *            Class type that extends {@link TransitionsPolicy}.
+     * @throws BadPolicyException
+     *      If the transitions policy provided is badly formed.
      * @see BaboonPetriCore
      */
     public static <A extends TransitionsPolicy> void createPetriCore(String pnmlFilePath, petriNetType type, Class<A> firingPolicy) throws BadPolicyException {
@@ -153,6 +159,7 @@ public class BaboonFramework {
      *            {@link TaskActionController} or {@link HappeningActionController} as
      *            {@link ActionController#actionMethod}
      * @param parameters
+     *            <ul>
      *            <li>The parameters to be used as arguments of the method on
      *            the new {@link TaskActionController} or {@link HappeningActionController}.
      *            This parameters are used along with the methodName to resolve
@@ -164,35 +171,38 @@ public class BaboonFramework {
      *            framework. In this case, mock instances of the classes
      *            required by the method could be used, allowing the framework
      *            to resolve and subscribe the method.</li>
+     *            </ul>
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the topicName provided as argument is null</li>
      *             <li>When a topic with name topicName does not exist</li>
      *             <li>If there is more than one permission on
      *             {@link Topic#permission}</li>
-     *             <li>If the object provided as argument is null</li>
-     *             <li>If the methodName provided as argument is null</li>
-     *             <li>If the framework fails to resolve the method</li>
+     *             <li>If the object provided as argument is null </li>
+     *             <li>If the methodName provided as argument is null </li>
+     *             <li>If the framework fails to resolve the method </li>
      *             <li>If there is a SecurityException when trying to resolve
-     *             the method</li>
+     *             the method </li>
      *             <li>If there's an exception on
-     *             {@link ActionController#resolveGuardProviderMethods()}</li>
+     *             {@link ActionController#resolveGuardProviderMethods()} </li>
      *             <li>If the method is not annotated with
-     *             {@link HappeningController} or {@link TaskController}</li>
+     *             {@link HappeningController} or {@link TaskController} </li>
      *             <li>When trying to subscribe a {@link HappeningActionController}
-     *             that is already subscribed</li>
+     *             that is already subscribed </li>
      *             <li>When trying to subscribe a {@link TaskActionController} to a
-     *             {@link Topic} with empty {@link Topic#permission}</li>
+     *             {@link Topic} with empty {@link Topic#permission} </li>
      *             <li>If the permission transition name is an empty String for
-     *             a {@link SimpleTaskControllerSubscription}</li>
+     *             a {@link SimpleTaskControllerSubscription} </li>
      *             <li>If the permission transition name is null for a
-     *             {@link SimpleTaskControllerSubscription}</li>
+     *             {@link SimpleTaskControllerSubscription} </li>
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
      *             <li>If the {@link ActionController#actionObject} does not have a
      *             {@link GuardProvider} annotated method to handle a guard
-     *             declared in the topic</li>
+     *             declared in the topic </li>
+     *             </ul>
      *
      * 
      * @see Topic
@@ -224,6 +234,7 @@ public class BaboonFramework {
      *            {@link TaskActionController} or {@link HappeningActionController} as
      *            {@link ActionController#actionMethod}
      * @param parameters
+     *            <ul>
      *            <li>The parameters to be used as arguments of the method on
      *            the new {@link TaskActionController} or {@link HappeningActionController}.
      *            This parameters are used along with the methodName to resolve
@@ -235,8 +246,10 @@ public class BaboonFramework {
      *            framework. In this case, mock instances of the classes
      *            required by the method could be used, allowing the framework
      *            to resolve and subscribe the method.</li>
+     *            </ul>
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the topicName provided as argument is null</li>
      *             <li>When a topic with name topicName does not exist</li>
      *             <li>If there is more than one permission on
@@ -265,7 +278,7 @@ public class BaboonFramework {
      *             <li>If the {@link ActionController#actionObject} does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
-     *
+     *             </ul>
      * 
      * @see Topic
      * @see ActionController
@@ -285,6 +298,11 @@ public class BaboonFramework {
      * @param topicsJsonFilePath
      *            the path of the json file containing the topics configuration.
      * 
+     * @throws BadTopicsJsonFormat
+     *      If the json file is badly formed
+     *      
+     * @throws NoTopicsJsonFileException
+     *      If the json file does not exist.
      * @see TopicsJsonParser
      */
     public static void addTopicsFile(String topicsJsonFilePath) throws BadTopicsJsonFormat, NoTopicsJsonFileException {
@@ -332,6 +350,7 @@ public class BaboonFramework {
      * @see TaskActionController
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If complexTaskName is empty String</li>
      *             <li>If complexTaskName is null</li>
      *             <li>If topicName is empty String</li>
@@ -341,6 +360,7 @@ public class BaboonFramework {
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
+     *             </ul>
      */
     public static void createNewComplexTaskController(String complexTaskName, String topicName) throws NotSubscribableException {
         baboonConfig.createNewComplexTaskController(complexTaskName, topicName);
@@ -368,6 +388,7 @@ public class BaboonFramework {
      *            the methodName to resolve the right method to use.
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the object provided as argument is null</li>
      *             <li>If the methodName provided as argument is null</li>
      *             <li>If the framework fails to resolve the method</li>
@@ -388,6 +409,7 @@ public class BaboonFramework {
      *             null</li>
      *             <li>If fails to append the {@link TaskActionController} to
      *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
+     *             </ul>
      *
      */
     public static void appendControllerToComplexTaskController(String complexTaskName, Object object, String methodName,
@@ -417,6 +439,7 @@ public class BaboonFramework {
      *            the methodName to resolve the right method to use.
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the methodsClass provided as argument is null</li>
      *             <li>If the methodName provided as argument is null</li>
      *             <li>If the framework fails to resolve the method</li>
@@ -438,6 +461,7 @@ public class BaboonFramework {
      *             null</li>
      *             <li>If fails to append the {@link TaskActionController} to
      *             {@link ComplexSecuentialTaskControllerSubscription}.</li>
+     *             </ul>
      */
     public static void appendStaticControllerToComplexTaskController(String complexTaskName, Class<?> methodsClass, String methodName, Object... parameters)
             throws NotSubscribableException {

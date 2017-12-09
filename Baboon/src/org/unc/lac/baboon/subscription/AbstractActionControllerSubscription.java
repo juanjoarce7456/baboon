@@ -34,10 +34,12 @@ public abstract class AbstractActionControllerSubscription {
      *            The topic to which {@link ActionController} objects will be subscribed
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>When the topic is null</li>
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
+     *             </ul>
      * 
      */
     public AbstractActionControllerSubscription(Topic topic) throws NotSubscribableException {
@@ -64,9 +66,11 @@ public abstract class AbstractActionControllerSubscription {
      * @return true if {@link #actionsList} changed as a result of the call
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the {@link ActionController} object does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
+     *             </ul>
      *
      * @see Topic#permission
      * @see Topic#setGuardCallback

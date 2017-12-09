@@ -10,12 +10,14 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
  * A HappeningControllerAction is a class defined by
+ * <ul>
  * <li>An object instance.</li>
  * <li>A {@link HappeningController} annotated method, member of
  * the class of the object instance.</li>
  * <li>A set of {@link GuardProvider} annotated methods, member of the class of
  * the object instance, that are organized in a Map indexed by the guard name
  * corresponding to the {@link GuardProvider#value()}.</li>
+ * </ul>
  *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -36,19 +38,25 @@ public class HappeningActionController extends ActionController {
      *            for this actionController, must be a member of {#actionObject} class
      * 
      * @throws MultipleGuardProvidersException
+     *             <ul>
      *             <li>When more than one {@link GuardProvider} annotated
      *             methods are referred to the same guard name</li>
+     *             </ul>
      * @throws InvalidGuardProviderMethod
+     *             <ul>
      *             <li>When a {@link GuardProvider} annotated method has a
      *             return type other than boolean</li>
      *             <li>When a {@link GuardProvider} annotated method requires
      *             arguments</li>
      *             <li>When {@link #actionMethod} is static and {@link GuardProvider} 
      *             annotated method is not static</li>
+     *             </ul>
      * @throws IllegalArgumentException
+     *             <ul>
      *             <li>When the actionObject provided is null</li>
      *             <li>When the actionMethod provided is null</li>
      *             <li>When the actionMethod provided is not annotated with {@link HappeningController}</li>
+     *             </ul>
      * 
      */
     public HappeningActionController(Object actionObject, Method actionMethod)

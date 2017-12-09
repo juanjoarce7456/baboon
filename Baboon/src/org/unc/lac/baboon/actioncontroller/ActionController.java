@@ -14,12 +14,14 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
  * An ActionController is an abstract class defined by
+ * <ul>
  * <li>An object instance.</li>
  * <li>A {@link TaskController} or {@link HappeningController} annotated method, member of
  * the class of the object instance.</li>
  * <li>A set of {@link GuardProvider} annotated methods, member of the class of
  * the object instance, that are organized in a Map indexed by the guard name
  * corresponding to the {@link GuardProvider#value()}.</li>
+ * </ul>
  *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -57,16 +59,22 @@ public abstract class ActionController {
      *            for this actionController, must be a member of {#actionObject} class
      * 
      * @throws MultipleGuardProvidersException
+     *             <ul>
      *             <li>When more than one {@link GuardProvider} annotated
      *             methods are referred to the same guard name</li>
+     *             </ul>
      * @throws InvalidGuardProviderMethod
+     *             <ul>
      *             <li>When a {@link GuardProvider} annotated method has a
      *             return type other than boolean</li>
      *             <li>When a {@link GuardProvider} annotated method requires
      *             arguments</li>
+     *             </ul>
      * @throws IllegalArgumentException
+     *             <ul>
      *             <li>When the actionObject provided is null</li>
      *             <li>When the actionMethod provided is null</li>
+     *             </ul>
      * 
      */
     public ActionController(Object actionObject, Method actionMethod)
@@ -98,11 +106,12 @@ public abstract class ActionController {
      * @return The value of the guard
      *
      * @throws InvocationTargetException
-     * @throws IllegalArgumentException
+     *         Error when invoking a {@link GuardProvider} method.
      * @throws IllegalAccessException
+     *         Error when accessing a {@link GuardProvider} method.
      */
     public boolean getGuardValue(String guardName)
-            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException {
         return (Boolean) guardProviderMethodsMap.get(guardName).invoke(actionObject);
     }
 
@@ -114,7 +123,7 @@ public abstract class ActionController {
      * @param guardName
      *            the guard name associated to the {@link GuardProvider}
      *            annotated method, whose presence is to be tested.
-     * @returns true if there is a {@link GuardProvider} annotated method
+     * @return true if there is a {@link GuardProvider} annotated method
      *          associated to the guardName
      */
     public boolean hasGuardProvider(String guardName) {
@@ -128,15 +137,19 @@ public abstract class ActionController {
      * GuardProvider#value()}
      * 
      * @throws MultipleGuardProvidersException
+     *             <ul>
      *             <li>When more than one {@link GuardProvider} annotated
      *             methods are referred to the same guard name</li>
+     *             </ul>
      * @throws InvalidGuardProviderMethod
+     *             <ul>
      *             <li>When a {@link GuardProvider} annotated method has a
      *             return type other than boolean</li>
      *             <li>When a {@link GuardProvider} annotated method requires
      *             arguments</li>
      *             <li>When {@link #actionMethod} is static and {@link GuardProvider} 
      *             annotated method is not static</li>
+     *             </ul>
      */
     private void resolveGuardProviderMethods() throws MultipleGuardProvidersException, InvalidGuardProviderMethod {
         boolean isStaticController = Modifier.isStatic(actionMethod.getModifiers());

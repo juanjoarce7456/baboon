@@ -29,6 +29,7 @@ public class HappeningControllerSubscription extends AbstractActionControllerSub
      *            subscribed to topic
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>When the topic is null</li>
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
@@ -37,6 +38,7 @@ public class HappeningControllerSubscription extends AbstractActionControllerSub
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
      *             <li>If there's more than one permission</li>
+     *             </ul>
      * 
      */
     public HappeningControllerSubscription(Topic topic, HappeningActionController happeningController)
@@ -69,14 +71,15 @@ public class HappeningControllerSubscription extends AbstractActionControllerSub
      * @return true if {@link #actionsList} changed as a result of the call
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the {@link ActionController} object does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
      *             <li>If the actionController's type is not an instance of
      *             {@link HappeningActionController}</li>
+     *             </ul>
      *
-     * @see {@link Topic#permission}
-     * @see {@link Topic#setGuardCallback}
+     * @see Topic
      * 
      */
     @Override

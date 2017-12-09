@@ -35,6 +35,10 @@ public class TopicsJsonParser {
      *            the path of the json file to parse.
      * @return a HashMap of the {@link Topic} objects described by the json file
      *         indexed by topic name.
+     * @throws BadTopicsJsonFormat
+     *         If the topic file provided is badly formed.
+     * @throws NoTopicsJsonFileException
+     *         If the topic file provided does not exist.
      */
     public HashMap<String, Topic> getTopicsFromJson(String jsonPath)
             throws BadTopicsJsonFormat, NoTopicsJsonFileException {

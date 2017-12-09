@@ -25,12 +25,14 @@ public class ComplexSecuentialTaskControllerSubscription extends AbstractTaskCon
      *            subscribed
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>When the topic is null</li>
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
      *             sizes are different.</li>
      *             <li>If {@link Topic#permission} is null.</li>
      *             <li>If {@link Topic#permission} is empty.</li>
+     *             </ul>
      * 
      */
     public ComplexSecuentialTaskControllerSubscription(Topic topic) throws NotSubscribableException {
@@ -48,6 +50,7 @@ public class ComplexSecuentialTaskControllerSubscription extends AbstractTaskCon
      *            order (or index).
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>If the {@link TaskActionController} object does not have a
      *             {@link GuardProvider} annotated method to handle a guard
      *             declared in the topic</li>
@@ -60,9 +63,9 @@ public class ComplexSecuentialTaskControllerSubscription extends AbstractTaskCon
      *             null</li>
      *             <li>If fails to append the {@link TaskActionController} to
      *             {@link #actionsList}.</li>
+     *             </ul>
      *
-     * @see {@link Topic#permission}
-     * @see {@link Topic#setGuardCallback}
+     * @see Topic
      * 
      */
     public void addTask(TaskActionController taskController) throws NotSubscribableException {
