@@ -11,6 +11,7 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
 
 /**
  * A TaskAction is an abstract class that inherits from {@link ActionController}, defined by
+ * <ul>
  * <li>An object instance.</li>
  * <li>A {@link TaskController} or {@link HappeningController} annotated method, member of
  * the class of the object instance.</li>
@@ -19,6 +20,7 @@ import org.unc.lac.baboon.exceptions.MultipleGuardProvidersException;
  * <li>A set of {@link GuardProvider} annotated methods, member of the class of
  * the object instance, that are organized in a Map indexed by the guard name
  * corresponding to the {@link GuardProvider#value()}.</li>
+ * </ul>
  *
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
@@ -46,20 +48,26 @@ public class TaskActionController extends ActionController {
      *            Varargs used as list of arguments for {@link #actionMethod}
      * 
      * @throws MultipleGuardProvidersException
+     *             <ul>
      *             <li>When more than one {@link GuardProvider} annotated
      *             methods are referred to the same guard name</li>
+     *             </ul>
      * @throws InvalidGuardProviderMethod
+     *             <ul>
      *             <li>When a {@link GuardProvider} annotated method has a
      *             return type other than boolean</li>
      *             <li>When a {@link GuardProvider} annotated method requires
      *             arguments</li>
      *             <li>When {@link #actionMethod} is static and {@link GuardProvider} 
      *             annotated method is not static</li>
+     *             </ul>
      * @throws IllegalArgumentException
+     *             <ul>
      *             <li>When the actionObject provided is null</li>
-     *             <li>When the actionMethod provided is null</li>-
+     *             <li>When the actionMethod provided is null</li>
      *             <li>When the actionMethod provided is not annotated with
      *             {@link TaskController}</li>
+     *             </ul>
      * 
      */
     public TaskActionController(Object actionObject, Method actionMethod, Object... parameters)
@@ -76,13 +84,14 @@ public class TaskActionController extends ActionController {
      * {@link #actionObject} and {@link #parameters} as the arguments.
      * 
      * @throws IllegalAccessException
+     *         Error when accessing the Action method
      * @throws InvocationTargetException
-     * @throws IllegalArgumentException
+     *         Error when invoking the Action method
      * 
      * @see Method#invoke(Object, Object...)
      * 
      */
-    public void executeMethod() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public void executeMethod() throws IllegalAccessException, InvocationTargetException {
         actionMethod.invoke(actionObject, parameters);
     }
 

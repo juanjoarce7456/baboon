@@ -58,7 +58,10 @@ public class BaboonPetriCore {
      *            A {@link Class} object that extends {@link TransitionsPolicy} used by 
      *            petri monitor to decide which transition to fire next. It might be null, 
      *            in which case {@link FirstInLinePolicy} will be used.
+     * @param <A> 
+     *            A {@link Class} object that extends {@link TransitionsPolicy}-
      * @throws BadPolicyException 
+     *      If the transitions policy provided is not correctly formed.
      */
     public <A extends TransitionsPolicy> BaboonPetriCore(String pnmlFilePath, petriNetType type, Class<A> firingPolicy) throws BadPolicyException {
         if (pnmlFilePath == null) {
@@ -107,7 +110,8 @@ public class BaboonPetriCore {
      *            The name of the transition to be fired.
      * @param perennialFiring
      *            Indicates if the firing is perennial or not.
-     * @throws PetriNetException 
+     * @throws PetriNetException
+     *            If an error regarding petri nets occurs.
      * 
      * @see PetriMonitor
      * @see PetriMonitor#fireTransition(String, boolean)
@@ -125,7 +129,8 @@ public class BaboonPetriCore {
      *            The name of the guard to be modified.
      * @param newValue
      *            the new boolean value to be set on the guard.
-     * @throws PetriNetException 
+     * @throws PetriNetException
+     *           If an error regarding petri nets occurs.
      * 
      * @see PetriMonitor
      * @see PetriMonitor#setGuard(String, boolean)

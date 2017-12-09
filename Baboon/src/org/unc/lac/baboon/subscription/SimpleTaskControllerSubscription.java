@@ -27,6 +27,7 @@ public class SimpleTaskControllerSubscription extends AbstractTaskControllerSubs
      *            The {@link TaskActionController} object that will be subscribed to topic
      * 
      * @throws NotSubscribableException
+     *             <ul>
      *             <li>When the topic is null</li>
      *             <li>If there are guard callbacks on the topic and
      *             {@link Topic#setGuardCallback} and {@link Topic#permission}
@@ -44,6 +45,7 @@ public class SimpleTaskControllerSubscription extends AbstractTaskControllerSubs
      *             <li>If the topic permission corresponding to this taskController is
      *             null</li>
      *             <li>If there's more than one permission</li>
+     *             </ul>
      * 
      */
     public SimpleTaskControllerSubscription(Topic topic, TaskActionController taskController) throws NotSubscribableException {

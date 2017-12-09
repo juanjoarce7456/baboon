@@ -19,7 +19,7 @@ import org.unc.lac.baboon.actioncontroller.ActionController;
  * 
  * The {@link #value()} attribute must contain the name of the guard whose
  * boolean value is to be provided by the method.
- * 
+ *  
  * @author Ariel Ivan Rabinovich
  * @author Juan Jose Arce Giacobbe
  * 
@@ -29,7 +29,8 @@ import org.unc.lac.baboon.actioncontroller.ActionController;
 @Target({ ElementType.METHOD })
 public @interface GuardProvider {
     /**
-     * The name of the guard whose boolean value is to be provided by the
+     * Method to access the name of the guard configured on the annotation.
+     * @return The name of the guard whose boolean value is to be provided by the
      * method.
      */
     String value();

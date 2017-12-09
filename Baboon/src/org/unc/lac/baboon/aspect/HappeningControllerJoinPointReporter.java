@@ -28,6 +28,10 @@ public class HappeningControllerJoinPointReporter {
     /**
      * The pointcut happening is defined as any execution of a method annotated
      * with {@link HappeningController}
+     * 
+     * @param joinPoint
+     *      The {@link JoinPoint} of execution reached. Is only one point of all 
+     *      the joinpoints that conform the pointcut.
      */
     @Pointcut(value = "execution(@org.unc.lac.baboon.annotations.HappeningController * *(..))",
             argNames = "joinPoint")
@@ -39,6 +43,10 @@ public class HappeningControllerJoinPointReporter {
      * this advice updates the {@link JoinPointObserver} {@link #observer}. This
      * is done to allow the framework to manage the synchronization of the
      * {@link HappeningController} annotated method.
+     * 
+     *  @param joinPoint
+     *      The {@link JoinPoint} of execution reached. Indicates which instance of object and 
+     *      {@link HappeningController} method has triggered the advice.
      */
     @Before(value = "happening(joinPoint)", argNames = "joinPoint")
     public void beforeHappening(final JoinPoint joinPoint) {
@@ -50,6 +58,11 @@ public class HappeningControllerJoinPointReporter {
      * this advice updates the {@link JoinPointObserver} {@link #observer}. This
      * is done to allow the framework to manage the synchronization of the
      * {@link HappeningController} annotated method.
+     * 
+     * @param joinPoint
+     *      The {@link JoinPoint} of execution reached. Indicates which instance of object and 
+     *      {@link HappeningController} method has triggered the advice.
+     *
      */
     @After(value = "happening(joinPoint)", argNames = "joinPoint")
     public void afterHappening(final JoinPoint joinPoint) {

@@ -100,6 +100,8 @@ public class Topic {
      * should be present on the {@link ActionController} that generated the set guard
      * callback event.
      * 
+     * @param index
+     *      The position of the guard callback in the list of guard callbacks
      * @return The set guard callback of this Topic instance.
      * 
      */

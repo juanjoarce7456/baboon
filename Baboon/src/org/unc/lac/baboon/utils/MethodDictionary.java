@@ -28,8 +28,14 @@ public class MethodDictionary {
      *            an object of the class declaring the method to resolve.
      * @param methodName
      *            the name of the method to resolve.
+     * @param parameterClasses
+     *            the method's parameter types, in declaration order.
      * @return a {@link Method} object resolved using object's class and
      *         methodName.
+     * @throws NoSuchMethodException
+     *         If the method cannot be found.
+     * @throws SecurityException
+     *         If a security exception occurs while resolving the method.
      */
     public static Method getMethod(Object object, String methodName, Class<?>... parameterClasses)
             throws NoSuchMethodException, SecurityException {
