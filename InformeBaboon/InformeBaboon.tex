@@ -23,6 +23,7 @@
 \usepackage{setspace}
 \usepackage{titling}
 \usepackage{geometry}
+\usepackage{afterpage}
 
 
  \geometry{
@@ -70,6 +71,28 @@
     % reset subfigure counter
     \newcommand{\ResetCounter}{\setcounter{subfigure}{0}}
     
+    \newcommand\blankpage{\null\thispagestyle{empty}\addtocounter{page}{-1}\newpage}
+    
+    \makeatletter
+    \renewcommand\part{%
+       \if@openright
+         \cleardoublepage
+       \else
+         \clearpage
+       \fi
+       \thispagestyle{empty}%
+       \if@twocolumn
+         \onecolumn
+         \@tempswatrue
+       \else
+         \@tempswafalse
+       \fi
+       \null\vfil
+       \secdef\@part\@spart}
+    \makeatother
+    
+    \pagenumbering{gobble}
+    
     \title{\nombreTesis}
 
     \author{
@@ -90,13 +113,13 @@
         {  \huge Facultad de Ciencias Exactas, Físicas y Naturales }
     \end{center}
     
-    \vspace{1cm}
+    \vspace{0.5cm}
     \begin{figure}[H]
         \centering
         \includegraphics[width=60mm]{logo_unc}
     \end{figure}
     
-    \vspace{1cm}
+    \vspace{0.5cm}
     \begin{center}
         \begin{doublespacing}
             { \huge \textbf{\texttt{\nombreTesis}}}
@@ -105,25 +128,35 @@
     
     \vspace{1.5cm}
     \begin{flushright}
-       \begin{onehalfspacing}
+       %\begin{onehalfspacing}
            {\Large \textbf{Autores: } } \hspace*{6cm} \\
            {\Large \theauthor} \\
         
        \vspace{0.7cm}
            {\Large \textbf{Director: } } \hspace*{5.9cm} \\ 
            {\Large Dr. Orlando Micolini \\ \href{mailto:omicolini@compuar.com}{omicolini@compuar.com} } \\
-       \end{onehalfspacing}
+       
+       \vspace{0.7cm}
+           {\Large \textbf{Codirector: } } \hspace*{5.9cm} \\ 
+           {\Large Ing. Luis Orlando Ventre \\
+           \href{mailto:lventre@gmail.com}{lventre@gmail.com} } \\
+       %\end{onehalfspacing}
      \end{flushright}
 \end{titlepage}
-    
+
+    \afterpage{\blankpage}
+    \include{./sections/Agradecimientos}
+
+	
     \tableofcontents
-    
+
     \listoffigures
     \listoftables
-
+    \afterpage{\blankpage}
 
     \setcounter{definitionsCounter}{0}
-    \part{Introducción y Objetivos}
+    
+    \part{Introducción y Objetivos} \pagenumbering{arabic}\setcounter{page}{1}
         \chapter{Introducción}
         \include{./sections/Introduccion_Objetivos/Introduccion}
         \chapter{Objetivos}
