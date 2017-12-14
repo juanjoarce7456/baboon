@@ -7,7 +7,7 @@
     <groupId>BaboonFramework</groupId>
     <artifactId>BaboonFramework</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v1.0</version>
 
     <modules>
         <module>Baboon</module>
