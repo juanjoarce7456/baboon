@@ -35,3 +35,9 @@ _minted**
 /output/
 /-shell-escape document.synctex.gz
 *.synctex.gz
+/InformeBaboon.bbl
+/InformeBaboon.blg
+/InformeBaboon.lof
+/InformeBaboon.lot
+/InformeBaboon.out
+/InformeBaboon.toc

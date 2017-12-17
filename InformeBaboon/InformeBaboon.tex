@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass[twoside, openright]{report}
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, array}
@@ -55,6 +55,7 @@
 % \stepcounter{definitionsCounter} before the definition
 \newcounter{definitionsCounter}
 
+\raggedbottom
 \begin{document}
     %Nombre templetizado para poder cambiarlo fácil hasta tenerlo definido
     \newcommand{\nombreTesis}{Framework para Sincronización de Eventos, 
@@ -106,53 +107,83 @@
     \graphicspath{ {resources/images/} }
     
 \begin{titlepage}
+{ \fontfamily{opensans}\selectfont
     \begin{center}
-        {  \Huge Universidad Nacional de Córdoba }
-        
-        \vspace{0.8cm}
-        {  \huge Facultad de Ciencias Exactas, Físicas y Naturales }
-    \end{center}
-    
-    \vspace{0.5cm}
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=60mm]{logo_unc}
-    \end{figure}
+
+%    \vspace{0.5cm}
+%    \begin{figure}[H]
+%        \centering
+%        \includegraphics[width=60mm]{logo_unc}
+%    \end{figure}
     
     \vspace{0.5cm}
     \begin{center}
         \begin{doublespacing}
-            { \huge \textbf{\texttt{\nombreTesis}}}
+        	{ \Huge \textbf{\nombreTesis}}
         \end{doublespacing}
     \end{center}
+
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.2pt}}
+    
+    \vspace{0.5cm}
+    { \Large Proyecto integrador - Ingeniería en Computación \\ }
     
     \vspace{1.5cm}
-    \begin{flushright}
+    %\begin{flushright}
        %\begin{onehalfspacing}
-           {\Large \textbf{Autores: } } \hspace*{6cm} \\
-           {\Large \theauthor} \\
+       %    {\Large \textbf{Autores: } } \hspace*{6cm} \\
+       %    {\Large \theauthor} \\
+           \vspace{0.7cm}
+           {\LARGE Ariel Iván Rabinovich } \\
+            {\large Matrícula: 36771223 } \\
+            {\large Teléfono: 0351-6108740 } \\
+           {\large airabinovich@gmail.com } \\
+           
+           \vspace{0.7cm}
+           {\LARGE Juan José Arce Giacobbe } \\
+            {\large Matrícula: 37194512 } \\
+            {\large Teléfono: 0351-6170901 } \\
+           {\large juanjo.arce7456@gmail.com} \\
         
        \vspace{0.7cm}
-           {\Large \textbf{Director: } } \hspace*{5.9cm} \\ 
-           {\Large Dr. Orlando Micolini \\ \href{mailto:omicolini@compuar.com}{omicolini@compuar.com} } \\
+           {\Large \textbf{Director} } \\ 
+           {\Large Dr. Orlando Micolini } \\
+           {\large omicolini@compuar.com } \\
        
        \vspace{0.7cm}
-           {\Large \textbf{Codirector: } } \hspace*{5.9cm} \\ 
-           {\Large Ing. Luis Orlando Ventre \\
-           \href{mailto:lventre@gmail.com}{lventre@gmail.com} } \\
+           {\Large \textbf{Codirector} } \\ 
+           {\Large Ing. Luis Orlando Ventre } \\
+           {\large lventre@gmail.com } \\
        %\end{onehalfspacing}
-     \end{flushright}
+     %\end{flushright}
+}
+    \vspace{5cm}
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.2pt}}
+    \begin{figure}[H]
+        \centering
+        \subfigure{\includegraphics[width=35mm]{unc_logo}}
+        \hspace{20mm}
+        \subfigure{\includegraphics[width=35mm]{fcefyn_logo}}
+        \hspace{20mm}
+        \subfigure{\includegraphics[width=35mm]{lac_logo}}
+    \end{figure}
+
+{ \fontfamily{opensans}\selectfont
+      { \large Universidad Nacional de Córdoba \\ }
+      { \large Facultad de Ciencias Exactas, Físicas y Naturales \\ }
+      { \large Laboratorio de Arquitectura de Computadoras \\ }
+    \end{center}
+}
 \end{titlepage}
 
     \afterpage{\blankpage}
     \include{./sections/Agradecimientos}
+	\afterpage{\blankpage}
 
-	
     \tableofcontents
 
     \listoffigures
     \listoftables
-    \afterpage{\blankpage}
 
     \setcounter{definitionsCounter}{0}
     
