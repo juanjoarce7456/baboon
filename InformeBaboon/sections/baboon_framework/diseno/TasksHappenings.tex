@@ -225,8 +225,8 @@ si bloqueará el hilo por no cumplirse las condiciones de ejecución del control
 	\label{fig:ejecucion_happening_controller}
 \end{figure}
 
-\section{ComplexSecuentialTaskController}
-\label{sec:complex_secuential_task_controller}
+\section{ComplexSequentialTaskController}
+\label{sec:complex_sequential_task_controller}
 En esta sección se presenta una optimización de la ejecución de Task Controllers
 (ver sección~\ref{sec:ejecucion_task_controller}) para sistemas de caracter
 secuencial, como el que se estudia en la
@@ -237,14 +237,14 @@ por cada Task Controller correspondiente a cada tarea secuencial.
 
 En respuesta a este problema, se determinó que los Task Controllers de acciones
 correspondientes a un proceso secuencial deben ser ejecutados por un mismo hilo.
-Esta agrupación de controladores se denomina Complex Secuential Task
+Esta agrupación de controladores se denomina Complex Sequential Task
 Controller.
 \\
-La utilización de Complex Secuential Task Controllers reduce la
+La utilización de Complex Sequential Task Controllers reduce la
 cantidad de hilos necesarios para ejecutar un sistema con tareas secuenciales.
 Para lograrlo, se incorpora una etapa de petición de permisos y una etapa de
 ejecución de controlador por cada Task Controller que forma parte del
-ComplexSecuentialTaskController. Cada una de estas etapas debe seguir el orden
+ComplexSequentialTaskController. Cada una de estas etapas debe seguir el orden
 preestablecido por la secuencia de acciones que conforman el proceso secuencial.
 Dicho orden se establece en el tópico, al definir el evento de acción para la
 sincronización de la tarea compleja.
@@ -257,7 +257,7 @@ petición de de ejecución (ver sección~\ref{sec:sincronizacion_peticion_ejecuc
 	\centering
 	\includegraphics[width=0.8\textwidth]{simple_vs_complex_task_petri_net}
 	\caption{Comparación del modelo en RdP de un sistema con tres
-	acciones secuenciales para Task Controllers simples y para Complex Secuential
+	acciones secuenciales para Task Controllers simples y para Complex Sequential
 	Task Controller.}
 	\label{fig:simple_task_vs_complex_task_petri_net}
 \end{figure}
@@ -275,7 +275,7 @@ petición de de ejecución (ver sección~\ref{sec:sincronizacion_peticion_ejecuc
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{ejecucion_complextask_controller_pt3}
-	\caption{Pasos de la Ejecución de un Complex Secuential Task Controller con
+	\caption{Pasos de la Ejecución de un Complex Sequential Task Controller con
 	Dos Acciones Task}
 	\label{fig:ejecucion_complextask_controller}
 \end{figure}

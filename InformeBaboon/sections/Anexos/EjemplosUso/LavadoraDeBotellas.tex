@@ -153,9 +153,9 @@ utilizando el framework.
             minimización de la cantidad de hilos de ejecución, sin
             afectar al paralelismo del programa. En este sentido, el usuario
             debe identificar los grupos de TaskControllers secuenciales y
-            agruparlos en ComplexSecuentialTaskControllers, que solo requieren
+            agruparlos en ComplexSequentialTaskControllers, que solo requieren
             un único hilo para su ejecución (ver
-            sección~\ref{sec:complex_secuential_task_controller}). \\
+            sección~\ref{sec:complex_sequential_task_controller}). \\
             En el ejemplo de estudio se distinguen los siguientes hilos de
             ejecución, donde se especifica quién está a cargo de la creación e
             inicialización del hilo (el control de la ejecución lo realiza el
@@ -171,7 +171,7 @@ utilizando el framework.
                   \item Expulsar botellas incorrectas.
                   \item Devolver botellas limpias.
                   \end{enumerate}
-              \item \textbf{Complex Secuential Task Controllers \emph{(A cargo
+              \item \textbf{Complex Sequential Task Controllers \emph{(A cargo
               del framework)}:} \begin{enumerate}[resume, label=\fbox{\arabic*}]
                     \item Proceso de lavado de botellas de gaseosa.
                         \begin{itemize}
@@ -455,11 +455,11 @@ public class AppSetup implements BaboonApplication {
       BaboonFramework.subscribeControllerToTopic("devolucion_botella", 
             maquina, "devolverBotellaLimpia");
 
-      //Creación de ComplexSecuentialTaskControllers
+      //Creación de ComplexSequentialTaskControllers
       BaboonFramework.createNewComplexTaskController("lavarCerveza", "lavado_cerveza");
       BaboonFramework.createNewComplexTaskController("lavarGaseosa", "lavado_gaseosa");
 
-      //Suscripción de TaskControllers a ComplexSecuentialTaskControllers
+      //Suscripción de TaskControllers a ComplexSequentialTaskControllers
       BaboonFramework.appendControllerToComplexTaskController("lavarCerveza", 
             maquina, "lavarCerveza");
       BaboonFramework.appendControllerToComplexTaskController("lavarCerveza", 
