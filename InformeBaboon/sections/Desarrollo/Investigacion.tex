@@ -1,0 +1,77 @@
+\section{Introducción}
+En este capítulo se describe el proceso de investigación realizado con el
+objetivo de determinar las características de la herramienta de software a
+desarrollar en este Proyecto Integrador.
+
+\section{Objetivos de la Investigación}
+Con la intención de definir la orientación del proyecto, se realizó
+una primera definición aproximada del objetivo principal:\\
+\emph{``El sistema a desarrollar es una herramienta para facilitar a
+desarrolladores de software la utilización de una Red de Petri como lógica de su
+producto.''}
+
+En este sentido, se realizó un listado de herramientas candidatas para
+cumplir con dicho objetivo:
+\begin{itemize}
+  \item Generación de código
+  \item APIs
+  \item Frameworks
+\end{itemize}
+
+Se desea que la herramienta resultante posea las siguientes condiciones:
+\begin{itemize}
+    \item La lógica del sistema debe quedar expresada en una Red de Petri.
+    \item El grado de acoplamiento entre el código de usuario
+    y la Red de Petri debe ser el mínimo.
+    \item La arquitectura de la herramienta tiene que contemplar el uso de
+    patrones de diseño en el código de usuario.
+    \item El flujo de ejecución debe quedar definido por la herramienta.
+    \item Determinar el grado de escalabilidad de los sistemas desarrollados
+    utilizando la herramienta.
+    \item La herramienta debe favorecer la mantenibilidad del código de usuario.
+    \item En caso de ser posible, analizar experiencias previas de sistemas
+    similares utilizando dichas herramientas.
+\end{itemize}
+
+\section{Desarrollo de la Investigación}
+\label{sec:investigacion_desarrollo}
+La investigación se basa en el análisis de generación de código, APIs y
+Frameworks expuestas en el capítulo~\ref{generacion_frameworks_apis}. Además se
+estudiaron las experiencias previas desarrolladas en \cite{codegen}, \cite{chimp} y
+\cite{Bentivegna-Ludemann}:
+\begin{itemize}
+  \item En \cite{codegen} se propone una solución basada en la generación de
+  código. Tras analizar los ejemplos de uso de la herramienta se pudieron
+  detectar desventajas importantes. El código generado utiliza las interfaces
+  del monitor directamente, provocando un alto grado de acoplamiento entre el
+  software del usuario y la Red de Petri. Esto provoca que los sistemas
+  desarrollados tienen reducida escalabilidad y mantenibilidad.
+  \item En \cite{chimp} se propone una solución basada en el desarrollo de un
+  framework como herramienta superadora a la generación de código. Los ejemplos
+  de uso muestran un claro avance respecto a \cite{codegen}. Los
+  sistemas desarrollados son mantenibles y la herramienta permite la
+  utilización de patrones de diseño en las aplicaciónes.
+  Sin embargo, la implementación presenta problemas de acoplamiento a la Red de
+  Petri ya que carece de una capa de abstracción entre eventos físicos y eventos
+  lógicos (ver sección~\ref{sec:sincronizacion_RdP_por_eventos}).
+  \item En \cite{Bentivegna-Ludemann} se desarrolla un sistema dirigido por RdP
+  y se utilizan las interfaces del monitor de Petri como una API o
+  biblioteca de funciones. Si bien se logra obtener un sistema funcional, en la
+  conclusión del proyecto sus autores expresan que es necesario un framework
+  para desacoplar el código de la red. Además el flujo de ejecución es
+  determinado por el desarrollador, aumentando el grado de acoplamiento.
+\end{itemize}
+
+\section{Conclusión de la Investigación}
+Tras lo expuesto en la sección~\ref{sec:investigacion_desarrollo} se determinó
+que la herramienta a desarrollar debe tener la forma de un Framework por las
+siguientes razones:
+\begin{itemize}
+  \item Funciona como una capa de abstracción entre las acciones de software,
+  los eventos lógicos de la red de Petri, los eventos físicos del mundo
+  exterior al sistema, las secuencias de acciones de software, las políticas de
+  prioridad y los estados de la Red de Petri.
+  \item El flujo de control queda contenido dentro de la estructura del
+  Framework.
+  \item El desacoplamiento facilita la mantenibilidad y legibilidad del sistema.
+\end{itemize} 

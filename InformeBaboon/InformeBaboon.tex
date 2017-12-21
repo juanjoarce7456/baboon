@@ -1,4 +1,4 @@
-\documentclass{report}
+\documentclass[twoside, openright]{report}
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, array}
@@ -10,6 +10,7 @@
 \usepackage{graphicx}
 \usepackage{graphbox}
 \usepackage{color}
+\usepackage{enumitem}
 \usepackage{float}
 \usepackage{subfigure}
 \usepackage{amsfonts}
@@ -18,6 +19,26 @@
 \usepackage{blindtext}
 \usepackage{scrextend}
 \usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{titling}
+\usepackage{geometry}
+\usepackage{afterpage}
+
+
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+
+%    \newenvironment{absolutelynopagebreak}
+%      {\par\nobreak\vfil\penalty0\vfilneg
+%        \vtop\bgroup}
+%      {\par\xdef\tpd{\the\prevdepth}\egroup
+%       \prevdepth=\tpd}
+
 \addtokomafont{labelinglabel}{\sffamily}
 \hypersetup{
      colorlinks=true,
@@ -34,49 +55,167 @@
 % \stepcounter{definitionsCounter} before the definition
 \newcounter{definitionsCounter}
 
+\raggedbottom
 \begin{document}
     %Nombre templetizado para poder cambiarlo fácil hasta tenerlo definido
-    \newcommand{\nombreTesis}{Framework de Sincronización de Tareas Coordinado
-    por Redes de Petri}
+    \newcommand{\nombreTesis}{Framework para Sincronización de Eventos, 
+    Gestión de Recursos y Manejo de Concurrencia Conducido por Red de Petri}
     %Nombre templetizada por si lo tenemos que cambiar
     \newcommand{\nombreFramework}{Baboon}
     %Nombre del monitor templetizado
     \newcommand{\javapetriconcurrencymonitor}{Java Petri Concurrency Monitor }
     
-    \newcommand{\repoMonitor}{https://github.com/airabinovich/java_petri_engine.git}
-    \newcommand{\repoFramework}{https://github.com/juanjoarce7456/petri_event_dispatcher.git}
+    \newcommand{\repoMonitor}{https://github.com/airabinovich/java_petri_concurrency_monitor}
+    \newcommand{\repoFramework}{https://github.com/juanjoarce7456/baboon}
+    \newcommand{\repoEjemplos}{https://github.com/juanjoarce7456/baboon_examples}
 
+    % reset subfigure counter
+    \newcommand{\ResetCounter}{\setcounter{subfigure}{0}}
+    
+    \newcommand\blankpage{\null\thispagestyle{empty}\addtocounter{page}{-1}\newpage}
+    
+    \makeatletter
+    \renewcommand\part{%
+       \if@openright
+         \cleardoublepage
+       \else
+         \clearpage
+       \fi
+       \thispagestyle{empty}%
+       \if@twocolumn
+         \onecolumn
+         \@tempswatrue
+       \else
+         \@tempswafalse
+       \fi
+       \null\vfil
+       \secdef\@part\@spart}
+    \makeatother
+    
+    \pagenumbering{gobble}
+    
     \title{\nombreTesis}
-    \author{Ariel Iván Rabinovich \\ \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com}
-        \and Juan José Arce Giacobbe \\ \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}}
+
+    \author{
+      Ariel Iván Rabinovich \\
+      36771223 - 0351-6108740 \\
+      \href{mailto:airabinovich@gmail.com}{airabinovich@gmail.com} \\
+      Juan José Arce Giacobbe \\
+      37194512 - 0351-6170901 \\
+      \href{mailto:juanjo.arce7546@gmail.com}{juanjo.arce7456@gmail.com}
+    }
     \graphicspath{ {resources/images/} }
     
-    \maketitle
+\begin{titlepage}
+{ \fontfamily{opensans}\selectfont
+    \begin{center}
+
+%    \vspace{0.5cm}
+%    \begin{figure}[H]
+%        \centering
+%        \includegraphics[width=60mm]{logo_unc}
+%    \end{figure}
     
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{doublespacing}
+        	{ \Huge \textbf{\nombreTesis}}
+        \end{doublespacing}
+    \end{center}
+
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.2pt}}
+    
+    \vspace{0.5cm}
+    { \Large Proyecto integrador - Ingeniería en Computación \\ }
+    
+    \vspace{1.5cm}
+    %\begin{flushright}
+       %\begin{onehalfspacing}
+       %    {\Large \textbf{Autores: } } \hspace*{6cm} \\
+       %    {\Large \theauthor} \\
+           \vspace{0.7cm}
+           {\LARGE Ariel Iván Rabinovich } \\
+            {\large Matrícula: 36771223 } \\
+            {\large Teléfono: 0351-6108740 } \\
+           {\large airabinovich@gmail.com } \\
+           
+           \vspace{0.7cm}
+           {\LARGE Juan José Arce Giacobbe } \\
+            {\large Matrícula: 37194512 } \\
+            {\large Teléfono: 0351-6170901 } \\
+           {\large juanjo.arce7456@gmail.com} \\
+        
+       \vspace{0.7cm}
+           {\Large \textbf{Director} } \\ 
+           {\Large Dr. Orlando Micolini } \\
+           {\large omicolini@compuar.com } \\
+       
+       \vspace{0.7cm}
+           {\Large \textbf{Codirector} } \\ 
+           {\Large Ing. Luis Orlando Ventre } \\
+           {\large lventre@gmail.com } \\
+       %\end{onehalfspacing}
+     %\end{flushright}
+}
+    \vspace{5cm}
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.2pt}}
+    \begin{figure}[H]
+        \centering
+        \subfigure{\includegraphics[width=35mm]{unc_logo}}
+        \hspace{20mm}
+        \subfigure{\includegraphics[width=35mm]{fcefyn_logo}}
+        \hspace{20mm}
+        \subfigure{\includegraphics[width=35mm]{lac_logo}}
+    \end{figure}
+
+{ \fontfamily{opensans}\selectfont
+      { \large Universidad Nacional de Córdoba \\ }
+      { \large Facultad de Ciencias Exactas, Físicas y Naturales \\ }
+      { \large Laboratorio de Arquitectura de Computadoras \\ }
+    \end{center}
+}
+\end{titlepage}
+
+    \afterpage{\blankpage}
+    \include{./sections/Agradecimientos}
+	\afterpage{\blankpage}
+
     \tableofcontents
-    
+
     \listoffigures
     \listoftables
-    
+
     \setcounter{definitionsCounter}{0}
     
-    \part{Marco Teórico}
+    \part{Introducción y Objetivos} \pagenumbering{arabic}\setcounter{page}{1}
         \chapter{Introducción}
-            \include{./sections/MarcoTeorico/Introduccion}
+        \include{./sections/Introduccion_Objetivos/Introduccion}
+        \chapter{Objetivos}
+        \include{./sections/Introduccion_Objetivos/Objetivos}
+    \part{Marco Teórico}
+        \label{cap:marco_teorico}
+        \include{./sections/MarcoTeorico/Introduccion}
         \chapter{Modelos}
+            \label{cap:modelos}
             \include{./sections/MarcoTeorico/RedesDePetri}
         \chapter{Paradigmas de Programación}
+            \label{cap:paradigmas_programacion}
             \include{./sections/MarcoTeorico/DataflowReactive}
             \include{./sections/MarcoTeorico/AspectOrientedProgramming}
             \include{./sections/MarcoTeorico/ObjectOrientedProgramming}
-        \chapter{Frameworks y Generación de Código}
+        \chapter{Generación de Código Frameworks y APIs}
+            \label{generacion_frameworks_apis}
             \include{./sections/MarcoTeorico/GeneracionDeCodigo}
             \include{./sections/MarcoTeorico/Frameworks}
         \chapter{Concurrencia}
+            \label{cap:concurrencia}
             \include{./sections/MarcoTeorico/Concurrencia}
 
     \part{Desarrollo}
         \chapter{Investigación}
+            \label{cap:investigacion}
+            \include{./sections/Desarrollo/Investigacion}
+        \chapter{Requerimientos}
             \include{./sections/Desarrollo/Requerimientos}
         \chapter{Monitor de Concurrencia con Redes de Petri}
         	\label{cap:petri_monitor}
@@ -84,17 +223,29 @@
             \include{./sections/Desarrollo/java_petri_concurrency_monitor/DisenoYFuncionamiento}
             \include{./sections/Desarrollo/java_petri_concurrency_monitor/ManualDeUso}
 
-        \chapter{Diseño de \nombreFramework  Framework}
+        \chapter{Diseño de \nombreFramework \ Framework}
         	\label{cap:diseno_framework}
+        	\include{./sections/baboon_framework/diseno/Introduccion}
             \include{./sections/baboon_framework/diseno/Eventos}
             \include{./sections/baboon_framework/diseno/ModosDeSincronizacion}
             \include{./sections/baboon_framework/diseno/TasksHappenings}
             \include{./sections/baboon_framework/diseno/GuardProviders}
             \include{./sections/baboon_framework/diseno/RelacionEventosLogicosEventosDeAccionControladoresDeAccion}
-        \chapter{Implementación de \nombreFramework  Framework}
-        	\include{./sections/baboon_framework/implementacion/DetallesImplementacion}
-       	\chapter{Ejemplo de Uso de \nombreFramework  Framework}
-        	\include{./sections/baboon_framework/ejemplos_de_uso/LavadoraBotellas}
+        \chapter{Implementación de \nombreFramework \ Framework}
+            \include{./sections/baboon_framework/implementacion/DetallesImplementacion}
+
+    \part{Conclusiones}
+        \chapter{Conclusión}
+            \include{./sections/Conclusion_TrabajoFuturo/Conclusion}
+        \chapter{Trabajo Futuro}
+            \include{./sections/Conclusion_TrabajoFuturo/TrabajoFuturo}
+
+    \part{Anexos}
+        \chapter{Ejemplo de Uso de \nombreFramework \ Framework}
+            \include{./sections/Anexos/EjemplosUso/LavadoraDeBotellas}
+        \chapter{Documentación y Casos de Prueba de JPCM y \nombreFramework \ Framework}
+            \include{./sections/Anexos/DocYTests/DocYTests}
     \bibliography{./bibliografia}
 	\bibliographystyle{alpha}
+	
 \end{document}

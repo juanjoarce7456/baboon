@@ -8,24 +8,26 @@ Los frameworks son una técnica de reutilización de prácticas, conceptos y
 criterios orientadas a facilitar la solución de un tipo de problemáticas en
 particular. Son estructuras concretas de software, que proveen una manera
 estándar de construir aplicaciones. Sirven como base para el diseño y
-desarrollo de software orientado a resolver problemas de dicho tipo.
+desarrollo de software orientado a resolver problemas específicos.
 De acuerdo a \cite{Johnson97} dos de las definiciones más comunes de framework
 son:
 \begin{itemize}
   \item ``Un framework es un diseño reusable de todo o parte de un sistema que es
-  representado por un conjunto de clases abstractas y la forma en que esas
+  representado por un conjunto de clases abstractas y la forma en que sus
   instancias interactúan''
   \item ``Un framework es el esqueleto de una aplicación que puede ser
   personalizado por un desarrollador de aplicaciones.''
 \end{itemize} 
 
  La primer definición describe la estructura de un framework, mientras que la
- segunda describe su propósito. 
+ segunda describe su propósito.
 
 Un framework es una técnica de reutilización de código porque facilita la
 creación de una aplicación a partir de una biblioteca de componentes existentes.
 Es posible la creación de nuevos componentes extendiendo los provistos por el
-framework.
+framework. Una característica que distingue a los frameworks de otras
+técnicas de reutilización es la inversión de control (ver
+sección\ref{sec:inversion_control}).
 
 Debe pensarse en frameworks y componentes de software como tecnologías
 diferentes, pero que cooperan entre sí \cite{JohnsonFeb97}:
@@ -39,18 +41,18 @@ que un diseño puro \cite{JohnsonFeb97}.
 
 \subsection{Inversión de Control}
 \label{sec:inversion_control}
-La inversión de control es una de las características de los frameworks.
-Es un principio de diseño en el cual porciones de código personalizado por el
-usuario reciben el flujo de control por parte de un framework.
+La inversión de control es una característica principal de los
+frameworks. Es un principio de diseño en el cual porciones de código
+personalizado por el usuario son controladas por un framework.
 
 Al implementar un sistema sin utilizar un framework, generalmente el
-desarrollador reutiliza componentes de una biblioteca escribiendo el código de
-un programa principal que realiza llamadas a los componentes. El desarrollador
-decide en el código cuándo llamar al componente y se encarga de la estructura y
-el flujo de control del programa.
+desarrollador escribe el código de un programa principal que realiza llamadas a
+componentes de una biblioteca. El desarrollador decide en el código cuándo
+llamar al componente y se encarga de la estructura y el flujo de control del
+programa.
 
-En un software basado en un framework el programa principal es reutilizado, el
-desarrollador solamente conecta componentes existentes al framework o
+En un software basado en un framework el programa principal es reutilizado. 
+El desarrollador solamente conecta componentes existentes al framework, o
 implementa nuevos componentes para conectar. Las porciones de código del
 desarrollador son llamadas por el framework. De esta manera, el framework
 determina la estructura y el flujo de control del programa.
@@ -111,74 +113,72 @@ La inversión de control sirve para los siguientes propósitos de diseño:
     Según \cite{JohnsonFeb97} existen tres formas de utilizar un framework
     desde la perspectiva de un usuario desarrollador de software: 
 \begin{itemize}
-    \item Black-Box Frameworks: La forma más sencilla de utilizar un framework
-    consiste en conectar componentes ya existentes. De esta forma no se modifica
-    el framework ni se crean nuevas clases concretas sino que se reutilizan las
-    interfaces del framework y sus reglas para interconectar componentes. Este
-    método es similar a la construcción de un circuito eléctrico. El
-    desarrollador necesita conocer la interfaz de conexión entre un objeto A y
-    un objeto B, pero no es necesario que conozca las especificación exacta de A o B.
+    \item Black-Box Frameworks: Consiste en conectar componentes ya existentes.
+    De esta forma no se modifica el framework ni se crean nuevas clases
+    concretas sino que se reutilizan las interfaces del framework y sus reglas
+    para interconectar componentes. Este método es similar a la construcción de
+    un circuito eléctrico. El desarrollador necesita conocer la interfaz de
+    conexión entre un objeto A y un objeto B, pero no es necesario que conozca
+    la especificación exacta de A o B.
 
-    \item White-Box Frameworks: La utilización de este tipo de
-    frameworks consiste en definir clases concretas, que extienden de clases
-    abstractas definidas en el framework, y utilizarlas para implementar una
-    aplicación. Las subclases están estrechamente acopladas a sus superclases,
-    de esta forma se requiere más conocimiento acerca de la implementación de
-    las clases que conforman el framework.
+    \item White-Box Frameworks: Consiste en definir clases concretas, que
+    extienden de clases abstractas definidas en el framework, y utilizarlas
+    para implementar una aplicación. Las subclases están estrechamente
+    acopladas a sus superclases. De esta forma se requiere más conocimiento
+    acerca de la implementación de las clases que conforman el framework.
 	
-	\item Extensión o Modificación del núcleo del framework:  Esta forma de
-	utilización de un framework consiste en extender el mismo cambiando las
-	clases abstractas que forman su núcleo, usualmente para añadir nuevas
-	variables u operaciones. Requiere mayores conocimientos acerca del diseño del
-    framework. Cambiar las clases abstractas puede provocar fallos en las
-    clases concretas existentes. Este modo de utilización no es
-    aplicable si el propósito es crear un sistema abierto.
+	\item Extensión o Modificación del núcleo del framework:  Consiste en extender
+	el framework cambiando las clases abstractas que forman su núcleo para añadir
+	nuevas variables u operaciones. Requiere conocimientos avanzados acerca del
+	diseño del framework. Cambiar las clases abstractas puede provocar fallos en
+	las clases concretas existentes. Este modo de utilización no es aplicable si
+	el propósito es crear un sistema abierto.
 \end{itemize}
 
-Existen intermedios entre las formas de utilización mencionadas. Es común
-que los frameworks puedan ser usados como Black-Box la mayor parte del tiempo y
-ser extendidos cuando la ocasión lo demande.
+Entre las formas de utilización mencionadas existen combinaciones intermedias. Es común
+que los frameworks se utilicen como Black-Box la mayor parte del tiempo y
+sean extendidos cuando la ocasión lo demande.
 
-\subsection{Frameworks VS APIs}
+\newpage
+\section{Comparación entre Frameworks y APIs}
 
 En la tabla \ref {tab:comparacion_frameworks_apis} se observa una comparación
-entre frameworks y APIs, basándose en características relevantes para los
-autores de este proyeto integrador.
-\begin{table}
-	\renewcommand{\arraystretch}{1.5}
+entre frameworks y APIs.
+\begin{table}[H]
 	\centering
-	\begin{tabularx}{\textwidth}{ | p{2cm} | X | X | }
+	\begin{tabular}{|>{\raggedright}m{3cm}|m{6cm}|m{6cm}|}
 	\hline
-	Categoría & Framework & API (Biblioteca) \\[10pt] \hline
-	Extensibilidad & Por parte de los desarrolladores del framework. Si es de
-	código abierto cualquiera puede extenderlo. & Por parte del fabricante de la
+	\multicolumn{1}{|>{\centering\arraybackslash}m{3cm}|}{\textbf{Categoría}}
+	& \multicolumn{1}{>{\centering\arraybackslash}m{6cm}|}{\textbf{Framework}} 
+    & \multicolumn{1}{>{\centering\arraybackslash}m{6cm}|}{\textbf{API (Biblioteca)}}\\
+	\hline
+    \textbf{Gestión del Flujo Principal} & El framework toma el
+    flujo principal del software & A cargo del programador\\[10pt] \hline
+    \textbf{Confiabilidad} & El flujo principal está ampliamente testeado por todos
+    los usuarios del framework & No brinda ninguna garantía de flujo\\[10pt] \hline
+    \textbf{Extensibilidad} & Por parte de los desarrolladores del
+	framework.
+	Si es de código abierto cualquiera puede extenderlo. & Por parte del fabricante de la
 	librería.
 	O cualquiera si es de código abierto \\[10pt] \hline
-	Reusabilidad & Objetivo principal del diseño de un framework.
-	Se aplica a nivel de arquitectura de software & Es reutilizable siempre que se
-	requiera la funcionalidad que brinda\\[10pt] \hline
-	Complejidad de Utilizar & Gran complejidad al principio, se simplifica a medida
-	que el usuario aprende el framework & Complejidad inicial menor que un
+	\textbf{Reusabilidad} & Objetivo principal del diseño de un framework.
+	Se aplica a nivel de arquitectura de software & Es reutilizable a nivel
+	de llamada a métodos\\[10pt] \hline 
+	\textbf{Complejidad de Uso} & Gran
+	complejidad al principio, se simplifica a medida que el usuario aprende el framework & Complejidad inicial menor que un
 	framework\\[10pt] \hline 
-	Gestión del Flujo Principal & El framework toma el
-	flujo principal del software & A cargo del programador\\[10pt] \hline
-	Confiabilidad & El flujo principal está ampliamente testeado por todos los
-	usuarios del framework & No brinda ninguna garantía de flujo\\[10pt] \hline
-	Aplicación de Patrones de diseño & Usualmente un framework fuerza al usuario a
-	utilizar uno o varios patrones & No obliga al usuario a utilizar ningún patrón
+	\textbf{Aplicación de Patrones de diseño} & Usualmente un framework fuerza al
+	usuario a utilizar uno o varios patrones & No obliga al usuario a utilizar ningún patrón
 	de diseño\\[10pt] \hline 
-	Especificidad / Generalización & Son de uso específico,
+	\textbf{Especificidad / Generalización} & Son de uso específico,
 	están diseñados para resolver una familia de problemas. Por esto mantienen una
 	arquitectura & De uso general donde una funcionalidad pueda ser
 	utilizada\\[10pt] \hline 
-	Impacto en el software del usuario ante un cambio &
-	Poco o nulo mientras se respete la arquitectura global & Puede dejar
-	incompatible cambiando o deprecando las funciones expuestas\\[10pt] \hline
-	Acoplamiento a un determinado lenguaje & Obliga al usuario a desarrollar en el
-	mismo lenguaje en el que está hecho el framework & No restringe a un lenguaje.
+	\textbf{Restricciones de lenguaje} & Obliga al usuario a
+	desarrollar en el mismo lenguaje en el que está hecho el framework & No restringe a un lenguaje.
 	Permite llamadas desde cualquier lenguaje mientras se respete la firma de las funciones expuestas\\[10pt] 
 	\hline
-	\end{tabularx}
+	\end{tabular}
 	\caption{Comparación entre Frameworks y APIs}
 	\label{tab:comparacion_frameworks_apis}
 \end{table}

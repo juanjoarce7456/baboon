@@ -1,0 +1,103 @@
+\section{Conclusión}
+
+En este trabajo se realizó el diseño e implementación de
+\textit{\nombreFramework \ Framework}, un framework para el desarrollo de
+sistemas reactivos. Como resultado de este desarrollo se logró la centralización de la
+gestión de los recursos, la concurrencia y la sincronización de hilos y,
+además, se obtuvo la conducción del flujo de ejecución utilizando un modelo de
+Red de Petri que implementa la lógica del sistema. A su vez, se desarrolló un
+mecanismo de gestión de prioridad de ejecución de los hilos por medio de
+políticas configurables por el usuario. En consecuencia, se cumplió con
+el objetivo principal del proyecto, descripto en la sección
+\ref{sec:objetivo_principal}.
+
+El proceso de diseño e implementación también estuvo guiado por los objetivos
+secundarios planteados en la sección \ref{sec:objetivos_secundarios}. A lo largo
+de los siguientes párrafos se explica cómo se cumplieron estos objetivos.
+
+La centralización de gestión de recursos, manejo de
+concurrencia y sincronización de hilos mencionada previamente se obtuvo
+mediante:
+\begin{itemize}
+ \item La transformación del modelo de RdP en código interpretado.
+
+ \item El desarrollo de un mecanismo de suscripción a disparos de transiciones.
+
+ \item La implementación de colas de espera y suspensión de hilos.
+\end{itemize}
+
+Estas características fueron implementadas como parte de
+\javapetriconcurrencymonitor (JPCM), un monitor de concurrencia que ejecuta
+Redes de Petri haciendo uso de la ecuación generalizada desarrollada en
+\cite{Ecuacion_generalizada_LAC}.
+
+Se obtuvo una arquitectura de framework que gestiona los eventos y mecanismos
+de comunicación necesarios para desacoplar el modelo de RdP, el código de
+usuario y el entorno.
+Como resultado, se simplifica el diseño del software de usuario, el que queda
+definido por:
+
+\begin{itemize}
+    \item El modelo de RdP
+    \item El conjunto de acciones: Son porciones de código con una
+    responsabilidad concreta y simple. Intercambian eventos con el entorno.
+    \item El conjunto de eventos de acción: Contienen las reglas de traducción
+    entre los eventos del entorno y eventos comprensibles para el modelo de
+    RdP.
+    \item El conjunto de suscripciones de acciones a eventos de acción
+\end{itemize}
+
+Se logró un diseño de framework no restrictivo sobre las herramientas
+que ofrece el lenguaje de programación. En consecuencia, el usuario dispone
+de todas las características de la programación orientada a objetos para el
+diseño de su sistema.
+
+Se implementó la inversión de control del framework mediante la utilización de
+prácticas de \textit{Reflection} y \textit{Aspect Oriented Programming}. Como
+resultado, el flujo de control del programa es responsabilidad del framework y
+el código de usuario se centra en las funcionalidades concretas del sistema a implementar.
+
+El código del framework se encuentra disponible de forma pública en repositorios
+en la red (ver sección \ref{config_baboon_env}) bajo licencia Apache 2.0. En los
+repositorios mencionados se encuentra también la documentación en formato \textit{Javadoc} y los casos de
+test automatizados para las funcionalidades implementadas.
+
+El desarrollo del framework se realizó siguiendo los requerimientos planteados
+en la sección \ref{sec:definicion_reqs}. A continuación se presenta un listado
+de los resultados obtenidos:
+\begin{itemize}
+  \item El framework interactúa con JPCM, el monitor de Redes de Petri
+  desarrollado en este proyecto.
+  \item El control del flujo de ejecución es delegado al monitor de RdP
+  mediante la utilización de prácticas de \textit{Reflection} y \textit{Aspect
+  Oriented Programming}.
+  \item Se requiere aprender menos de diez conceptos para desarrollar un
+  sistema utilizando Baboon Framework (task controller, happening
+  controller, complex sequential task controller, interfaz declare, interfaz
+  subscribe, transition policies, topic, guard provider, RdP).
+  \item Se desarrollaron diversos casos de uso, disponibles de forma pública en
+  el repositorio de ejemplos (\url{\repoEjemplos}). En estos ejemplos se muestra
+  la forma de uso de todas las interfaces de usuario del framework.
+  \item El framework utiliza las interfaces que ofrece JPCM para interactuar con
+  el modelo de RdP.
+  \item Actualmente el framework no es compatible con otros monitores
+  desarrollados en el Laboratorio de Arquitectura de Computadoras, pero su
+  arquitectura fue diseñada para adaptarse a un cambio de monitor de forma
+  simple.
+  \item El reporte de cobertura de los casos de prueba arroja un resultado del
+  82,5\% de líneas de código cubiertas. Este porcentaje supera al requerido.
+  \item El framework tiene al menos un test automatizado por cada funcionalidad
+  implementada.
+  \item Se realizó documentación de código utilizando el formato estándar
+  \textit{Javadoc}.
+  \item Todos los objetos del framework tienen documentación sobre sus métodos,
+  explicando la forma de uso y su función.
+  \item La documentación no brinda detalles de implementación.
+  \item La documentación se encuentra disponible de forma pública. Ver la
+  sección \ref{genJavadoc}
+\end{itemize}
+
+A modo de corolario se menciona que la utilización de Baboon Framework
+en conjunto con el proceso de diseño de sistemas reactivos expuesto en
+\cite{Bentivegna-Ludemann} permite el diseño y desarrollo de sistemas reactivos
+confiables, mantenibles y portables a múltiples plataformas.

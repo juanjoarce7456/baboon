@@ -1,14 +1,24 @@
-\section{Implementación de \nombreFramework Framework}
-El framework se implementó de acuerdo a los aspectos de diseño expuestos en
-las secciones anteriores. El framework es de un tipo intermedio entre caja negra
-y caja blanca. Para utilizar la mayor parte de las funcionalidades ofrecidas, el
-usuario sólo debe conocer las interfaces que expone el framework para conectar
-los componentes. Sin embargo, para determinados casos de uso (por ejemplo para
-añadir políticas de disparo de transiciones) se requiere de la extensión de
-clases del framework.
-(ver sección~\ref{sec:tipos_framework}).
-El usuario tiene la responsabilidad de definir los siguientes componentes,
-previamente expuestos en el capítulo~\ref{cap:diseno_framework}:
+\section{Introducción}
+En este capítulo se describe la implementación de los componentes del framework
+y se detallan sus interfaces de programación.
+Se detalla la implementación de un controlador de acción y el
+proceso de ejecución de los mismos. A su vez, se detalla la implementación de
+los tópicos.
+
+La implementación se realizó de acuerdo a los aspectos de diseño
+expuestos en el capítulo~\ref{cap:diseno_framework}.
+
+\section{Detalles de Implementación de \nombreFramework \ Framework}
+
+Las interfaces expuestas por \nombreFramework\ Framework permiten al usuario
+acceder a la mayoría de las funcionalidades ofrecidas sin necesidad de conocer
+su estructura interna, como un framework de caja negra (ver sección~\ref{sec:tipos_framework}).
+Sin embargo, en determinados casos de uso (por ejemplo para añadir políticas
+de disparo de transiciones) se requiere de la extensión de clases del framework.
+\\
+Para la utilización de \nombreFramework\ Framework el usuario tiene la
+responsabilidad de definir los siguientes componentes, previamente expuestos en
+el capítulo~\ref{cap:diseno_framework}:
 \begin{itemize} 
   \item Controladores de acciones.
   \item Tópicos.
@@ -22,7 +32,7 @@ Por su lado, el framework se encarga de:
   \item Controlar el flujo de ejecución del programa.
 \end{itemize}
 
-\subsection{Implementación de un Controlador De Acción}
+\section{Implementación de un Controlador De Acción}
 \label{sec:implementacion_controlador_accion}
 La implementación de un controlador de acción queda definida por dos elementos:
 \begin{labeling}{description}
@@ -38,9 +48,9 @@ La implementación de un controlador de acción queda definida por dos elementos
   del método.
 \end{labeling}
 
-\subsection{Componentes del Framework}
+\section{Componentes del Framework}
 \label{sec:componentes_baboon}
-En la Figura~\ref{fig:diagrama_componentes} se pueden observar los
+En la Figura~\ref{fig:diagrama_componentes} se muestran los
 módulos que componen el framework implementado:
 \begin{itemize}
   \item \textbf{BaboonConfig: } Este componente se encarga de manejar la
@@ -64,18 +74,18 @@ módulos que componen el framework implementado:
   \item \textbf{BaboonApplication: } Es una interfaz Java que define dos
   métodos. Esta interfaz debe ser implementada por una clase de usuario, que
   será utilizada para inicializar el sistema. Los métodos son:
-  \begin{itemize}
-    \item \textbf{\emph{declare(): }} En este método el usuario debe:
-    	\begin{enumerate}
-    	  \item Proveer un archivo JSON con la definición de los tópicos.
-    	  \item Proveer un archivo PNML con la definición del modelo de RdP.
-    	  \item Declarar e inicializar los objetos del sistema. Estos objetos
-    	  (desarrollados por el usuario) contienen la implementación
-    	  de los controladores de acción.
-    	\end{enumerate}
-    \item \textbf{\emph{subscribe(): }} En este método el usuario define todas
-    las suscripciones de controladores de acción a tópicos.
-   \end{itemize}
+      \begin{itemize}
+        \item \textbf{\emph{declare(): }} En este método el usuario debe:
+        	\begin{enumerate}
+        	  \item Proveer un archivo JSON con la definición de los tópicos.
+        	  \item Proveer un archivo PNML con la definición del modelo de RdP.
+        	  \item Declarar e inicializar los objetos del sistema. Estos objetos
+        	  (desarrollados por el usuario) contienen la implementación
+        	  de los controladores de acción.
+        	\end{enumerate}
+        \item \textbf{\emph{subscribe(): }} En este método el usuario define todas
+        las suscripciones de controladores de acción a tópicos.
+       \end{itemize}
    
   \item \textbf{DummyThread: } Objeto que implementa la interfaz Callable y, en
   consecuencia, es ejecutable por un hilo. Encapsula el controlador de acción
@@ -119,16 +129,15 @@ módulos que componen el framework implementado:
 \end{itemize}
 
 \begin{figure}[H]
-	\vspace*{-4cm}
-	\hspace{-1,60cm}
-	\includegraphics[width=150mm]{diagrama_componentes}
+    \centering
+	\includegraphics[width=0.85\textwidth]{diagrama_componentes}
 	\caption{Diagrama de Componentes de la implementación de \nombreFramework
 	Framework}
 	\label{fig:diagrama_componentes}
 \end{figure}
 
 
-\subsection{Ejecución del Framework}
+\section{Ejecución de \nombreFramework \ Framework}
 
 \begin{itemize}
   \item \textbf{Main: } La ejecución de este método consta de
@@ -149,8 +158,8 @@ módulos que componen el framework implementado:
   	\end{enumerate}
   	
  \begin{figure}[H]
-	\hspace{-2,90cm}
-	\includegraphics[width=180mm]{secuencia_implementacion_ejecucion_main}
+    \centering
+	\includegraphics[width=\textwidth]{secuencia_implementacion_ejecucion_main}
 	\caption{Diagrama de Secuencia de la Implementación del Método Principal}
 	\label{fig:diagrama_secuencia_implementacion_ejecucion_main}
 \end{figure}
@@ -175,8 +184,8 @@ módulos que componen el framework implementado:
   	  controlador a través del tópico de la suscripción.
   	  \item Se ejecutan los métodos GuardProvider que corresponden a las guardas
   	  asociadas. 
-  	  \item El objeto DummyThread setea en el monitor de Petri, para cada guarda asociada, el valor
-  	  correspondiente que retornan los métodos GuardProvider.
+  	  \item El objeto DummyThread establece en el monitor de Petri, para cada
+  	  guarda asociada, el valor correspondiente que retornan los métodos GuardProvider.
   	  \item Se obtienen del tópico los nombres de las transiciones de aviso de
   	  finalización de ejecución.
   	  \item El objeto DummyThread realiza disparos no perennes de las
@@ -185,8 +194,8 @@ módulos que componen el framework implementado:
   	\end{enumerate}
   	
 \begin{figure}[H]
-	\hspace{-2,90cm}
-	\includegraphics[width=180mm]{secuencia_implementacion_ejecucion_task_controller}
+    \centering
+	\includegraphics[width=\textwidth]{secuencia_implementacion_ejecucion_task_controller}
 	\caption{Diagrama de Secuencia de la Ejecución Implementada de un
 	TaskController}
 	\label{fig:diagrama_secuencia_implementacion_ejecucion_task_controller}
@@ -233,8 +242,9 @@ módulos que componen el framework implementado:
   	  través del tópico de la suscripción.
   	  \item Se ejecutan los métodos GuardProvider que corresponden a las guardas
   	  asociadas.
-  	  \item El objeto HappeningControllerSincronizer setea en el monitor de
-  	  Petri, para cada guarda asociada, el valor correspondiente que retornan los métodos GuardProvider.
+  	  \item El objeto HappeningControllerSincronizer establece en el monitor de
+  	  Petri, para cada guarda asociada, el valor correspondiente que retornan los
+  	  métodos GuardProvider.
   	  \item Se obtienen del tópico los nombres de las transiciones de aviso de
   	  finalización de ejecución.
   	  \item El objeto HappeningControllerSincronizer realiza disparos no perennes
@@ -250,21 +260,22 @@ módulos que componen el framework implementado:
 	ejecuta el controlador de acción, permitiendo su sincronización.
 	\end{framed}
 
-\end{itemize}
+
 
 \begin{figure}[H]
-	\hspace{-2,90cm}
-	\includegraphics[width=180mm]{secuencia_implementacion_ejecucion_happening_controller}
+    \centering
+	\includegraphics[width=\textwidth]{secuencia_implementacion_ejecucion_happening_controller}
 	\caption{Diagrama de Secuencia de la Ejecución Implementada de un
 	HappeningController}
 	\label{fig:diagrama_secuencia_implementacion_ejecucion_happening_controller}
 \end{figure}
 
+\end{itemize}
 
-\subsection{Implementación de Tópicos}
+\section{Implementación de Tópicos}
 Los tópicos, cuyo concepto se explica en la sección \ref{sec:diseno_topicos}, son definidos
-por el usuario en un archivo de formato JSON, de la forma que se presenta a
-continuación:
+por el usuario en un archivo JSON con el siguiente formato: \\
+
 \begin{minted}{json}
 [
 

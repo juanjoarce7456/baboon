@@ -16,11 +16,11 @@ dependencia entre partes del sistema.
 
 Los intereses transversales son la base para el desarrollo de aspectos. Estos no
 pueden ser representados claramente en los paradigmas de programación orientado
-a objetos o programación procedural.
+a objetos o programación procedural. \cite{AspectJInAction}
 La separación de intereses transversales se realiza añadiendo comportamientos
-adicionales al codigo existente (llamados consejos o advices) sin cambiar el
-código existente. En cambio especifica separadamente que codigo debe modificarse
-mediante la definición de pointcuts. 
+adicionales al código existente, llamados advices o consejos, sin modificar el
+mismo. Para lograrlo, se especifican puntos de ejecución (mediante la definición
+de pointcuts) donde se aplican los advices previamente mencionados.
 
 La programación orientada a aspectos complementa a la programación orientada a
 objetos al permitir al desarrollador modificar dinamicamente el modelo estático
@@ -63,9 +63,9 @@ medida que se va desarrollando. \cite{Introduction_To_Aspect}
   denomina aspecto. \cite{Introduction_To_Aspect}
   
   \item Tejido (Weaving): Proceso de aplicar aspectos a los objetos
-  destinatarios para crear los nuevos objetos resultantes en los  puntos de
-  unión especificados. Este proceso puede ocurriren distintos momentos del ciclo
-  de vida del objeto destinatario:
+  destinatarios para crear los nuevos objetos resultantes en los puntos de
+  unión especificados. De acuerdo al momento del ciclo de vida del sistema en
+  el cual se aplica el tejido, se realiza la siguiente clasificación:
   	\begin{itemize}
 		\item Aspectos en Tiempo de Compilación.
 		\item Aspectos en Tiempo de Carga.

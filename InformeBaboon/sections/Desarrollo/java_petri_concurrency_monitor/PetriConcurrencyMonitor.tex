@@ -1,26 +1,38 @@
 \section{Introduccion}
 \label{sec:petri_concurrency_monitor_intro}
-Como se dijo en la sección [{\color{red}CITAR OBJETIVOS DONDE SE QUIERE
-SEPARAR LA LÓGICA DEL CÓDIGO EJECUTANDO EL MODELO}], uno de los objetivos de
-este proyecto integrador es modelar sistemas reactivos para garantizar su
-correcto diseño.
-Para esto se propone modelar el sistema con RdP (ver sección \ref{redes_de_petri}).
-Otro objetivo planteado es separar la lógica de un sistema del código que
-implementa sus funcionalidades y su política de gestión de hilos.
-Teniendo ambos objetivos es cuenta es que se propone que sea el propio modelo
-quien guíe la ejecución lógica del sistema.
-
-Por su naturaleza, los sistemas reactivos son concurrentes y envían y reciben
-eventos del mundo exterior.
-Por esto se debe hacer una buena gestión de la concurrencia para asegurar su correcto
-funcionamiento, utilizando alguna de las técnicas vistas en
-la sección \ref{ProgramacionConcurrente} y para modelarlos se debe incluir en
-el modelo el envío y recepción de eventos.
-
 Como el modelo de concurrencia obtenido por las RdP es centralizado, resulta
-casi natural ejecutar una RdP como lógica secuencial de un sistema reactivo
-dentro de un monitor de concurrencia. Luego, para relacionar los eventos con el
-monitor se utilizan RdP no autónomas.
+directo ejecutar una RdP como lógica secuencial de un sistema reactivo dentro
+de un monitor de concurrencia. Luego, para relacionar los eventos con el
+monitor se utilizan RdP no autónomas. Por lo cual en este apartado desarrollamos
+un monitor de concurrencia con Redes de Petri.
+
+\section{Requerimientos del monitor}
+Del estudio de \cite{Ecuacion_generalizada_LAC}, \cite{codegen}, \cite{chimp} y
+\cite{Bentivegna-Ludemann} emergen los requerimientos del monitor:
+\begin{enumerate}
+  \item Debe ofrecer interfaces para la carga de una Red de Petri en formato
+  estándar PNML (dialecto Tina).
+  \item Debe soportar Redes de Petri ordinarias y temporales.
+  \item Debe ofrecer interfaces para el disparo de transiciones.
+  \item Debe implementar la ecuación de estado generalizada descrita en
+  \cite{Ecuacion_generalizada_LAC} para la ejecución de RdP.
+  \item Debe soportar las etiquetas de transición definidas en \cite{codegen}
+  (transiciones automáticas/disparadas y transiciones informadas/no
+  informadas).\\
+  Esto implica los siguientes requerimientos:
+  \begin{enumerate}
+    \item Debe ofrecer interfaces para la suscripción a informes de transiciones
+    informadas.
+    \item Debe prohibir el disparo manual de transiciones automáticas.
+    \item Debe disparar automáticamente transiciones automáticas sensibilizadas.
+  \end{enumerate}
+  \item Debe ofrecer interfaces para la carga de políticas de prioridad de
+  disparo de transiciones.
+  \item Debe brindar alguna forma de asociar guardas con transiciones.
+  \item Debe ofrecer interfaces para la modificación del valor de guardas.
+  \item Debería soportar disparos perennes y no perennes.
+  \item Debería soportar arcos normales, de reset, lectores e inhibidores.
+\end{enumerate}
 
 \section{\javapetriconcurrencymonitor}
 \label{sec:java_petri_concurrency_monitor}
@@ -30,28 +42,3 @@ de Petri, hecho en lenguaje de programación Java.
 Provee al usuario de una interfaz de programación de aplicaciones (API) para
 ejecutar una RdP, pretegiéndola de los problemas de concurrencia con la
 exclusion mutua del monitor.
-
-Brinda soporte para:
-\begin{itemize}
-  \item Redes de Petri:
-  \begin{itemize}
-    \item Plaza-Transición
-    \item Temporales
-  \end{itemize}
-  
-  \item Tipos de arcos;
-  \begin{itemize}
-    \item Normal
-    \item Lector o de Prueba
-    \item Inhibidor
-    \item Reset
-  \end{itemize}
-  
-  \item Carga de RdP en lenguaje PNML (dialecto de TINA)
-  \item Guardas
-  \item Transitiones automáticas
-  \item Subscripción a eventos en transiciones informadas
-  \item Políticas intercambiables y extensibles de prioridad de disparo
-  \item Disparos perennes y no-perennes
-
-\end{itemize}

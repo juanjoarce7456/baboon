@@ -1,0 +1,42 @@
+\section{Trabajo Futuro}
+Durante el desarrollo del framework y su posterior utilización, surgieron
+nuevos aspectos y mejoras a desarrollar en versiones futuras:
+\begin{itemize}
+  \item Performance: el uso de técnicas de reflection y de programación
+  orientada a aspectos brinda la posibilidad de realizar la inversión de control
+  y de ofrecer una interfaz de usuario amigable para el programador de sistemas
+  reactivos, pero sacrifica performance. Es de interés investigar la existencia 
+  de otras alternativas que permitan la implementación de la inversión de
+  control de manera más performante.
+  \item Utilización para desarrollo de sistemas distribuidos: analizar la
+  posibilidad de centralizar la ejecución de la RdP y exponerla como un servicio
+  para la coordinación de ejecución de sistemas remotos.
+  \item Agregar soporte para otros dialectos de PNML: existen otros software de
+  edición de RdP más potentes que TINA, cada uno con su dialecto de PNML. JPCM
+  está preparado para agregar soporte para nuevos dialectos de forma simple.
+  \item Soporte para ejecución de múltiples RdP: Se puede paralelizar la toma
+  de decisiones mediante el uso de RdP jerárquicas o simplemente mediante el
+  uso de múltiples RdP donde cada una modela una parte del sistema.
+  \item Soporte para ejecución de otros tipos de modelo: en principio, dentro
+  del monitor JPCM se podría ejecutar múltiples tipos de modelos (máquinas de
+  estado finitas, máquinas de Turing, etc). Esta capacidad amplía la gama de
+  usuarios interesados en la utilización de \textit{\nombreFramework \
+  Framework}.
+  \item Embeber el manejo e intercambio de datos entre procesos dentro del
+  framework: Actualmente, el framework controla el flujo de control de las
+  instrucciones del programa, pero el manejo de los datos es responsabilidad
+  total del usuario. En la versión actual del framework, el manejo de la
+  dinámica de los datos agrega una complejidad innecesaria
+  al concepto de acción de software, ya que además de la acción concreta debe
+  programarse el manejo del flujo de datos. La implementación de nuevas
+  interfaces para el intercambio de datos entre acciones de software
+  facilitaría aún más la creación de sistemas reactivos utilizando
+  \textit{\nombreFramework \ Framework}.
+  \item Agregar una interfaz para la liberación de recursos en tiempo de
+  finalización del programa. Esta interfaz debe formar parte de
+  \mint{java}|BaboonApplication|. Así, el usuario deberá implementar esta
+  funcionalidad en un método que será ejecutado por \textit{\nombreFramework \
+  Framework}.
+\end{itemize}
+
+

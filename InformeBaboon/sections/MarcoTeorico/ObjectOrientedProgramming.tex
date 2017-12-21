@@ -1,61 +1,60 @@
 \section{Programación Orientada a Objetos}
 
-No es del interés de este proyecto integrador ahondar en el campo de la
-programación orientada a objetos, y se asume que el lector tiene conocimientos
-afianzados sobre este paradigma de programación. Aún así, es necesario nombrarlo
-para poder introducir los conceptos desarrollados en la sección \ref{reflection}
+Existe extensa bibliografía de consulta acerca del paradigma de Programación
+Orientada a Objetos. Es de interés en particular aquella bibliografía basada en
+el lenguaje Java (ver \cite{flanagan2005java} \cite{lafore2003data}). 
+Dentro del marco de la progrmaación orientada a objetos, tiene
+gran relevancia en este proyecto el concepto de Reflection, expuesto en la
+sección~\ref{reflection}.
 
 \subsection{Reflection}
 \label{reflection}
 
-Existen escenarios en la programación donde es útil tener la opción de conocer
-los datos disponibles y las operaciones que se pueden aplicar sobre estos datos
-en tiempo de ejecución. Además, resulta ventajoso poder tomar decisiones sobre
-estos datos y operaciones en base al flujo del programa para modificar el
-comportamiento del mismo. Tener esta posibilidad permite escribir software
-flexible, reutilizable y capaz de adaptarse a múltiples escenarios. Estas
-capacidades se pueden obtener por medio de la programación basada en la
+En determinados escenarios de programación es útil conocer en
+tiempo de ejecución la estructura interna de los objetos y las operaciones del
+programa. De esta manera, en base a esta información y al flujo de ejecución,
+el programa modifica su propio comportamiento.
+
+Estas capacidades se obtienen por medio de la programación basada en la
 \textit{reflexión} del programa.
 
 Reflexión (o reflection) es la habilidad de un programa de examinarse a sí
-mismo y a su entorno en tiempo de ejecución, y de cambiar su comportamiento
-dependiendo de lo que encuentra.
+mismo y a su entorno en tiempo de ejecución, y de cambiar su propio
+comportamiento.
 
 Para realizar esta autoexaminación, un programa necesita tener una
 representación de sí mismo. Esta información se llama \textit{metainformación} o
 \textit{metadata}. En particular, en un entorno de programación orientada a
-objetos la metadata se organiza en objetos, llamados \textit{metaobjetos}. La
+objetos la metadata se organiza en \textit{metaobjetos}. La
 revisión en tiempo de ejecución de los metaobjetos se llama
 \textit{introspección} o \textit{introspection}.
 \cite{Forman04javareflection}
 
-En general, la introspección está seguida de un cambio del comportamiento.
-Existen tres técnicas que una interfaz de programación de reflection puede
-ofrecer para generar cambios de comportamiento:
+La metainformación es el elemento estructural más importante de un
+sistema reflectivo. Examinando su autorepresentación, un programa obtiene
+información acerca de su estructura y comportamiento para tomar decisiones
+importantes.
+
+En general, la introspección está seguida de un cambio del comportamiento del
+propio programa. Existen tres técnicas que una interfaz de reflection ofrece
+para generar cambios de comportamiento:
 \begin{itemize}
     \item Modificación de los metaobjetos
-    \item Operaciones con la metadata: como la invocación dinámica de métodos 
-    \item Intercesión: Se le permite al código interceder en varias fases de la
-    ejecución para alterar el comportamiento del programa.
+    \item Operaciones con la metadata: como la invocación dinámica de métodos.
+    \item Intercesión: El código intercede en varias fases de la ejecución para
+    alterar el comportamiento del programa.
 \end{itemize}
 
-Estas características hacen que el uso de reflection permita diseñar software
-más flexible, que se adapte más fácilmente a cambio de requerimientos y que a
-la vez mantenga una estructura ordenada y buena legibilidad de código.
-Esto favorece a la mantenibilidad.
-
-Para poder hacer introspection, un programa que aplique reflection debe poder
-acceder a su metainformación. Por esto, esta representación es el elemento
-estructural más importante de un sistema reflectivo. Examinando su
-autorepresentación, un programa puede obtener información acerca de su
-estructura y comportamiento para tomar decisiones importantes.
+Estas características permiten diseñar software más flexible, que se adapta a
+cambio de requerimientos, favoreciendo a la mantenibilidad.
 
 Existen tres problemas relacionados al uso de reflection en el diseño de un
-programa que deben ser tenidos en cuenta para poder asegurar la calidad del
-mismo. Estos son:
+programa que deben tenerse en cuenta:
 \begin{itemize}
     \item Seguridad
     \item Complejidad del código
     \item Performance
 \end{itemize}
-Todos ellos se pueden mitigar mediante el uso de buenas prácticas de programación y un correcto diseño del software.
+
+Los problemas mencionados se mitigan mediante el uso de buenas prácticas de
+programación y un correcto diseño del software.
