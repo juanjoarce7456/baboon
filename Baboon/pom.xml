@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.github.airabinovich</groupId>
             <artifactId>java_petri_concurrency_monitor</artifactId>
-            <version>fix~update-jackson-dependency-SNAPSHOT</version>
+            <version>v1.0.1</version>
         </dependency>
     </dependencies>
 </project>
